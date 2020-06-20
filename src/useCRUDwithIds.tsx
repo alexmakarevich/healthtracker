@@ -1,28 +1,28 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 
-export default (initialValue: any) => {
+export default (idProp: string, initialValue: any) => {
 
     const [items, setItems]: [Array<any>, Function] = useState(initialValue)
 
     return {
         items,
         C: (newItem: any) => {
-            const newId = 1 + items.reduce((prev, current) => (prev.id > current.id) ? prev.id : current.id)
-            newItem.id = newId
+            const newId = 1 + items.reduce((prev, current) => (prev[idProp] > current[idProp]) ? prev[idProp]: current[idProp])
+            newItem[idProp] = newId
             setItems(...items, newItem)
         },
 
         R: (id: number | string) => {
-            return items.find(item => item.id === id)
+            return items.find(item => item[idProp] === id)
         },
 
         U: (itemToUpdate: any) => {
-            const newItems: Array<any> = items.map(item => item.id === itemToUpdate.id ? item = itemToUpdate : item)
+            const newItems: Array<any> = items.map(item => item[idProp] === itemToUpdate[idProp] ? item = itemToUpdate : item)
             setItems(newItems)
         },
 
         D: (itemToDelete: any) => {
-            const itemsAfterDelete: Array<any> = items.filter(item => item.id != itemToDelete.id) 
+            const itemsAfterDelete: Array<any> = items.filter(item => item[idProp] !== itemToDelete[idProp]) 
             setItems(itemsAfterDelete)
         }
 
