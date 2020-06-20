@@ -1,11 +1,9 @@
-import React from 'react'
-import NutritionList from './NutritionList'
-import useState from 'react'
 import useCRUDwithIds from './useCRUDwithIds'
 
 const startingNutrition: NutritionItem[] = [
     {id: 1, title: 'apple'},
-    {id: 2, title: 'orange'}
+    {id: 2, title: 'orange'},
+    {id: 3, title: 'tomato'}
 ]
 
 export class NutritionItem {
@@ -17,7 +15,7 @@ export const NutritionLogic = () => {
 }
 
 export function useNutritionCRUD(initialNutrition: NutritionItem[] = startingNutrition) {
-    const { items, C, R, U, D } = useCRUDwithIds(initialNutrition)
+    const { items, C, R, U, D } = useCRUDwithIds('id', initialNutrition)
 
     return {
         nutrition: items,
