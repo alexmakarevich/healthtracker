@@ -9,7 +9,7 @@ export default (idProp: string, initialValue: any) => {
         C: (newItem: any) => {
             const newId = 1 + items.reduce((prev, current) => (prev[idProp] > current[idProp]) ? prev[idProp]: current[idProp])
             newItem[idProp] = newId
-            setItems(...items, newItem)
+            setItems([...items, newItem])
         },
 
         R: (id: number | string) => {
