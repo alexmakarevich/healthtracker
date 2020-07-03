@@ -6,11 +6,11 @@ import NutritionListItem from './NutritionListItem';
 
 const NutritionList = () => {
 
-    const { nutrition, createNutrition, updateNutrition, deleteNutrition }:
+    const { nutrition, createNutrition, readNutrition, updateNutrition, deleteNutrition }:
     {nutrition: NutritionItem[], createNutrition: Function, readNutrition: Function, updateNutrition: Function, deleteNutrition: Function} 
     = useNutritionCRUD()
 
-    const { formObject, updateProperty, resetForm } = useFormState( {id:'temp', title: ''})
+    const { formObject, updateProperty, resetForm } = useFormState( {id:'temp', title: '', ingredientIds: []})
 
     function handleTitleChange(title: string) {
         updateProperty('title', title)

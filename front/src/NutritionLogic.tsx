@@ -3,10 +3,12 @@ import useCRUDwithIds from './useCRUDwithIds'
 export class NutritionItem {
     id: number | string = 'initial'
     title!: string;
+    ingredientIds: number[] | string[] = []
 
-    constructor (id: number | string, title: string) {
+    constructor (id: number | string, title: string, ingredientIds?: number[] | string[]) {
         this.id = id
         this.title = title
+        ingredientIds !== undefined ? this.ingredientIds = ingredientIds : this.ingredientIds = []
     }
 }
 
@@ -16,6 +18,10 @@ function startingNutrition() {
     nutrArray.push(new NutritionItem(1, 'apple'))
     nutrArray.push(new NutritionItem(2, 'orange'))
     nutrArray.push(new NutritionItem(3, 'tomato'))
+    nutrArray.push(new NutritionItem(4, 'pizza', [5, 6, 7]))
+    nutrArray.push(new NutritionItem(5, 'dough'))
+    nutrArray.push(new NutritionItem(6, 'cheese'))
+    nutrArray.push(new NutritionItem(7, 'salami'))
     return nutrArray
 }
 
@@ -37,8 +43,8 @@ export function useNutritionCRUD(initialNutrition: NutritionItem[] = startingNut
         createNutrition: (nutritionItem: NutritionItem) => {
             C(nutritionItem)
         },
-        readNutrition: (nutritionItem: NutritionItem) => {
-            R(nutritionItem.id)
+        readNutrition: (id: string | number) => {
+            return R(id)
         },
         updateNutrition: (nutritionItem: NutritionItem) => {
             U(nutritionItem)
