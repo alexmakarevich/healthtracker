@@ -2,21 +2,21 @@ import React from "react";
 import { useState } from "react";
 import {
   NutritionItem,
-  useNutritionCRUD,
+  NIcreate,
+  NIgetById,
+  NIdeleteById,
+  NIupdateById,
 } from "../logic/nutrition/NutritionLogic";
 import useFormState from "../common/useFormState";
 import useObjectState from "../common/useObjectState";
 import TextWithEdit from "./TextWithEdit";
 
-import axios from "axios";
-
 interface Props {
   item: NutritionItem;
-  U: Function;
-  D: Function;
+  refresh: () => void;
 }
 
-const NutritionListItem = ({ item, U, D }: Props) => {
+const NutritionListItem = ({ item, refresh }: Props) => {
   const {
     obj,
     updateProperty,
@@ -27,19 +27,6 @@ const NutritionListItem = ({ item, U, D }: Props) => {
     resetObj: any;
   } = useObjectState(item);
   const [isEditing, setIsEditing] = useState(false);
-  const {
-    nutrition,
-    createNutrition,
-    readNutrition,
-    updateNutrition,
-    deleteNutrition,
-  }: {
-    nutrition: NutritionItem[];
-    createNutrition: Function;
-    readNutrition: Function;
-    updateNutrition: Function;
-    deleteNutrition: Function;
-  } = useNutritionCRUD();
 
   const itemState: NutritionItem = obj;
 
@@ -52,14 +39,17 @@ const NutritionListItem = ({ item, U, D }: Props) => {
   }
 
   function handleSave() {
-    console.log("handle save");
-    U(itemState);
+    NIupdateById(itemState._id, itemState);
     setIsEditing(!isEditing);
   }
 
   function handleCancel() {
     resetObj();
     setIsEditing(!isEditing);
+  }
+
+  function handleDelete() {
+    NIdeleteById(itemState._id).then(() => refresh());
   }
 
   return (
@@ -79,7 +69,7 @@ const NutritionListItem = ({ item, U, D }: Props) => {
       ) : (
         <div>
           <button onClick={toggleEdit}>edit</button>
-          <button onClick={() => D(itemState)}>delete</button>
+          <button onClick={() => handleDelete()}>delete</button>
         </div>
       )}
     </div>

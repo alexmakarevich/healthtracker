@@ -6,7 +6,7 @@ const nutritionItemsInstance = axios.create({
 
 // standard generic apis
 
-export function generateAPI(baseURL: string) {
+export function generateCRUD(baseURL: string) {
   const axiosInstance = axios.create({
     baseURL: baseURL,
   });
@@ -16,12 +16,12 @@ export function generateAPI(baseURL: string) {
     return console.log(res.data);
   };
 
-  const getById = async (id: number | string) => {
+  const readById = async (id: number | string) => {
     const res = await axiosInstance.get(`/${id}`);
     return await res.data;
   };
 
-  const getAll = async () => {
+  const readAll = async () => {
     const res = await axiosInstance.get("");
     return await res.data;
   };
@@ -36,5 +36,11 @@ export function generateAPI(baseURL: string) {
     return res;
   };
 
-  return { create, getById, getAll, updateById, deleteById };
+  return {
+    create,
+    readById,
+    readAll,
+    updateById,
+    deleteById,
+  };
 }

@@ -1,5 +1,5 @@
 import useCRUDwithIds from "../../useCRUDwithIds";
-import { generateAPI } from "../../api/apiGenerator";
+import { generateCRUD } from "../../api/apiGenerator";
 import axios, { AxiosInstance } from "axios";
 
 const axiosInstance = axios.create({
@@ -28,60 +28,11 @@ export class NutritionItem {
   }
 }
 
-// interface NutritionItemDAO {
-//   id: number | string;
-//   title: string;
-//   ingredient_ids: number[] | string[];
-// }
-
-// function frontToBack (front: NutritionItem): NutritionItemDAO {
-//   const back = {id: front.id,
-//   title: front.title,
-//   ingredient_ids: front.ingredientIds
-//   }
-// }
-
 // api for NI
 export const {
   create: NIcreate,
-  getById: NIgetById,
-  getAll: NIgetAll,
+  readById: NIgetById,
+  readAll: NIgetAll,
   updateById: NIupdateById,
   deleteById: NIdeleteById,
-} = generateAPI("http://localhost:4000/nutritionItems");
-
-// TODO: replace useState data with data from backend, then remove the code below
-
-function startingNutrition() {
-  const nutrArray: NutritionItem[] = [];
-  nutrArray.push(new NutritionItem("apple"));
-  nutrArray.push(new NutritionItem("orange"));
-  nutrArray.push(new NutritionItem("tomato"));
-  nutrArray.push(new NutritionItem("pizza", [5, 6, 7]));
-  nutrArray.push(new NutritionItem("dough"));
-  nutrArray.push(new NutritionItem("cheese"));
-  nutrArray.push(new NutritionItem("salami"));
-  return nutrArray;
-}
-
-export function useNutritionCRUD(
-  initialNutrition: NutritionItem[] = startingNutrition()
-) {
-  const { items, C, R, U, D } = useCRUDwithIds("id", initialNutrition);
-
-  return {
-    nutrition: items,
-    createNutrition: (nutritionItem: NutritionItem) => {
-      C(nutritionItem);
-    },
-    readNutrition: (id: string | number) => {
-      return R(id);
-    },
-    updateNutrition: (nutritionItem: NutritionItem) => {
-      U(nutritionItem);
-    },
-    deleteNutrition: (nutritionItem: NutritionItem) => {
-      D(nutritionItem);
-    },
-  };
-}
+} = generateCRUD("http://localhost:4000/nutritionItems");

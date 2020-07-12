@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 // import {useState} from 'react';
 import {
   NutritionItem,
-  useNutritionCRUD,
   NIcreate,
   NIgetById,
   NIgetAll,
@@ -13,20 +12,6 @@ import useFormState from "../common/useFormState";
 import NutritionListItem from "./NutritionListItem";
 
 const NutritionList = () => {
-  const {
-    nutrition,
-    createNutrition,
-    readNutrition,
-    updateNutrition,
-    deleteNutrition,
-  }: {
-    nutrition: NutritionItem[];
-    createNutrition: Function;
-    readNutrition: Function;
-    updateNutrition: Function;
-    deleteNutrition: Function;
-  } = useNutritionCRUD();
-
   const [allNutritionFromBack, setAllNutritionFromBack]: [
     NutritionItem[],
     Function
@@ -85,8 +70,7 @@ const NutritionList = () => {
         <NutritionListItem
           key={nutritionItem._id}
           item={nutritionItem}
-          U={handleItemUpdate}
-          D={handleItemDelete}
+          refresh={getAllNutrition}
         />
       ))}
       <li>
