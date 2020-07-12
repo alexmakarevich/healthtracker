@@ -10,20 +10,6 @@ const NutritionList = () => {
     Function
   ] = useState([]);
 
-  const {
-    formObject,
-    updateProperty,
-    resetForm,
-  }: {
-    formObject: NutritionItem;
-    updateProperty: Function;
-    resetForm: Function;
-  } = useFormState({
-    id: "temp",
-    title: "",
-    ingredientIds: [1, 3, 2],
-  });
-
   useEffect(() => {
     console.log("useEffect getAllNutrition called");
     getAllNutrition();
