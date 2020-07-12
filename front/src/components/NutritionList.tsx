@@ -1,8 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 // import {useState} from 'react';
-import { NutritionItem, NIgetAll } from "../logic/nutrition/NutritionLogic";
+import { NutritionItem, NIreadAll } from "../logic/nutrition/NutritionLogic";
 import useFormState from "../common/useFormState";
 import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
+import { createUseStyles } from "react-jss";
+
+export const TestContext = createContext("test context value");
+
+const useStyles = createUseStyles({
+  list: {
+    background: "#f0f0f0",
+    padding: "5px",
+    width: "fit-content",
+    borderRadius: "15px",
+    display: "flex",
+    flexFlow: "column nowrap",
+  },
+});
 
 const NutritionList = () => {
   const [allNutritionFromBack, setAllNutritionFromBack]: [
@@ -15,16 +29,18 @@ const NutritionList = () => {
     getAllNutrition();
   }, []);
 
+  const classes = useStyles();
+
   async function getAllNutrition() {
     console.log("getAllNutrition called");
 
-    const allNutr: NutritionItem[] = await NIgetAll();
+    const allNutr: NutritionItem[] = await NIreadAll();
     setAllNutritionFromBack(allNutr);
     // return allNutr;
   }
 
   return (
-    <ul>
+    <ul className={classes.list}>
       {allNutritionFromBack.map((nutritionItem) => (
         <NutritionListItem
           key={nutritionItem._id}

@@ -31,8 +31,8 @@ export class NutritionItem {
 // api for NI
 export const {
   create: NIcreate,
-  readById: NIgetById,
-  readAll: NIgetAll,
+  readById: NIreadById,
+  readAll: NIreadAll,
   updateById: NIupdateById,
   deleteById: NIdeleteById,
 } = generateCRUD("http://localhost:4000/nutritionItems");

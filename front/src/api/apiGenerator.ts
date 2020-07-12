@@ -18,21 +18,25 @@ export function generateCRUD(baseURL: string) {
     return console.log(res.data);
   };
 
+  // TODO would be nice to bolt type inference from given object onto this. Unsure how well it'd work statically though. Might just move the 'any' type one step behind.
   const readById = async (id: number | string) => {
     const res = await axiosInstance.get(`/${id}`);
     return await res.data;
   };
 
+  // TODO would be nice to bolt type inference from given object onto this. Unsure how well it'd work statically though. Might just move the 'any' type one step behind.
   const readAll = async () => {
     const res = await axiosInstance.get("");
     return await res.data;
   };
 
-  const updateById = async (id: number | string, object: object) => {
-    const res = await axiosInstance.post(`/update/${id}`, object);
+  // TODO would be nice to bolt type inference from given object onto this. Unsure how well it'd work statically though. Might just move the 'any' type one step behind.
+  const updateById = async (object: any) => {
+    const res = await axiosInstance.post(`/update/${object._id}`, object);
     return res;
   };
 
+  // TODO would be nice to bolt type inference from given object onto this. Unsure how well it'd work statically though. Might just move the 'any' type one step behind.
   const deleteById = async (id: number | string) => {
     const res = await axiosInstance.delete(`/delete/${id}`);
     return res;
