@@ -11,8 +11,10 @@ export function generateCRUD(baseURL: string) {
     baseURL: baseURL,
   });
 
-  const create = async (object: object) => {
-    const res = await axiosInstance.post("/add", object);
+  // TODO would be nice to bolt type inference from given object onto this. Unsure how well it'd work statically though. Might just move the 'any' type one step behind.
+  const create = async (object: any) => {
+    const { _id, ...objectWithoutMongoId } = object;
+    const res = await axiosInstance.post("/add", objectWithoutMongoId);
     return console.log(res.data);
   };
 

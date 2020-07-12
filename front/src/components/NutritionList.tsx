@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
 // import {useState} from 'react';
-import {
-  NutritionItem,
-  NIcreate,
-  NIgetById,
-  NIgetAll,
-  NIdeleteById,
-  NIupdateById,
-} from "../logic/nutrition/NutritionLogic";
+import { NutritionItem, NIgetAll } from "../logic/nutrition/NutritionLogic";
 import useFormState from "../common/useFormState";
-import NutritionListItem from "./NutritionListItem";
+import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
 
 const NutritionList = () => {
   const [allNutritionFromBack, setAllNutritionFromBack]: [
@@ -44,49 +37,21 @@ const NutritionList = () => {
     // return allNutr;
   }
 
-  function handleTitleChange(title: string) {
-    updateProperty("title", title);
-  }
-
-  function handleItemUpdate(nutritionItem: NutritionItem) {
-    NIupdateById(nutritionItem._id, nutritionItem).then(() =>
-      getAllNutrition()
-    );
-  }
-
-  async function handleItemDelete(nutritionItem: NutritionItem) {
-    // deleteNutrition(nutritionItem);
-    NIdeleteById(nutritionItem._id).then(() => getAllNutrition());
-  }
-
-  async function sendCreateRequest() {
-    NIcreate(formObject).then(() => getAllNutrition());
-    resetForm();
-  }
-
   return (
     <ul>
       {allNutritionFromBack.map((nutritionItem) => (
         <NutritionListItem
           key={nutritionItem._id}
           item={nutritionItem}
+          initialMode={NutritionItemModes.Show}
           refresh={getAllNutrition}
         />
       ))}
-      <li>
-        <input
-          value={formObject.title}
-          placeholder="title"
-          onChange={(event) => handleTitleChange(event.target.value)}
-        />
-        <button
-          onClick={() => {
-            sendCreateRequest();
-          }}
-        >
-          create
-        </button>
-      </li>
+      <NutritionListItem
+        item={new NutritionItem("")}
+        initialMode={NutritionItemModes.New}
+        refresh={getAllNutrition}
+      />
     </ul>
   );
 };

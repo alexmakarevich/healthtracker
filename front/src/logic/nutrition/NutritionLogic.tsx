@@ -15,7 +15,7 @@ function generateTempId() {
 }
 
 export class NutritionItem {
-  _id: number | string = "not yet generated";
+  _id: number | string = 0;
   id: number | string | undefined = generateTempId();
   title!: string;
   ingredientIds: number[] | string[] = [];

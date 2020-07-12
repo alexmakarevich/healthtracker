@@ -7,69 +7,84 @@ import {
   NIdeleteById,
   NIupdateById,
 } from "../logic/nutrition/NutritionLogic";
-import useFormState from "../common/useFormState";
 import useObjectState from "../common/useObjectState";
 import TextWithEdit from "./TextWithEdit";
 
+export enum NutritionItemModes {
+  Show,
+  Edit,
+  New,
+}
+
 interface Props {
   item: NutritionItem;
+  initialMode: NutritionItemModes;
   refresh: () => void;
 }
 
-const NutritionListItem = ({ item, refresh }: Props) => {
+const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
   const {
-    obj,
-    updateProperty,
-    resetObj,
+    obj: itemState,
+    updateProperty: updateItemProperty,
+    resetObj: resetItemState,
   }: {
     obj: NutritionItem;
     updateProperty: any;
     resetObj: any;
   } = useObjectState(item);
-  const [isEditing, setIsEditing] = useState(false);
 
-  const itemState: NutritionItem = obj;
-
-  function handleTextChange(propName: string, newValue: any) {
-    updateProperty(propName, newValue);
-  }
-
-  function toggleEdit() {
-    setIsEditing(!isEditing);
-  }
+  const [mode, setMode] = useState(initialMode);
 
   function handleSave() {
-    NIupdateById(itemState._id, itemState);
-    setIsEditing(!isEditing);
+    NIupdateById(itemState._id, itemState).then(refresh);
+    setMode(NutritionItemModes.Show);
+    resetItemState();
   }
 
   function handleCancel() {
-    resetObj();
-    setIsEditing(!isEditing);
+    setMode(NutritionItemModes.Show);
+    resetItemState();
   }
 
   function handleDelete() {
-    NIdeleteById(itemState._id).then(() => refresh());
+    NIdeleteById(itemState._id).then(refresh);
+  }
+
+  function handleCreate() {
+    NIcreate(itemState).then(refresh);
+  }
+
+  function handleReset() {
+    resetItemState();
   }
 
   return (
     <div>
       <TextWithEdit
         text={itemState.title}
-        isEdit={!isEditing}
+        isEdit={
+          mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
+        }
         handleChange={(newText: string) => {
-          handleTextChange("title", newText);
+          updateItemProperty("title", newText);
         }}
       />
-      {isEditing ? (
+      {mode === NutritionItemModes.Show && (
+        <div>
+          <button onClick={() => setMode(NutritionItemModes.Edit)}>edit</button>
+          <button onClick={() => handleDelete()}>delete</button>
+        </div>
+      )}
+      {mode === NutritionItemModes.Edit && (
         <div>
           <button onClick={() => handleSave()}>save</button>
           <button onClick={() => handleCancel()}>cancel</button>
         </div>
-      ) : (
+      )}
+      {mode === NutritionItemModes.New && (
         <div>
-          <button onClick={toggleEdit}>edit</button>
-          <button onClick={() => handleDelete()}>delete</button>
+          <button onClick={() => handleCreate()}>create</button>
+          <button onClick={() => handleReset()}>reset</button>
         </div>
       )}
     </div>
