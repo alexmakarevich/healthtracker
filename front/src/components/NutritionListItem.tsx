@@ -64,8 +64,6 @@ const NutritionListItem = ({ item, U, D }: Props) => {
 
   return (
     <div>
-      {obj.id}
-      -
       <TextWithEdit
         text={itemState.title}
         isEdit={!isEditing}

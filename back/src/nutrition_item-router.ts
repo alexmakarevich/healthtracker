@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
 let NutririonItem = new Schema({
@@ -13,6 +14,6 @@ let NutririonItem = new Schema({
   },
 });
 
-const Model = mongoose.model("NutritionItem", NutririonItem);
+const nutritionItemRoutes = generateRoutes("NutritionItem", NutririonItem);
 
-module.exports = Model;
+export { nutritionItemRoutes };

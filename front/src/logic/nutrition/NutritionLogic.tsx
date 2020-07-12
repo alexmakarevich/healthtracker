@@ -1,5 +1,10 @@
 import useCRUDwithIds from "../../useCRUDwithIds";
 import { generateAPI } from "../../api/apiGenerator";
+import axios, { AxiosInstance } from "axios";
+
+const axiosInstance = axios.create({
+  baseURL: "http://localhost:4000/nutritionItems",
+});
 
 const dateTimeNow = new Date();
 
@@ -10,6 +15,7 @@ function generateTempId() {
 }
 
 export class NutritionItem {
+  _id: number | string = "not yet generated";
   id: number | string | undefined = generateTempId();
   title!: string;
   ingredientIds: number[] | string[] = [];
@@ -36,9 +42,13 @@ export class NutritionItem {
 // }
 
 // api for NI
-export const { create: NIcreate, getById: NIgetById } = generateAPI(
-  "http://localhost:4000/nutritionItems"
-);
+export const {
+  create: NIcreate,
+  getById: NIgetById,
+  getAll: NIgetAll,
+  updateById: NIupdateById,
+  deleteById: NIdeleteById,
+} = generateAPI("http://localhost:4000/nutritionItems");
 
 // TODO: replace useState data with data from backend, then remove the code below
 

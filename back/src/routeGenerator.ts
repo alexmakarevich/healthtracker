@@ -1,13 +1,17 @@
-const express = require("express");
+import * as express from "express";
 const mongoose = require("mongoose");
-import { Model, Document, Schema } from "mongoose";
-import { Mode } from "fs";
 
 // model should be if type express model, but not sure how to import it
-function generateRoutes(modelName: string, schema: typeof Schema) {
-  let router = express.Router();
+function generateRoutes(
+  // Model: Model<Document, {}>
+  modelName: string,
+  schema: any
+) {
+  // const Model: Model<Document, {}> = mongoose.model(modelName, schema);
 
-  const Model: Model<Document, {}> = mongoose.model(modelName, schema);
+  const Model = mongoose.model(modelName, schema);
+
+  let router = express.Router();
 
   router.route("/").get(function (req, res) {
     Model.find(function (err, items) {
@@ -28,15 +32,15 @@ function generateRoutes(modelName: string, schema: typeof Schema) {
 
   router.route("/update/:id").post(function (req, res) {
     Model.findById(req.params.id, function (err, item) {
-      if (!item) res.status(404).send(modelName, "data not found - 404.");
-      else item = req.body;
+      if (!item) res.status(404).send("data not found - 404.");
+      else item = Object.assign(item, req.body);
       item
         .save()
         .then((item) => {
-          res.json(modelName, " updated");
+          res.json({ result: "updated", request: req.body, item: item });
         })
-        .catch((item) => {
-          res.status(400).send(modelName, "update failed - 400");
+        .catch((err) => {
+          res.status(400).send("update failed - 400");
         });
     });
   });
@@ -60,7 +64,7 @@ function generateRoutes(modelName: string, schema: typeof Schema) {
     item
       .save()
       .then((item) => {
-        res.status(200).json({ item: "nutrition item added successfully" });
+        res.status(200).json({ result: "item added successfully", item: item });
       })
       .catch((err) => {
         res.status(400).send("adding new nutrition item failed");

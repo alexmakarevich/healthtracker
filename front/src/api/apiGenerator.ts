@@ -11,28 +11,29 @@ export function generateAPI(baseURL: string) {
     baseURL: baseURL,
   });
 
-  const create = (object: object) => {
-    return axiosInstance
-      .post("/add", object)
-      .then((res) => console.log(res.data));
+  const create = async (object: object) => {
+    const res = await axiosInstance.post("/add", object);
+    return console.log(res.data);
   };
 
-  const getById = (id: number | string) => {
-    return axiosInstance.get(`/${id}`).then((res) => console.log(res.data));
+  const getById = async (id: number | string) => {
+    const res = await axiosInstance.get(`/${id}`);
+    return await res.data;
   };
 
-  const getAll = () => {
-    return axiosInstance.get("").then((res) => console.log(res.data));
+  const getAll = async () => {
+    const res = await axiosInstance.get("");
+    return await res.data;
   };
 
-  const updateById = (id: number | string, object: object) => {
-    return axiosInstance
-      .put(`/${id}`, object)
-      .then((res) => console.log(res.data));
+  const updateById = async (id: number | string, object: object) => {
+    const res = await axiosInstance.post(`/update/${id}`, object);
+    return res;
   };
 
-  const deleteById = (id: number | string) => {
-    return axiosInstance.delete(`/${id}`).then((res) => console.log(res.data));
+  const deleteById = async (id: number | string) => {
+    const res = await axiosInstance.delete(`/delete/${id}`);
+    return res;
   };
 
   return { create, getById, getAll, updateById, deleteById };

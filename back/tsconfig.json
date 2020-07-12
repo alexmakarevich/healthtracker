@@ -10,6 +10,11 @@
     "baseUrl": "./src",
     "alwaysStrict": true
   },
-  "include": ["src/**/*.ts", "src/todo-router.js"],
+  "include": [
+    "src/**/*.ts",
+    "src/*.ts",
+    "src/todo-router.js",
+    "src/nutritionItem-model.js"
+  ],
   "exclude": ["node_modules"]
 }

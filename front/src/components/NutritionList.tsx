@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import {useState} from 'react';
 import {
   NutritionItem,
   useNutritionCRUD,
   NIcreate,
   NIgetById,
+  NIgetAll,
+  NIdeleteById,
+  NIupdateById,
 } from "../logic/nutrition/NutritionLogic";
 import useFormState from "../common/useFormState";
 import NutritionListItem from "./NutritionListItem";
@@ -24,6 +27,11 @@ const NutritionList = () => {
     deleteNutrition: Function;
   } = useNutritionCRUD();
 
+  const [allNutritionFromBack, setAllNutritionFromBack]: [
+    NutritionItem[],
+    Function
+  ] = useState([]);
+
   const {
     formObject,
     updateProperty,
@@ -38,44 +46,44 @@ const NutritionList = () => {
     ingredientIds: [1, 3, 2],
   });
 
-  console.log("nutrition list rendered");
+  useEffect(() => {
+    console.log("useEffect getAllNutrition called");
+    getAllNutrition();
+  }, []);
+
+  async function getAllNutrition() {
+    console.log("getAllNutrition called");
+
+    const allNutr: NutritionItem[] = await NIgetAll();
+    setAllNutritionFromBack(allNutr);
+    // return allNutr;
+  }
 
   function handleTitleChange(title: string) {
     updateProperty("title", title);
   }
 
-  function handleCreate() {
-    createNutrition(formObject);
-    sendCreateRequest();
-    resetForm();
-  }
-
   function handleItemUpdate(nutritionItem: NutritionItem) {
-    updateNutrition(nutritionItem);
+    NIupdateById(nutritionItem._id, nutritionItem).then(() =>
+      getAllNutrition()
+    );
   }
 
-  function handleItemDelete(nutritionItem: NutritionItem) {
-    deleteNutrition(nutritionItem);
+  async function handleItemDelete(nutritionItem: NutritionItem) {
+    // deleteNutrition(nutritionItem);
+    NIdeleteById(nutritionItem._id).then(() => getAllNutrition());
   }
 
-  function sendCreateRequest() {
-    // createNutritionAPI(newNutritionItem)
-    // axios.post('http://localhost:4000/nutritionItems/add', newNutritionItem).then(res => console.log(res.data));
-    // createNutritionHTTP(formObject);
-    // createNutritionAPIFromConst(formObject);
-    // generatedCreateNutr(formObject);
-    NIcreate({
-      id: 1000,
-      title: "new",
-      ingredientIds: [1, 2, 3],
-    });
+  async function sendCreateRequest() {
+    NIcreate(formObject).then(() => getAllNutrition());
+    resetForm();
   }
 
   return (
     <ul>
-      {nutrition.map((nutritionItem) => (
+      {allNutritionFromBack.map((nutritionItem) => (
         <NutritionListItem
-          key={nutritionItem.id}
+          key={nutritionItem._id}
           item={nutritionItem}
           U={handleItemUpdate}
           D={handleItemDelete}
@@ -89,7 +97,7 @@ const NutritionList = () => {
         />
         <button
           onClick={() => {
-            handleCreate();
+            sendCreateRequest();
           }}
         >
           create
