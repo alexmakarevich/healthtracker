@@ -1,9 +1,10 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 // import {useState} from 'react';
 import { NutritionItem, NIreadAll } from "../logic/nutrition/NutritionLogic";
 import useFormState from "../common/useFormState";
 import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
 import { createUseStyles } from "react-jss";
+import { NutritionContext } from "../App";
 
 export const TestContext = createContext("test context value");
 
@@ -19,40 +20,26 @@ const useStyles = createUseStyles({
 });
 
 const NutritionList = () => {
-  const [allNutritionFromBack, setAllNutritionFromBack]: [
-    NutritionItem[],
-    Function
-  ] = useState([]);
-
-  useEffect(() => {
-    console.log("useEffect getAllNutrition called");
-    getAllNutrition();
-  }, []);
+  const {
+    items: allNutritionItems,
+    getOneById: getNutriitionItemByIdFromContext,
+    refresh: updateAllNutritionItems,
+  } = useContext(NutritionContext);
 
   const classes = useStyles();
 
-  async function getAllNutrition() {
-    console.log("getAllNutrition called");
-
-    const allNutr: NutritionItem[] = await NIreadAll();
-    setAllNutritionFromBack(allNutr);
-    // return allNutr;
-  }
-
   return (
     <ul className={classes.list}>
-      {allNutritionFromBack.map((nutritionItem) => (
+      {allNutritionItems.map((nutritionItem) => (
         <NutritionListItem
           key={nutritionItem._id}
           item={nutritionItem}
           initialMode={NutritionItemModes.Show}
-          refresh={getAllNutrition}
         />
       ))}
       <NutritionListItem
         item={new NutritionItem("")}
         initialMode={NutritionItemModes.New}
-        refresh={getAllNutrition}
       />
     </ul>
   );

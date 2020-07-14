@@ -54,10 +54,9 @@ export enum NutritionItemModes {
 interface Props {
   item: NutritionItem;
   initialMode: NutritionItemModes;
-  refresh: () => void;
 }
 
-const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
+const NutritionListItem = ({ item, initialMode }: Props) => {
   const {
     obj: itemState,
     setObj: setItemState,
@@ -70,7 +69,11 @@ const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
     resetObj: any;
   } = useObjectState(item);
 
-  const testContext = useContext(NutritionContext);
+  const {
+    items: allNutritionItems,
+    getOneById: getNutriitionItemByIdFromContext,
+    refresh: refreshNIContext,
+  } = useContext(NutritionContext);
 
   const [mode, setMode] = useState(initialMode);
 
@@ -114,7 +117,7 @@ const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
   }
 
   function handleSave() {
-    NIupdateById(itemState).then(refresh);
+    NIupdateById(itemState).then(() => refreshNIContext());
     setMode(NutritionItemModes.Show);
   }
 
@@ -124,18 +127,18 @@ const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
   }
 
   function handleDelete() {
-    NIdeleteById(itemState._id).then(refresh);
+    NIdeleteById(itemState._id).then(() => refreshNIContext());
   }
 
   function handleCreate() {
-    NIcreate(itemState).then(refresh);
+    NIcreate(itemState).then(() => refreshNIContext());
   }
 
   function handleReset() {
     resetItemState();
   }
 
-  async function NIreadByIdAsync(id: string | number) {
+  async function NIreadByIdAsync(id: NutritionItem["_id"]) {
     return await NIreadById(id);
   }
 
@@ -159,11 +162,11 @@ const NutritionListItem = ({ item, initialMode, refresh }: Props) => {
               : () => {}
           }
         />
-        {ingredients.map((ingredient) => (
+        {itemState.ingredientIds.map((id: string) => (
           <NutritionItemCompact
-            item={ingredient}
+            item={getNutriitionItemByIdFromContext(id)}
             initialMode={NutritionItemModes.Show}
-            refresh={refresh}
+            refresh={() => refreshNIContext()}
           />
         ))}
       </div>

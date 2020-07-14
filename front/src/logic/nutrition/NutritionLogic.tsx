@@ -15,12 +15,12 @@ function generateTempId() {
 }
 
 export class NutritionItem {
-  _id: number | string = 0;
+  _id: string = "default";
   id: number | string | undefined = generateTempId();
   title!: string;
-  ingredientIds: number[] | string[] = [];
+  ingredientIds: NutritionItem["_id"][] = [];
 
-  constructor(title: string, ingredientIds?: number[] | string[]) {
+  constructor(title: string, ingredientIds?: NutritionItem["ingredientIds"]) {
     this.title = title;
     ingredientIds !== undefined
       ? (this.ingredientIds = ingredientIds)
@@ -28,7 +28,8 @@ export class NutritionItem {
   }
 }
 
-// api for NI
+// TODO see if below is at all useful anymore, likely remove
+// local state-based api for NI
 export const {
   create: NIcreate,
   readById: NIreadById,

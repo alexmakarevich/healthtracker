@@ -6,12 +6,20 @@ import { NutritionItem, NIreadAll } from "./logic/nutrition/NutritionLogic";
 
 export const TestContext = createContext<any>("test context value");
 
-export const NutritionContext = createContext<NutritionItem[] | null>(null);
+interface NutritionContextProps {
+  items: NutritionItem[];
+  getOneById: Function;
+  refresh: Function;
+}
+
+export const NutritionContext = createContext<NutritionContextProps>({
+  items: [],
+  getOneById: () => {},
+  refresh: () => {},
+});
 
 function App() {
-  const [nutrition, setNutrition]: [NutritionItem[], Function] = useState([
-    { id: "", title: "", _id: "", ingredientIds: [1, 3, 4] },
-  ]);
+  const [nutrition, setNutrition]: [NutritionItem[], Function] = useState([]);
 
   useEffect(() => {
     console.log("App useEffect called");
@@ -26,8 +34,20 @@ function App() {
     // return allNutr;
   }
 
+  function getNutriitionItemByIdFromContext(id: NutritionItem["_id"]) {
+    const item = nutrition.find((item) => item._id === id);
+    return item;
+  }
+
+  const providerValues = {
+    items: nutrition,
+    getOneById: (id: NutritionItem["_id"]) =>
+      getNutriitionItemByIdFromContext(id),
+    refresh: () => getAllNutrition(),
+  };
+
   return (
-    <NutritionContext.Provider value={nutrition}>
+    <NutritionContext.Provider value={providerValues}>
       <div className="App">
         <NutritionList />
       </div>
