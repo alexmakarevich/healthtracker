@@ -15,6 +15,11 @@ import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { TestContext, NutritionContext } from "../App";
 import SelectList from "../components/generic/SelectList";
+import GenericSelect, {
+  SelectModes,
+  SelectPair,
+} from "../components/generic/GenericSelect";
+import GenericSelectItem from "../components/generic/GenericSelectItem";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -179,7 +184,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
             refresh={() => refreshNIContext()}
           />
         ))}
-        <SelectList
+        {/* <SelectList
           children={allNutritionItems.map((ni) => ({
             id: ni._id,
             node: ni.title,
@@ -187,7 +192,17 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
           }))}
           handleSelect={(id: string) => handleIngredientSelectOnExisting(id)}
           handleUnselect={(id) => console.log(id)}
-        />
+        /> */}
+        <GenericSelect
+          mode={SelectModes.MultiSelect}
+          handleChangeSelection={(selectPairs: SelectPair[]) => {
+            console.log(selectPairs);
+          }}
+          children={[
+            { element: <GenericSelectItem />, id: "1", isSelected: false },
+            { element: <GenericSelectItem />, id: "2", isSelected: true },
+          ]}
+        ></GenericSelect>
       </div>
       <div className={classes.buttons}>
         {mode === NutritionItemModes.Show && (
