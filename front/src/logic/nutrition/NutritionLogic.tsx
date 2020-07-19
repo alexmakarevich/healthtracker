@@ -28,6 +28,23 @@ export class NutritionItem {
   }
 }
 
+export const NIaddIngredient = (
+  ni: NutritionItem,
+  ingredientId: NutritionItem["_id"]
+) => {
+  const newIngredients = [...ni.ingredientIds, ingredientId];
+  const newNI = { ...ni, ingredientIds: newIngredients };
+  return newNI;
+};
+
+export const NIaddIngredientAndUpdate = (
+  ni: NutritionItem,
+  ingredientId: NutritionItem["_id"]
+) => {
+  const newNI = NIaddIngredient(ni, ingredientId);
+  NIupdateById(newNI);
+};
+
 // TODO see if below is at all useful anymore, likely remove
 // local state-based api for NI
 export const {

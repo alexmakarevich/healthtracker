@@ -6,12 +6,15 @@ import {
   NIreadById,
   NIdeleteById,
   NIupdateById,
+  NIaddIngredient,
+  NIaddIngredientAndUpdate,
 } from "../logic/nutrition/NutritionLogic";
 import useObjectState from "../common/useObjectState";
 import TextWithEdit from "./generic/TextWithEdit";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { TestContext, NutritionContext } from "../App";
+import SelectList from "../components/generic/SelectList";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -138,6 +141,13 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
     resetItemState();
   }
 
+  async function handleIngredientSelectOnExisting(
+    ingredientId: NutritionItem["_id"]
+  ) {
+    setItemState(NIaddIngredientAndUpdate(itemState, ingredientId));
+    // NIupdateById(itemState).then(() => refreshNIContext());
+  }
+
   async function NIreadByIdAsync(id: NutritionItem["_id"]) {
     return await NIreadById(id);
   }
@@ -169,6 +179,15 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
             refresh={() => refreshNIContext()}
           />
         ))}
+        <SelectList
+          children={allNutritionItems.map((ni) => ({
+            id: ni._id,
+            node: ni.title,
+            selected: false,
+          }))}
+          handleSelect={(id: string) => handleIngredientSelectOnExisting(id)}
+          handleUnselect={(id) => console.log(id)}
+        />
       </div>
       <div className={classes.buttons}>
         {mode === NutritionItemModes.Show && (
