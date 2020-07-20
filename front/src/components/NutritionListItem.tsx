@@ -14,12 +14,7 @@ import TextWithEdit from "./generic/TextWithEdit";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { TestContext, NutritionContext } from "../App";
-import SelectList from "../components/generic/SelectList";
-import GenericSelect, {
-  SelectModes,
-  SelectPair,
-} from "../components/generic/GenericSelect";
-import GenericSelectItem from "../components/generic/GenericSelectItem";
+import SelectList from "./generic/SelectList";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -177,32 +172,24 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
               : () => {}
           }
         />
-        {itemState.ingredientIds.map((id: string) => (
-          <NutritionItemCompact
-            item={getNutriitionItemByIdFromContext(id)}
-            initialMode={NutritionItemModes.Show}
-            refresh={() => refreshNIContext()}
-          />
-        ))}
-        {/* <SelectList
+        {itemState.ingredientIds.map(
+          (id: string) =>
+            getNutriitionItemByIdFromContext(id) && (
+              <NutritionItemCompact
+                item={getNutriitionItemByIdFromContext(id)}
+                initialMode={NutritionItemModes.Show}
+                refresh={() => refreshNIContext()}
+              />
+            )
+        )}
+        <SelectList
           children={allNutritionItems.map((ni) => ({
             id: ni._id,
             node: ni.title,
             selected: false,
           }))}
-          handleSelect={(id: string) => handleIngredientSelectOnExisting(id)}
-          handleUnselect={(id) => console.log(id)}
-        /> */}
-        <GenericSelect
-          mode={SelectModes.MultiSelect}
-          handleChangeSelection={(selectPairs: SelectPair[]) => {
-            console.log(selectPairs);
-          }}
-          children={[
-            { element: <GenericSelectItem />, id: "1", isSelected: false },
-            { element: <GenericSelectItem />, id: "2", isSelected: true },
-          ]}
-        ></GenericSelect>
+          handleChangeSelection={(id: string) => console.log(id)}
+        />
       </div>
       <div className={classes.buttons}>
         {mode === NutritionItemModes.Show && (

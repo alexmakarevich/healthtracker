@@ -47,16 +47,6 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
 
   const [mode, setMode] = useState(initialMode);
 
-  useEffect(() => {
-    console.log(
-      "useEffect forceItemFromProp called. item prop: ",
-      item.title,
-      "item state: ",
-      itemState.title
-    );
-    setItemState(item);
-  }, [item]);
-
   const classes = useStyles();
 
   function handleSave() {
@@ -84,7 +74,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   return (
     <div className={classes.wrapper}>
       <TextWithEdit
-        text={itemState.title}
+        text={item.title}
         isEdit={
           mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
         }

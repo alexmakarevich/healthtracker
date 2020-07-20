@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import NutritionList from "./components/NutritionList";
 import { NutritionItem, NIreadAll } from "./logic/nutrition/NutritionLogic";
+import SelectList from "./components/generic/SelectList";
 
 export const TestContext = createContext<any>("test context value");
 
