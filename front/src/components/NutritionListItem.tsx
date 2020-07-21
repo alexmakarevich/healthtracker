@@ -15,6 +15,7 @@ import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { TestContext, NutritionContext } from "../App";
 import SelectList from "./generic/SelectList";
+import SearchWithDropdown from "./generic/SearchWithDropdown";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -83,6 +84,8 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   const [ingredients, setIngredients]: [NutritionItem[], Function] = useState(
     []
   );
+
+  const [ingredientSearch, setIngredientSearch] = useState("");
 
   useEffect(() => {
     // console.log(
@@ -182,13 +185,16 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
               />
             )
         )}
-        <SelectList
-          children={allNutritionItems.map((ni) => ({
+        <SearchWithDropdown
+          dropdownItems={allNutritionItems.map((ni) => ({
             id: ni._id,
             node: ni.title,
             selected: false,
+            searchableText: ni.title,
           }))}
-          handleChangeSelection={(id: string) => console.log(id)}
+          searchTextValue={ingredientSearch}
+          onSearchChange={(value) => setIngredientSearch(value)}
+          onSelectChange={(id) => console.log(id)}
         />
       </div>
       <div className={classes.buttons}>

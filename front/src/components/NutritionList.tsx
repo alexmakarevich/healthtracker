@@ -9,7 +9,7 @@ import { Collapsible } from "./generic/Collapsible";
 
 export const TestContext = createContext("test context value");
 
-const useStyles = createUseStyles({
+const styles = () => ({
   list: {
     background: "#f0f0f0",
     padding: "5px",
@@ -19,6 +19,8 @@ const useStyles = createUseStyles({
     flexFlow: "column nowrap",
   },
 });
+
+const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
 // useState below purely for testing purposes
 
