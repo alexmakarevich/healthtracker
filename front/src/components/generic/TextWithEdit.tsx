@@ -1,13 +1,13 @@
 import { useState, KeyboardEvent } from "react";
 import React from "react";
 import { render } from "@testing-library/react";
-import classes from "*.module.css";
+import { InputText } from "./InputText";
 
 interface Props {
   text: string;
   isEdit: boolean;
   className?: string;
-  handleChange: Function;
+  handleChange: (eventTartgetValue: string) => void;
   onEnter?: () => void;
 }
 
@@ -18,22 +18,10 @@ const TextWithEdit = ({
   handleChange,
   onEnter,
 }: Props) => {
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (onEnter !== undefined) {
-      if (e.charCode === 13) {
-        onEnter();
-      }
-    }
-  };
-
   return (
     <div className={className}>
       {isEdit ? (
-        <input
-          value={text}
-          onChange={(event) => handleChange(event.target.value)}
-          onKeyPress={handleKeyPress}
-        />
+        <InputText value={text} onChange={handleChange} onEnter={onEnter} />
       ) : (
         <div>{text}</div>
       )}
