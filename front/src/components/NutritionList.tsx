@@ -5,6 +5,7 @@ import useFormState from "../common/useFormState";
 import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
 import { createUseStyles } from "react-jss";
 import { NutritionContext } from "../App";
+import { Collapsible } from "./generic/Collapsible";
 
 export const TestContext = createContext("test context value");
 
@@ -19,6 +20,8 @@ const useStyles = createUseStyles({
   },
 });
 
+// useState below purely for testing purposes
+
 const NutritionList = () => {
   const {
     items: allNutritionItems,
@@ -27,6 +30,7 @@ const NutritionList = () => {
   } = useContext(NutritionContext);
 
   const classes = useStyles();
+  const [expandList, setExpandList] = useState(false);
 
   return (
     <ul className={classes.list}>
