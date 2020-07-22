@@ -15,7 +15,7 @@ const Collapsible = ({ isExpanded, children }: Props) => {
           initial="collapsed"
           animate="open"
           exit="collapsed"
-          transition={{ duration: 0.8, ease: [0.5, 0.62, 0.23, 0.98] }}
+          transition={{ duration: 0.5 }}
           variants={{
             open: { opacity: 1, height: "auto" },
             collapsed: { opacity: 0.5, height: 0 },

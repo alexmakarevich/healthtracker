@@ -24,15 +24,9 @@ interface Props {
   item: NutritionItem;
   initialMode: NutritionItemModes;
   refresh?: () => void;
-  onRemove: (id: NutritionItem["_id"]) => void;
 }
 
-const NutritionItemCompact = ({
-  item,
-  initialMode,
-  refresh,
-  onRemove,
-}: Props) => {
+const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   const {
     obj: itemState,
     setObj: setItemState,
@@ -61,9 +55,6 @@ const NutritionItemCompact = ({
           updateItemProperty("title", newText);
         }}
       />
-      <div style={{ background: "red" }} onClick={() => onRemove(item._id)}>
-        X
-      </div>
     </div>
   );
 };

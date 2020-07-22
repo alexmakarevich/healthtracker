@@ -27,26 +27,28 @@ export class NutritionItem {
       : (this.ingredientIds = []);
   }
 
-  addIngredient(ingredientId: NutritionItem["_id"]) {
-    const newIngredients = [this.ingredientIds, ingredientId];
-    const newNI = { ...this, ingredientIds: newIngredients };
-    return newNI;
-  }
+  // addIngredient(ingredientId: NutritionItem["_id"]) {
+  //   const newIngredients = [this.ingredientIds, ingredientId];
+  //   const newNI = { ...this, ingredientIds: newIngredients };
+  //   return newNI;
+  // }
 
-  removeIngredient(ingredientId: NutritionItem["_id"]) {
-    const newIngredients = this.ingredientIds.map((id) =>
-      id === ingredientId ? null : id
-    );
-    const newNI = { ...this, ingredientIds: newIngredients };
-    return newNI;
-  }
+  // removeIngredient(ingredientId: NutritionItem["_id"]) {
+  //   const newIngredients = this.ingredientIds.map((id) =>
+  //     id === ingredientId ? null : id
+  //   );
+  //   const newNI = { ...this, ingredientIds: newIngredients };
+  //   return newNI;
+  // }
 }
 
 export const NILogic = {
   API: generateCRUD("http://localhost:4000/nutritionItems"),
   Transformations: {
     add_ingredient: (ni: NutritionItem, ingredientId: NutritionItem["_id"]) => {
-      const newIngredients = [...ni.ingredientIds, ingredientId];
+      const newIngredients = Array.from(
+        new Set([...ni.ingredientIds, ingredientId])
+      );
       const newNI = { ...ni, ingredientIds: newIngredients };
       return newNI;
     },

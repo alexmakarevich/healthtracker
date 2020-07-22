@@ -1,15 +1,22 @@
 import { useState, KeyboardEvent, useMemo } from "react";
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, findByLabelText } from "@testing-library/react";
 import { InputText } from "./InputText";
 import SelectList, { SelectChild } from "./SelectList";
 import Fuse from "fuse.js";
 import { createUseStyles } from "react-jss";
 
 const styles = () => ({
+  wrapper: {
+    display: "flex",
+    position: "relative",
+    alignItems: "center",
+  },
   dropdown: {
     position: "absolute",
     background: "white",
+    top: "100%",
+    zIndex: "100",
   },
 });
 
@@ -48,20 +55,16 @@ const SearchWithDropdown = ({
   ]);
 
   function itemsAfterSearch() {
-    // if (searchTextValue.length > 0) {
     const fuse = new Fuse(dropdownItems, fuseOptions);
     const searchResult = fuse.search(searchTextValue);
     const dropdownItemsAfterSearch: SearchableSelectChild[] = searchResult.map(
       (searchItem) => searchItem.item
     );
     return dropdownItemsAfterSearch;
-    // } else {
-    //   return dropdownItems;
-    // }
   }
 
   return (
-    <div {...rest}>
+    <div {...rest} className={classes.wrapper}>
       <InputText value={searchTextValue} onChange={onSearchChange} />
       <SelectList
         children={dropdownItemsAfterSearch}

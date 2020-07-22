@@ -10,41 +10,46 @@ import TextWithEdit from "./../generic/TextWithEdit";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { TestContext, NutritionContext } from "../../App";
-import SelectList from "./../generic/SelectList";
+import { NutritionContext } from "../../App";
+import Ingredients from "./Ingredients";
 import SearchWithDropdown from "./../generic/SearchWithDropdown";
 
-const useStyles = createUseStyles({
-  wrapper: {
-    background: "#84d9b0",
-    borderRadius: "10px",
-    margin: "10px",
-    padding: "5px",
-  },
-  info: {
-    width: "100%",
-    padding: "5px",
-    display: "flex",
-    justifyContent: "space-around",
-  },
-  title: {
-    display: "flex",
-    alignItems: "center",
-  },
-  buttons: {
-    width: "100%",
-    padding: "5px",
-
-    "& > div": {
-      width: "100%",
+const useStyles = createUseStyles(
+  {
+    outerWrapper: {
+      margin: "5px",
+    },
+    innerWrapper: {
+      background: "#84d9b0",
+      borderRadius: "10px",
+      padding: "10px",
+    },
+    info: {
+      padding: "5px",
       display: "flex",
-      justifyContent: "space-around",
-      "& > button": {
-        flexGrow: 1,
+      justifyContent: "center",
+    },
+    title: {
+      display: "flex",
+      alignItems: "center",
+    },
+    buttons: {
+      width: "auto",
+      padding: "5px",
+
+      "& > div": {
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-around",
+        "& > button": {
+          flexGrow: 1,
+        },
       },
     },
   },
-});
+  { name: "NutritionListItem" }
+);
 
 export enum NutritionItemModes {
   Show,
@@ -135,86 +140,59 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
     resetItemState();
   }
 
-  const testNI = new NutritionItem("ttt");
-  console.log(testNI.addIngredient("5f0b512d689c0030e06cff5e"));
-
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.info}>
-        <TextWithEdit
-          text={itemState.title}
-          className={classes.title}
-          isEdit={
-            mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
-          }
-          handleChange={(newText: string) => {
-            updateItemProperty("title", newText);
-          }}
-          onEnter={
-            mode === NutritionItemModes.New
-              ? () => handleCreate()
-              : mode === NutritionItemModes.Edit
-              ? () => handleSave()
-              : () => {}
-          }
-        />
-        {itemState.ingredientIds.map(
-          (id: string) =>
-            NIfromContextById(id) && (
-              <Removable>
-                <NutritionItemCompact
-                  item={NIfromContextById(id)}
-                  initialMode={NutritionItemModes.Show}
-                  refresh={() => refreshNIContext()}
-                  onRemove={(id) =>
-                    setItemState(
-                      NILogic.Transformations.remove_ingredient(itemState, id)
-                    )
-                  }
-                />
-              </Removable>
+    <div className={classes.outerWrapper}>
+      <Removable onRemove={() => handleDelete()}>
+        <div className={classes.innerWrapper}>
+          <div className={classes.info}>
+            <div className={classes.buttons}>
+              {mode === NutritionItemModes.Show && (
+                <button onClick={() => setMode(NutritionItemModes.Edit)}>
+                  edit
+                </button>
+              )}
+              {mode === NutritionItemModes.Edit && (
+                <div>
+                  <button onClick={() => handleSave()}>save</button>
+                  <button onClick={() => handleCancel()}>cancel</button>
+                </div>
+              )}
+              {mode === NutritionItemModes.New && (
+                <div>
+                  <button onClick={() => handleCreate()}>create</button>
+                  <button onClick={() => handleReset()}>reset</button>
+                </div>
+              )}
+            </div>
+            <TextWithEdit
+              text={itemState.title}
+              className={classes.title}
+              isEdit={
+                mode === NutritionItemModes.Edit ||
+                mode === NutritionItemModes.New
+              }
+              handleChange={(newText: string) => {
+                updateItemProperty("title", newText);
+              }}
+              onEnter={
+                mode === NutritionItemModes.New
+                  ? () => handleCreate()
+                  : mode === NutritionItemModes.Edit
+                  ? () => handleSave()
+                  : () => {}
+              }
+            />
+          </div>
+        </div>
+        <Ingredients
+          ids={itemState.ingredientIds}
+          onRemove={(id: NutritionItem["_id"]) =>
+            setItemState(
+              NILogic.Transformations.remove_ingredient(itemState, id)
             )
-        )}
-        <SearchWithDropdown
-          dropdownItems={allNIfromContext.map((ni) => ({
-            id: ni._id,
-            node: (
-              <NutritionItemCompact
-                item={NIfromContextById(ni._id)}
-                initialMode={NutritionItemModes.Show}
-                onRemove={(id) => console.log(id)}
-              />
-            ),
-            selected: false,
-            searchableText: ni.title,
-          }))}
-          searchTextValue={ingredientSearch}
-          onSearchChange={(value) => setIngredientSearch(value)}
-          onSelectChange={(id) => console.log(id)}
+          }
         />
-      </div>
-      <div className={classes.buttons}>
-        {mode === NutritionItemModes.Show && (
-          <div>
-            <button onClick={() => setMode(NutritionItemModes.Edit)}>
-              edit
-            </button>
-            <button onClick={() => handleDelete()}>delete</button>
-          </div>
-        )}
-        {mode === NutritionItemModes.Edit && (
-          <div>
-            <button onClick={() => handleSave()}>save</button>
-            <button onClick={() => handleCancel()}>cancel</button>
-          </div>
-        )}
-        {mode === NutritionItemModes.New && (
-          <div>
-            <button onClick={() => handleCreate()}>create</button>
-            <button onClick={() => handleReset()}>reset</button>
-          </div>
-        )}
-      </div>
+      </Removable>
     </div>
   );
 };

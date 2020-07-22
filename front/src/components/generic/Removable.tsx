@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createUseStyles } from "react-jss";
 import { relative } from "path";
@@ -6,7 +6,8 @@ import { relative } from "path";
 const styles = () => ({
   wrapper: {
     position: "relative",
-    margin: "5px",
+    marginTop: "10px",
+    marginRight: "10px",
   },
   removeButton: {
     background: "#ee3333",
@@ -27,7 +28,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "Removable" });
 
 interface Props {
-  children: ReactElement;
+  children: ReactNode;
   onRemove?: () => void;
 }
 
