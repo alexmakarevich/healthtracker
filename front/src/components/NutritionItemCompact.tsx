@@ -1,12 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import {
-  NutritionItem,
-  NIcreate,
-  NIreadById,
-  NIdeleteById,
-  NIupdateById,
-} from "../logic/nutrition/NutritionLogic";
+import { NutritionItem } from "../logic/nutrition/NutritionLogic";
 import useObjectState from "../common/useObjectState";
 import TextWithEdit from "./generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
@@ -30,14 +24,21 @@ interface Props {
   item: NutritionItem;
   initialMode: NutritionItemModes;
   refresh?: () => void;
+  onRemove: (id: NutritionItem["_id"]) => void;
 }
 
-const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
+const NutritionItemCompact = ({
+  item,
+  initialMode,
+  refresh,
+  onRemove,
+}: Props) => {
   const {
     obj: itemState,
     setObj: setItemState,
     updateProperty: updateItemProperty,
     resetObj: resetItemState,
+    ...rest
   }: {
     obj: NutritionItem;
     setObj: any;
@@ -49,30 +50,8 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
 
   const classes = useStyles();
 
-  function handleSave() {
-    NIupdateById(itemState).then(refresh);
-    setMode(NutritionItemModes.Show);
-  }
-
-  function handleCancel() {
-    setMode(NutritionItemModes.Show);
-    resetItemState();
-  }
-
-  function handleDelete() {
-    NIdeleteById(itemState._id).then(refresh);
-  }
-
-  function handleCreate() {
-    NIcreate(itemState).then(refresh);
-  }
-
-  function handleReset() {
-    resetItemState();
-  }
-
   return (
-    <div className={classes.wrapper}>
+    <div className={classes.wrapper} {...rest}>
       <TextWithEdit
         text={item.title}
         isEdit={
@@ -81,32 +60,10 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
         handleChange={(newText: string) => {
           updateItemProperty("title", newText);
         }}
-        onEnter={
-          mode === NutritionItemModes.New
-            ? () => handleCreate()
-            : mode === NutritionItemModes.Edit
-            ? () => handleSave()
-            : () => {}
-        }
       />
-      {/* {mode === NutritionItemModes.Show && (
-        <div>
-          <button onClick={() => setMode(NutritionItemModes.Edit)}>edit</button>
-          <button onClick={() => handleDelete()}>delete</button>
-        </div>
-      )}
-      {mode === NutritionItemModes.Edit && (
-        <div>
-          <button onClick={() => handleSave()}>save</button>
-          <button onClick={() => handleCancel()}>cancel</button>
-        </div>
-      )}
-      {mode === NutritionItemModes.New && (
-        <div>
-          <button onClick={() => handleCreate()}>create</button>
-          <button onClick={() => handleReset()}>reset</button>
-        </div>
-      )} */}
+      <div style={{ background: "red" }} onClick={() => onRemove(item._id)}>
+        X
+      </div>
     </div>
   );
 };

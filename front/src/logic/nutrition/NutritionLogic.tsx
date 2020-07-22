@@ -26,7 +26,27 @@ export class NutritionItem {
       ? (this.ingredientIds = ingredientIds)
       : (this.ingredientIds = []);
   }
+
+  addIngredient(ingredientId: NutritionItem["_id"]) {
+    const newIngredients = [this.ingredientIds, ingredientId];
+    const newNI = { ...this, ingredientIds: newIngredients };
+    return newNI;
+  }
+
+  removeIngredient(ingredientId: NutritionItem["_id"]) {
+    const newIngredients = this.ingredientIds.map((id) =>
+      id === ingredientId ? null : id
+    );
+    const newNI = { ...this, ingredientIds: newIngredients };
+    return newNI;
+  }
+
+  // returnSelf = ()
 }
+
+export const NutritionItemAPI = generateCRUD(
+  "http://localhost:4000/nutritionItems"
+);
 
 export const NIaddIngredient = (
   ni: NutritionItem,
@@ -36,21 +56,3 @@ export const NIaddIngredient = (
   const newNI = { ...ni, ingredientIds: newIngredients };
   return newNI;
 };
-
-export const NIaddIngredientAndUpdate = (
-  ni: NutritionItem,
-  ingredientId: NutritionItem["_id"]
-) => {
-  const newNI = NIaddIngredient(ni, ingredientId);
-  NIupdateById(newNI);
-};
-
-// TODO see if below is at all useful anymore, likely remove
-// local state-based api for NI
-export const {
-  create: NIcreate,
-  readById: NIreadById,
-  readAll: NIreadAll,
-  updateById: NIupdateById,
-  deleteById: NIdeleteById,
-} = generateCRUD("http://localhost:4000/nutritionItems");

@@ -2,12 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { useState } from "react";
 import {
   NutritionItem,
-  NIcreate,
-  NIreadById,
-  NIdeleteById,
-  NIupdateById,
-  NIaddIngredient,
-  NIaddIngredientAndUpdate,
+  NutritionItemAPI,
 } from "../logic/nutrition/NutritionLogic";
 import useObjectState from "../common/useObjectState";
 import TextWithEdit from "./generic/TextWithEdit";
@@ -101,7 +96,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   const classes = useStyles();
 
   async function readIngredient(id: string) {
-    const ingredient: NutritionItem = await NIreadById(id);
+    const ingredient: NutritionItem = await NutritionItemAPI.READ_BY_ID(id);
     return ingredient;
   }
 
@@ -109,7 +104,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
     console.log("readAllIngredients called");
 
     asyncForEach(itemState.ingredientIds, async (id: any) => {
-      const ingredient: NutritionItem = await NIreadById(id);
+      const ingredient: NutritionItem = await NutritionItemAPI.READ_BY_ID(id);
       console.log("ingredient: ", ingredient);
 
       setIngredients([...ingredients, ingredient]);
@@ -123,7 +118,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   }
 
   function handleSave() {
-    NIupdateById(itemState).then(() => refreshNIContext());
+    NutritionItemAPI.UPDATE_BY_ID(itemState).then(() => refreshNIContext());
     setMode(NutritionItemModes.Show);
   }
 
@@ -133,27 +128,30 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   }
 
   function handleDelete() {
-    NIdeleteById(itemState._id).then(() => refreshNIContext());
+    NutritionItemAPI.DELETE_BY_ID(itemState._id).then(() => refreshNIContext());
   }
 
   function handleCreate() {
-    NIcreate(itemState).then(() => refreshNIContext());
+    NutritionItemAPI.CREATE(itemState).then(() => refreshNIContext());
   }
 
   function handleReset() {
     resetItemState();
   }
 
-  async function handleIngredientSelectOnExisting(
-    ingredientId: NutritionItem["_id"]
-  ) {
-    setItemState(NIaddIngredientAndUpdate(itemState, ingredientId));
-    // NIupdateById(itemState).then(() => refreshNIContext());
-  }
+  // async function handleIngredientSelectOnExisting(
+  //   ingredientId: NutritionItem["_id"]
+  // ) {
+  //   setItemState(NIaddIngredientAndUpdate(itemState, ingredientId));
+  //   // NIupdateById(itemState).then(() => refreshNIContext());
+  // }
 
-  async function NIreadByIdAsync(id: NutritionItem["_id"]) {
-    return await NIreadById(id);
-  }
+  // async function NIreadByIdAsync(id: NutritionItem["_id"]) {
+  //   return await NIreadById(id);
+  // }
+
+  const testNI = new NutritionItem("ttt");
+  console.log(testNI.addIngredient("5f0b512d689c0030e06cff5e"));
 
   return (
     <div className={classes.wrapper}>
@@ -182,13 +180,20 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
                 item={getNutriitionItemByIdFromContext(id)}
                 initialMode={NutritionItemModes.Show}
                 refresh={() => refreshNIContext()}
+                onRemove={() => console.log(id)}
               />
             )
         )}
         <SearchWithDropdown
           dropdownItems={allNutritionItems.map((ni) => ({
             id: ni._id,
-            node: ni.title,
+            node: (
+              <NutritionItemCompact
+                item={getNutriitionItemByIdFromContext(ni._id)}
+                initialMode={NutritionItemModes.Show}
+                onRemove={(id) => console.log(id)}
+              />
+            ),
             selected: false,
             searchableText: ni.title,
           }))}
