@@ -1,11 +1,11 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 // import {useState} from 'react';
-import { NutritionItem, NIreadAll } from "../logic/nutrition/NutritionLogic";
-import useFormState from "../common/useFormState";
+import { NutritionItem } from "../../logic/nutrition/NutritionLogic";
+import useFormState from "../../common/useFormState";
 import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
 import { createUseStyles } from "react-jss";
-import { NutritionContext } from "../App";
-import { Collapsible } from "./generic/Collapsible";
+import { NutritionContext } from "../../App";
+import { Collapsible } from "./../generic/Collapsible";
 
 export const TestContext = createContext("test context value");
 

@@ -40,19 +40,29 @@ export class NutritionItem {
     const newNI = { ...this, ingredientIds: newIngredients };
     return newNI;
   }
-
-  // returnSelf = ()
 }
+
+export const NILogic = {
+  API: generateCRUD("http://localhost:4000/nutritionItems"),
+  Transformations: {
+    add_ingredient: (ni: NutritionItem, ingredientId: NutritionItem["_id"]) => {
+      const newIngredients = [...ni.ingredientIds, ingredientId];
+      const newNI = { ...ni, ingredientIds: newIngredients };
+      return newNI;
+    },
+    remove_ingredient: (
+      ni: NutritionItem,
+      ingredientId: NutritionItem["_id"]
+    ) => {
+      const newIngredients = ni.ingredientIds.map((id) =>
+        id === ingredientId ? null : id
+      );
+      const newNI = { ...ni, ingredientIds: newIngredients };
+      return newNI;
+    },
+  },
+};
 
 export const NutritionItemAPI = generateCRUD(
   "http://localhost:4000/nutritionItems"
 );
-
-export const NIaddIngredient = (
-  ni: NutritionItem,
-  ingredientId: NutritionItem["_id"]
-) => {
-  const newIngredients = [...ni.ingredientIds, ingredientId];
-  const newNI = { ...ni, ingredientIds: newIngredients };
-  return newNI;
-};

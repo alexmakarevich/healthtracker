@@ -3,14 +3,16 @@ import { useState } from "react";
 import {
   NutritionItem,
   NutritionItemAPI,
-} from "../logic/nutrition/NutritionLogic";
-import useObjectState from "../common/useObjectState";
-import TextWithEdit from "./generic/TextWithEdit";
+  NILogic,
+} from "../../logic/nutrition/NutritionLogic";
+import useObjectState from "../../common/useObjectState";
+import TextWithEdit from "./../generic/TextWithEdit";
+import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { TestContext, NutritionContext } from "../App";
-import SelectList from "./generic/SelectList";
-import SearchWithDropdown from "./generic/SearchWithDropdown";
+import { TestContext, NutritionContext } from "../../App";
+import SelectList from "./../generic/SelectList";
+import SearchWithDropdown from "./../generic/SearchWithDropdown";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -69,8 +71,8 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   } = useObjectState(item);
 
   const {
-    items: allNutritionItems,
-    getOneById: getNutriitionItemByIdFromContext,
+    items: allNIfromContext,
+    getOneById: NIfromContextById,
     refresh: refreshNIContext,
   } = useContext(NutritionContext);
 
@@ -83,12 +85,6 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   const [ingredientSearch, setIngredientSearch] = useState("");
 
   useEffect(() => {
-    // console.log(
-    //   "useEffect forceItemFromProp called. item prop: ",
-    //   item.title,
-    //   "item state: ",
-    //   itemState.title
-    // );
     setItemState(item);
     readAllIngredients();
   }, [item]);
@@ -139,17 +135,6 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
     resetItemState();
   }
 
-  // async function handleIngredientSelectOnExisting(
-  //   ingredientId: NutritionItem["_id"]
-  // ) {
-  //   setItemState(NIaddIngredientAndUpdate(itemState, ingredientId));
-  //   // NIupdateById(itemState).then(() => refreshNIContext());
-  // }
-
-  // async function NIreadByIdAsync(id: NutritionItem["_id"]) {
-  //   return await NIreadById(id);
-  // }
-
   const testNI = new NutritionItem("ttt");
   console.log(testNI.addIngredient("5f0b512d689c0030e06cff5e"));
 
@@ -175,21 +160,27 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
         />
         {itemState.ingredientIds.map(
           (id: string) =>
-            getNutriitionItemByIdFromContext(id) && (
-              <NutritionItemCompact
-                item={getNutriitionItemByIdFromContext(id)}
-                initialMode={NutritionItemModes.Show}
-                refresh={() => refreshNIContext()}
-                onRemove={() => console.log(id)}
-              />
+            NIfromContextById(id) && (
+              <Removable>
+                <NutritionItemCompact
+                  item={NIfromContextById(id)}
+                  initialMode={NutritionItemModes.Show}
+                  refresh={() => refreshNIContext()}
+                  onRemove={(id) =>
+                    setItemState(
+                      NILogic.Transformations.remove_ingredient(itemState, id)
+                    )
+                  }
+                />
+              </Removable>
             )
         )}
         <SearchWithDropdown
-          dropdownItems={allNutritionItems.map((ni) => ({
+          dropdownItems={allNIfromContext.map((ni) => ({
             id: ni._id,
             node: (
               <NutritionItemCompact
-                item={getNutriitionItemByIdFromContext(ni._id)}
+                item={NIfromContextById(ni._id)}
                 initialMode={NutritionItemModes.Show}
                 onRemove={(id) => console.log(id)}
               />

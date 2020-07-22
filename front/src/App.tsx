@@ -1,8 +1,11 @@
 import React, { createContext, useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import NutritionList from "./components/NutritionList";
-import { NutritionItem, NIreadAll } from "./logic/nutrition/NutritionLogic";
+import NutritionList from "./components/Nutrition/NutritionList";
+import {
+  NutritionItem,
+  NutritionItemAPI,
+} from "./logic/nutrition/NutritionLogic";
 import SelectList from "./components/generic/SelectList";
 
 export const TestContext = createContext<any>("test context value");
@@ -30,7 +33,7 @@ function App() {
   async function getAllNutrition() {
     console.log("App getAllNutrition called");
 
-    const allNutr: NutritionItem[] = await NIreadAll();
+    const allNutr: NutritionItem[] = await NutritionItemAPI.READ_ALL();
     setNutrition(allNutr);
     // return allNutr;
   }
@@ -48,6 +51,7 @@ function App() {
   };
 
   return (
+    // TODO: move context to separate component
     <NutritionContext.Provider value={providerValues}>
       <div className="App">
         <NutritionList />
