@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent, useMemo } from "react";
+import { useState, KeyboardEvent, useMemo, ReactNode, Children } from "react";
 import React from "react";
 import { render, findByLabelText } from "@testing-library/react";
 import { InputText } from "./InputText";
@@ -30,7 +30,8 @@ interface SearchableSelectChild extends SelectChild {
 interface Props {
   // search text state not managed here so it could be used for other things in the parent
   searchTextValue: string;
-  dropdownItems: SearchableSelectChild[];
+  dropdownItems?: SearchableSelectChild[] | undefined;
+  inputChildren?: ReactNode;
   onSearchChange: (value: string) => void;
   onSelectChange: (value: string) => void;
   childrenToExcludeIds?: string[];
@@ -39,6 +40,7 @@ interface Props {
 const SearchWithDropdown = ({
   searchTextValue,
   dropdownItems,
+  inputChildren,
   onSearchChange,
   onSelectChange,
   ...rest
@@ -49,23 +51,25 @@ const SearchWithDropdown = ({
     keys: ["searchableText"],
   };
 
-  const dropdownItemsAfterSearch = useMemo(() => itemsAfterSearch(), [
-    searchTextValue,
-    dropdownItems,
-  ]);
+  const dropdownItemsAfterSearch = itemsAfterSearch();
 
   function itemsAfterSearch() {
-    const fuse = new Fuse(dropdownItems, fuseOptions);
-    const searchResult = fuse.search(searchTextValue);
-    const dropdownItemsAfterSearch: SearchableSelectChild[] = searchResult.map(
-      (searchItem) => searchItem.item
-    );
-    return dropdownItemsAfterSearch;
+    if (dropdownItems) {
+      const fuse = new Fuse(dropdownItems, fuseOptions);
+      const searchResult = fuse.search(searchTextValue);
+      const dropdownItemsAfterSearch: (
+        | SearchableSelectChild
+        | undefined
+      )[] = searchResult.map((searchItem) => searchItem.item);
+      return dropdownItemsAfterSearch;
+    }
   }
 
   return (
     <div {...rest} className={classes.wrapper}>
-      <InputText value={searchTextValue} onChange={onSearchChange} />
+      <InputText value={searchTextValue} onChange={onSearchChange}>
+        {inputChildren}
+      </InputText>
       <SelectList
         children={dropdownItemsAfterSearch}
         onChangeSelection={onSelectChange}

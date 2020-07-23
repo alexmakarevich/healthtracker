@@ -16,7 +16,8 @@ function generateTempId() {
 
 export class NutritionItem {
   _id: string = "default";
-  id: number | string | undefined = generateTempId();
+  // TODO: make sure it's properly unique
+  tempId: string = generateTempId();
   title!: string;
   ingredientIds: NutritionItem["_id"][] = [];
 
@@ -44,10 +45,13 @@ export class NutritionItem {
 
 export const NILogic = {
   API: generateCRUD("http://localhost:4000/nutritionItems"),
-  Transformations: {
-    add_ingredient: (ni: NutritionItem, ingredientId: NutritionItem["_id"]) => {
+  LocalOperations: {
+    add_ingredients: (
+      ni: NutritionItem,
+      ingredientIds: NutritionItem["_id"][]
+    ) => {
       const newIngredients = Array.from(
-        new Set([...ni.ingredientIds, ingredientId])
+        new Set([...ni.ingredientIds, ...ingredientIds])
       );
       const newNI = { ...ni, ingredientIds: newIngredients };
       return newNI;

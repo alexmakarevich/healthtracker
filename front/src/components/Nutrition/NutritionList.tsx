@@ -5,7 +5,6 @@ import useFormState from "../../common/useFormState";
 import NutritionListItem, { NutritionItemModes } from "./NutritionListItem";
 import { createUseStyles } from "react-jss";
 import { NutritionContext } from "../../App";
-import { Collapsible } from "./../generic/Collapsible";
 import Removable from "./../generic/Removable";
 
 export const TestContext = createContext("test context value");

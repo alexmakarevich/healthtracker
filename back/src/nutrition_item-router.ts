@@ -3,7 +3,7 @@ import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
 let NutririonItem = new Schema({
-  id: {
+  tempId: {
     type: String,
   },
   title: {

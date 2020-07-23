@@ -6,18 +6,19 @@ import {
   NILogic,
 } from "../../logic/nutrition/NutritionLogic";
 import useObjectState from "../../common/useObjectState";
-import TextWithEdit from "./../generic/TextWithEdit";
-import Removable from "./../generic/Removable";
+import TextWithEdit from "../generic/TextWithEdit";
+import Removable from "../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { NutritionContext } from "../../App";
 import Ingredients from "./Ingredients";
-import SearchWithDropdown from "./../generic/SearchWithDropdown";
+import SearchWithDropdown from "../generic/SearchWithDropdown";
 
 const useStyles = createUseStyles(
   {
     outerWrapper: {
       margin: "5px",
+      width: "100%",
     },
     innerWrapper: {
       background: "#84d9b0",
@@ -34,11 +35,9 @@ const useStyles = createUseStyles(
       alignItems: "center",
     },
     buttons: {
-      width: "auto",
       padding: "5px",
 
       "& > div": {
-        width: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-around",
@@ -62,7 +61,7 @@ interface Props {
   initialMode: NutritionItemModes;
 }
 
-const NutritionListItem = ({ item, initialMode }: Props) => {
+const NITableRow = ({ item, initialMode }: Props) => {
   const {
     obj: itemState,
     setObj: setItemState,
@@ -75,11 +74,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
     resetObj: any;
   } = useObjectState(item);
 
-  const {
-    items: allNIfromContext,
-    getOneById: NIfromContextById,
-    refresh: refreshNIContext,
-  } = useContext(NutritionContext);
+  const NIContext = useContext(NutritionContext);
 
   const [mode, setMode] = useState(initialMode);
 
@@ -102,12 +97,8 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   }
 
   async function readAllIngredients() {
-    console.log("readAllIngredients called");
-
     asyncForEach(itemState.ingredientIds, async (id: any) => {
       const ingredient: NutritionItem = await NutritionItemAPI.READ_BY_ID(id);
-      console.log("ingredient: ", ingredient);
-
       setIngredients([...ingredients, ingredient]);
     });
   }
@@ -119,7 +110,7 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   }
 
   function handleSave() {
-    NutritionItemAPI.UPDATE_BY_ID(itemState).then(() => refreshNIContext());
+    NutritionItemAPI.UPDATE_BY_ID(itemState).then(() => NIContext.refresh());
     setMode(NutritionItemModes.Show);
   }
 
@@ -129,41 +120,50 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
   }
 
   function handleDelete() {
-    NutritionItemAPI.DELETE_BY_ID(itemState._id).then(() => refreshNIContext());
+    NutritionItemAPI.DELETE_BY_ID(itemState._id).then(() =>
+      NIContext.refresh()
+    );
   }
 
   function handleCreate() {
-    NutritionItemAPI.CREATE(itemState).then(() => refreshNIContext());
+    NutritionItemAPI.CREATE(itemState).then(() => NIContext.refresh());
   }
 
   function handleReset() {
     resetItemState();
   }
 
+  function commitAddIngredients(ids: string[]) {
+    const newNI = NILogic.LocalOperations.add_ingredients(itemState, ids);
+    NutritionItemAPI.UPDATE_BY_ID(newNI).then(() => NIContext.refresh());
+  }
+
   return (
-    <div className={classes.outerWrapper}>
-      <Removable onRemove={() => handleDelete()}>
+    <tr className={classes.outerWrapper}>
+      <td>
+        <div className={classes.buttons}>
+          {mode === NutritionItemModes.Show && (
+            <button onClick={() => setMode(NutritionItemModes.Edit)}>
+              edit
+            </button>
+          )}
+          {mode === NutritionItemModes.Edit && (
+            <div>
+              <button onClick={() => handleSave()}>save</button>
+              <button onClick={() => handleCancel()}>cancel</button>
+            </div>
+          )}
+          {mode === NutritionItemModes.New && (
+            <div>
+              <button onClick={() => handleCreate()}>create</button>
+              <button onClick={() => handleReset()}>reset</button>
+            </div>
+          )}
+        </div>
+      </td>
+      <td>
         <div className={classes.innerWrapper}>
           <div className={classes.info}>
-            <div className={classes.buttons}>
-              {mode === NutritionItemModes.Show && (
-                <button onClick={() => setMode(NutritionItemModes.Edit)}>
-                  edit
-                </button>
-              )}
-              {mode === NutritionItemModes.Edit && (
-                <div>
-                  <button onClick={() => handleSave()}>save</button>
-                  <button onClick={() => handleCancel()}>cancel</button>
-                </div>
-              )}
-              {mode === NutritionItemModes.New && (
-                <div>
-                  <button onClick={() => handleCreate()}>create</button>
-                  <button onClick={() => handleReset()}>reset</button>
-                </div>
-              )}
-            </div>
             <TextWithEdit
               text={itemState.title}
               className={classes.title}
@@ -184,18 +184,25 @@ const NutritionListItem = ({ item, initialMode }: Props) => {
             />
           </div>
         </div>
+      </td>
+      <td>
         <Ingredients
-          onAdd={(sas) => console.log(sas)}
           activeIngredientIds={itemState.ingredientIds}
+          onAdd={commitAddIngredients}
           onRemove={(id: NutritionItem["_id"]) =>
             setItemState(
               NILogic.LocalOperations.remove_ingredient(itemState, id)
             )
           }
         />
-      </Removable>
-    </div>
+      </td>
+      <td>
+        {mode !== NutritionItemModes.New && (
+          <button onClick={() => handleDelete()}>delete</button>
+        )}
+      </td>
+    </tr>
   );
 };
 
-export default NutritionListItem;
+export default NITableRow;

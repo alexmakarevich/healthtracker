@@ -4,21 +4,26 @@ import React from "react";
 export interface SelectChild {
   node: React.ReactNode;
   id: string;
-  selected: boolean;
+  isSelected: boolean;
 }
 
 interface Props {
   className?: string;
-  children: SelectChild[];
+  children?: (SelectChild | undefined)[];
   onChangeSelection: (id: SelectChild["id"]) => void;
 }
 
 const SelectList = ({ className, children, onChangeSelection }: Props) => {
   return (
     <div className={className}>
-      {children.map((child) => (
-        <div onClick={() => onChangeSelection(child.id)}>{child.node}</div>
-      ))}
+      {children?.map(
+        (child?) =>
+          child !== undefined && (
+            <div key={child.id} onClick={() => onChangeSelection(child.id)}>
+              {child.node}
+            </div>
+          )
+      )}
     </div>
   );
 };

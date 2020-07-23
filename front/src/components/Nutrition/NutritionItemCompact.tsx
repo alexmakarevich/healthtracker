@@ -47,7 +47,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   return (
     <div className={classes.wrapper} {...rest}>
       <TextWithEdit
-        text={item.title}
+        text={itemState.title}
         isEdit={
           mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
         }
