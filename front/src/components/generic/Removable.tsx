@@ -1,7 +1,6 @@
 import React, { ReactElement, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createUseStyles } from "react-jss";
-import { relative } from "path";
 
 const styles = () => ({
   wrapper: {
@@ -32,28 +31,32 @@ interface Props {
   onRemove?: () => void;
 }
 
+// TODO: fix or remove animation
+
 const Removable = ({ children, onRemove }: Props) => {
   const classes = useStyles();
   return (
     <AnimatePresence initial={false}>
-      <motion.div
-        key="content"
-        initial="collapsed"
-        animate="open"
-        exit="collapsed"
-        transition={{ duration: 0.8, ease: [0.5, 0.62, 0.23, 0.98] }}
-        variants={{
-          open: { opacity: 1, height: "auto" },
-          collapsed: { opacity: 0.5, height: 0 },
-        }}
-      >
-        <div className={classes.wrapper}>
-          <button className={classes.removeButton} onClick={onRemove}>
-            X
-          </button>
-          {children}
-        </div>
-      </motion.div>
+      {children && (
+        <motion.div
+          key="content"
+          initial="collapsed"
+          animate="open"
+          exit="collapsed"
+          transition={{ duration: 0.15 }}
+          variants={{
+            open: { opacity: 1, width: "auto", height: "auto" },
+            collapsed: { opacity: 0, width: 0, height: 0 },
+          }}
+        >
+          <div className={classes.wrapper}>
+            <button className={classes.removeButton} onClick={onRemove}>
+              X
+            </button>
+            {children}
+          </div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 };

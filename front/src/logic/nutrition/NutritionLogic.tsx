@@ -46,22 +46,29 @@ export class NutritionItem {
 export const NILogic = {
   API: generateCRUD("http://localhost:4000/nutritionItems"),
   LocalOperations: {
-    add_ingredients: (
-      ni: NutritionItem,
-      ingredientIds: NutritionItem["_id"][]
-    ) => {
-      const newIngredients = Array.from(
-        new Set([...ni.ingredientIds, ...ingredientIds])
+    add_ingredient: (ni: NutritionItem, ingredientId: NutritionItem["_id"]) => {
+      console.log(
+        "local add_ingredient called: " + ni.title + ", " + ingredientId
       );
+      const newIngredients = Array.from(
+        new Set([...ni.ingredientIds, ingredientId])
+      );
+      console.log("new Ingredients: ");
+      console.log(newIngredients);
       const newNI = { ...ni, ingredientIds: newIngredients };
+      console.log("newNI: ");
+      console.log(newNI);
       return newNI;
     },
     remove_ingredient: (
       ni: NutritionItem,
       ingredientId: NutritionItem["_id"]
     ) => {
-      const newIngredients = ni.ingredientIds.map((id) =>
-        id === ingredientId ? null : id
+      console.log(
+        "local remove_ingredient called: " + ni.title + ", " + ingredientId
+      );
+      const newIngredients = ni.ingredientIds.filter(
+        (id) => id !== ingredientId
       );
       const newNI = { ...ni, ingredientIds: newIngredients };
       return newNI;

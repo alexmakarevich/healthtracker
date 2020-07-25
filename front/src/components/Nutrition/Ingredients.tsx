@@ -1,21 +1,18 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import {
   NutritionItem,
-  NutritionItemAPI,
   NILogic,
+  NutritionItemAPI,
 } from "../../logic/nutrition/NutritionLogic";
-import useObjectState from "../../common/useObjectState";
-import TextWithEdit from "./../generic/TextWithEdit";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { NutritionContext } from "../../App";
-import SearchWithDropdown from "./../generic/SearchWithDropdown";
-import { NutritionItemModes } from "./NutritionListItem";
+import { NutritionContext } from "../../context/NIContext";
+import { NutritionItemModes } from "./NITableRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
-import { wait } from "@testing-library/react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const useStyles = createUseStyles(
   {
@@ -39,98 +36,77 @@ const useStyles = createUseStyles(
 );
 
 interface Props {
-  activeIngredientIds: NutritionItem["_id"][];
-  onAdd: (id: Array<NutritionItem["_id"]>) => void;
+  parent: NutritionItem;
+  onAdd: (id: NutritionItem["_id"]) => void;
   onRemove: (id: NutritionItem["_id"]) => void;
 }
 
-const Ingredients = ({ activeIngredientIds, onAdd, onRemove }: Props) => {
-  const classes = useStyles();
+const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
   const NIContext = useContext(NutritionContext);
-
-  const niMinusAlreadyActive = NIContext.items.filter(
-    (ni) => !activeIngredientIds.includes(ni._id)
-  );
-
-  const defaultDropdownState = niMinusAlreadyActive.map((ni) => ({
-    ni: ni,
-    isSelected: false,
-  }));
-
-  const [searchInput, setSearchInput] = useState("");
+  const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [dropdownState, setDropdownState] = useState(defaultDropdownState);
 
-  // function handleSelectChage(id: NutritionItem["id"]) {
-  //   const newDropdown = dropdownState.map((item) =>
-  //     item.ni._id === id ? { ...item, isSelected: !item.isSelected } : item
-  //   );
-  //   setDropdownState(newDropdown);
-  // }
-
-  function handleSelect(id: NutritionItem["_id"]) {
-    onAdd([id]);
-  }
+  const dropdownItems = NIContext.all;
+  // .filter(
+  //   (item) => item._id !== parent._id && !parent.ingredientIds.includes(item._id)
+  // );
 
   async function handleCreateNewFromSearch(title: string) {
     const newNI = new NutritionItem(title);
-    console.log("new NI local: " + newNI);
-
-    const tempId = newNI.tempId;
-    console.log("tempId from newNi: " + tempId);
-
     const createResult = await NILogic.API.CREATE(newNI);
     const createdNI: NutritionItem = createResult.item;
-
-    console.log("createdNI");
-    console.log(createdNI);
-
-    handleSelect(createdNI._id);
+    onAdd(createdNI._id);
   }
 
   return (
     <div className={classes.wrapper}>
-      {/* <div className={classes.subheading}> Ingredients:</div> */}
-      {activeIngredientIds.map(
-        (id, index) =>
-          NIContext.getOneById(id) && (
-            <Removable onRemove={() => onRemove(id)} key={index}>
-              <NutritionItemCompact
-                item={NIContext.getOneById(id)}
-                initialMode={NutritionItemModes.Show}
-                refresh={() => NIContext.refresh()}
-              />
-            </Removable>
-          )
-      )}
+      {parent.ingredientIds.map((id, index) => (
+        <AnimatePresence key={id} initial={false}>
+          {NIContext.getOneById(id) && (
+            <motion.div
+              key="content"
+              initial="collapsed"
+              animate="open"
+              exit="collapsed"
+              transition={{ duration: 0.15 }}
+              variants={{
+                open: { opacity: 1, width: "auto" },
+                collapsed: { opacity: 0, width: 0 },
+              }}
+            >
+              <Removable onRemove={() => onRemove(id)} key={index}>
+                <NutritionItemCompact
+                  item={NIContext.getOneById(id)}
+                  initialMode={NutritionItemModes.Show}
+                  refresh={() => NIContext.refresh()}
+                />
+              </Removable>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      ))}
       <div className={classes.addSection}>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={!isAddOpen}>
           <button onClick={() => setIsAddOpen(true)}>+</button>
         </Collapsible>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={isAddOpen}>
-          <button
-            onClick={() => {
-              setIsAddOpen(false);
-              setSearchInput("");
-            }}
-          >
-            cancel
-          </button>
+          <button onClick={() => setIsAddOpen(false)}>cancel</button>
         </Collapsible>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={isAddOpen}>
           <PickOrAdd
-            dropdownItems={dropdownState.map((item) => ({
-              id: item.ni._id,
+            dropdownItems={dropdownItems.map((item) => ({
+              id: item._id,
               node: (
                 <NutritionItemCompact
-                  item={NIContext.getOneById(item.ni._id)}
+                  key={item._id}
+                  item={NIContext.getOneById(item._id)}
                   initialMode={NutritionItemModes.Show}
                 />
               ),
-              isSelected: item.isSelected,
-              searchableText: item.ni.title,
+              isSelected: false,
+              searchableText: item.title,
             }))}
-            onSelect={(id) => handleSelect(id)}
+            onSelect={(id) => onAdd(id)}
             onCreateNew={handleCreateNewFromSearch}
           />
         </Collapsible>
