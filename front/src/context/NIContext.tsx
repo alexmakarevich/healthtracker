@@ -1,15 +1,17 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { NutritionItem, NILogic } from "../logic/nutrition/NutritionLogic";
+import { generateCRUD } from "./../api/apiGenerator";
+
+const API = generateCRUD("http://localhost:4000/nutritionItems");
 
 export const TestContext = createContext<any>("test context value");
 
 interface NutritionContextProps {
-  all: NutritionItem[];
+  all: any[];
   create: Function;
   update: Function;
   delete: Function;
-  getOneById: Function;
-  getIdByTempId: Function;
+  getOneFromContext: Function;
   refresh: Function;
 }
 
@@ -18,8 +20,7 @@ export const NutritionContext = createContext<NutritionContextProps>({
   update: () => {},
   create: () => {},
   delete: () => {},
-  getOneById: () => {},
-  getIdByTempId: () => {},
+  getOneFromContext: () => {},
   refresh: () => {},
 });
 
@@ -31,39 +32,30 @@ function NIContext({ children }: Props) {
   const [all, setNutrition]: [NutritionItem[], Function] = useState([]);
 
   useEffect(() => {
-    console.log("App useEffect called");
-    refresh().then(() => console.log("use effect complete: " + all));
+    refresh();
   }, []);
 
   async function refresh() {
-    const allNutr: NutritionItem[] = await NILogic.API.READ_ALL();
+    const allNutr: NutritionItem[] = await API.READ_ALL();
     setNutrition(allNutr);
     return all;
   }
 
-  function getIdByTempId(tempId: NutritionItem["tempId"]) {
-    refresh();
-    const ni = all.find((item) => item.tempId === tempId);
-    const id = ni?._id;
-    return id;
-  }
-  function getOneById(id: NutritionItem["_id"]) {
+  function getOneFromContext(id: NutritionItem["_id"]) {
     const item = all.find((item) => item._id === id);
     return item;
   }
 
   async function createOne(item: NutritionItem) {
-    await NILogic.API.CREATE(item).then(() => refresh());
+    await API.CREATE(item).then(() => refresh());
   }
 
   async function updateOne(item: NutritionItem) {
-    console.log("updateOne called");
-    console.log(item);
-    await NILogic.API.UPDATE_BY_ID(item).then(() => refresh());
+    await API.UPDATE_BY_ID(item).then(() => refresh());
   }
 
   async function deleteOne(id: NutritionItem["_id"]) {
-    await NILogic.API.DELETE_BY_ID(id).then(() => refresh());
+    await API.DELETE_BY_ID(id).then(() => refresh());
   }
 
   const providerValues = {
@@ -71,8 +63,7 @@ function NIContext({ children }: Props) {
     update: updateOne,
     create: createOne,
     delete: deleteOne,
-    getIdByTempId: getIdByTempId,
-    getOneById: getOneById,
+    getOneFromContext: getOneFromContext,
     refresh: refresh,
   };
 

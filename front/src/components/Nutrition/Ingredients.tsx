@@ -1,10 +1,6 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import {
-  NutritionItem,
-  NILogic,
-  NutritionItemAPI,
-} from "../../logic/nutrition/NutritionLogic";
+import { NutritionItem, NILogic } from "../../logic/nutrition/NutritionLogic";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
@@ -46,10 +42,10 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const dropdownItems = NIContext.all;
-  // .filter(
-  //   (item) => item._id !== parent._id && !parent.ingredientIds.includes(item._id)
-  // );
+  const dropdownItems = NIContext.all.filter(
+    (item) =>
+      item._id !== parent._id && !parent.ingredientIds.includes(item._id)
+  );
 
   async function handleCreateNewFromSearch(title: string) {
     const newNI = new NutritionItem(title);
@@ -62,7 +58,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
     <div className={classes.wrapper}>
       {parent.ingredientIds.map((id, index) => (
         <AnimatePresence key={id} initial={false}>
-          {NIContext.getOneById(id) && (
+          {NIContext.getOneFromContext(id) && (
             <motion.div
               key="content"
               initial="collapsed"
@@ -76,7 +72,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
             >
               <Removable onRemove={() => onRemove(id)} key={index}>
                 <NutritionItemCompact
-                  item={NIContext.getOneById(id)}
+                  item={NIContext.getOneFromContext(id)}
                   initialMode={NutritionItemModes.Show}
                   refresh={() => NIContext.refresh()}
                 />
@@ -99,7 +95,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
               node: (
                 <NutritionItemCompact
                   key={item._id}
-                  item={NIContext.getOneById(item._id)}
+                  item={NIContext.getOneFromContext(item._id)}
                   initialMode={NutritionItemModes.Show}
                 />
               ),

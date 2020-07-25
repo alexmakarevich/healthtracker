@@ -75,7 +75,3 @@ export const NILogic = {
     },
   },
 };
-
-export const NutritionItemAPI = generateCRUD(
-  "http://localhost:4000/nutritionItems"
-);
