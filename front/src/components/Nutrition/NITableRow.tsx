@@ -68,8 +68,10 @@ const NITableRow = ({ item, initialMode }: Props) => {
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
-    console.log("NITR useEffect called");
-    resetItemState();
+    /* TODO: maintaining itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
+    if (mode !== NutritionItemModes.New) {
+      resetItemState();
+    }
   }, [item]);
 
   function handleSave() {
@@ -100,6 +102,14 @@ const NITableRow = ({ item, initialMode }: Props) => {
       console.log(newNI);
       NIContext.update(newNI);
       // console.log("row newNI: " + newNi)
+    } else if (mode === NutritionItemModes.New) {
+      // NIContext.update(NILogic.add_ingredient(NIState, id))
+      console.log("mode is new, add ingredient: " + id);
+      const newNI = NILogic.add_ingredient(NIState, id);
+      console.log("row newNI: ");
+      console.log(newNI);
+      setNIState(newNI);
+      // console.log("row newNI: " + newNi)
     }
   }
 
@@ -112,7 +122,24 @@ const NITableRow = ({ item, initialMode }: Props) => {
       console.log(newNI);
       NIContext.update(newNI);
       // console.log("row newNI: " + newNi)
+    } else if (mode === NutritionItemModes.New) {
+      // NIContext.update(NILogic.add_ingredient(NIState, id))
+      console.log("mode is new, remove ingredient: " + id);
+      const newNI = NILogic.remove_ingredient(NIState, id);
+      console.log("row newNI: ");
+      console.log(newNI);
+      setNIState(newNI);
+      // console.log("row newNI: " + newNi)
     }
+  }
+
+  async function createAndAddIngredient(title: string) {
+    const newNI = new NutritionItem(title);
+    const createResult = await NIContext.create(newNI);
+    const createdNI: NutritionItem = createResult.item;
+    console.log("createdResult");
+    console.log(await createResult);
+    addIngredient(createdNI._id);
   }
 
   return (
@@ -165,6 +192,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
           parent={NIState}
           onAdd={(id) => addIngredient(id)}
           onRemove={(id) => removeIngredient(id)}
+          onCreateAndAdd={createAndAddIngredient}
         />
       </td>
       <td>

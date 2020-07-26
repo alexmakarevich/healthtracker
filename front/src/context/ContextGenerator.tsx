@@ -46,7 +46,16 @@ function NIContext({ apiBaseUrl, children, context }: Props) {
   }
 
   async function createOne(item: any) {
-    await API.CREATE(item).then(() => refresh());
+    let result;
+    await API.CREATE(item).then((res) => {
+      refresh();
+      console.log("res");
+      console.log(res);
+      result = res;
+    });
+    console.log("result");
+    console.log(result);
+    return result;
   }
 
   async function updateOne(item: any) {

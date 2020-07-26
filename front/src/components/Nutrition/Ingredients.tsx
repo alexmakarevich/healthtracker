@@ -35,9 +35,10 @@ interface Props {
   parent: NutritionItem;
   onAdd: (id: NutritionItem["_id"]) => void;
   onRemove: (id: NutritionItem["_id"]) => void;
+  onCreateAndAdd: (title: string) => void;
 }
 
-const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
+const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
   const NIContext = useContext(NutritionContext);
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -46,13 +47,6 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
     (item) =>
       item._id !== parent._id && !parent.ingredientIds.includes(item._id)
   );
-
-  async function handleCreateNewFromSearch(title: string) {
-    const newNI = new NutritionItem(title);
-    const createResult = await NIContext.create(newNI);
-    const createdNI: NutritionItem = createResult.item;
-    onAdd(createdNI._id);
-  }
 
   return (
     <div className={classes.wrapper}>
@@ -103,7 +97,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
               searchableText: item.title,
             }))}
             onSelect={(id) => onAdd(id)}
-            onCreateNew={handleCreateNewFromSearch}
+            onCreateNew={onCreateAndAdd}
           />
         </Collapsible>
       </div>
