@@ -6,6 +6,12 @@ let NutririonItem = new Schema({
   tempId: {
     type: String,
   },
+  createdOn: {
+    type: String,
+  },
+  lastModifiedOn: {
+    type: String,
+  },
   title: {
     type: String,
   },

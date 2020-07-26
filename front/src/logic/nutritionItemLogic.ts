@@ -1,17 +1,11 @@
-function generateTempId() {
-  const randomNum = Math.random().toString();
-  const tempId = randomNum;
-  return tempId;
-}
+import { Basic } from "./sharedLogic";
 
-export class NutritionItem {
-  _id: string = "default";
-  // TODO: make sure it's properly unique
-  tempId: string = generateTempId();
+export class NutritionItem extends Basic {
   title!: string;
   ingredientIds: NutritionItem["_id"][] = [];
 
   constructor(title: string, ingredientIds?: NutritionItem["ingredientIds"]) {
+    super();
     this.title = title;
     ingredientIds !== undefined
       ? (this.ingredientIds = ingredientIds)

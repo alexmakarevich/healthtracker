@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { NutritionItem } from "../../logic/nutrition/NutritionLogic";
+import { NutritionItem } from "../../logic/nutritionItemLogic";
 import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";

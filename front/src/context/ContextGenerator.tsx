@@ -1,6 +1,11 @@
 import React, { createContext, useState, useEffect, ReactNode } from "react";
 import { generateCRUD } from "../api/apiGenerator";
 
+const timestamp = () => {
+  const timestamp = new Date().toISOString();
+  return timestamp;
+};
+
 export interface ContextProps {
   all: any[];
   create: Function;
@@ -59,7 +64,8 @@ function NIContext({ apiBaseUrl, children, context }: Props) {
   }
 
   async function updateOne(item: any) {
-    await API.UPDATE_BY_ID(item).then(() => refresh());
+    const itemWithModifiedTimestamp = { ...item, lastModifiedOn: timestamp() };
+    await API.UPDATE_BY_ID(itemWithModifiedTimestamp).then(() => refresh());
   }
 
   async function deleteOne(id: any["_id"]) {

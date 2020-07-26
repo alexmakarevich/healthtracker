@@ -1,6 +1,6 @@
 import React, { useState, createContext, useContext } from "react";
 // import {useState} from 'react';
-import { NutritionItem } from "../../logic/nutrition/NutritionLogic";
+import { NutritionItem } from "../../logic/nutritionItemLogic";
 import { NutritionItemModes } from "./NITableRow";
 import { createUseStyles } from "react-jss";
 import { NutritionContext } from "../../context/NIContext";

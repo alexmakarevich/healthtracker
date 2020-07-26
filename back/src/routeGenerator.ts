@@ -1,14 +1,8 @@
 import * as express from "express";
 const mongoose = require("mongoose");
 
-// model should be if type express model, but not sure how to import it
-function generateRoutes(
-  // Model: Model<Document, {}>
-  modelName: string,
-  schema: any
-) {
-  // const Model: Model<Document, {}> = mongoose.model(modelName, schema);
-
+// model should be of type express model, but not sure how to import it
+function generateRoutes(modelName: string, schema: any) {
   const Model = mongoose.model(modelName, schema);
 
   let router = express.Router();

@@ -11,8 +11,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const PORT = 4000;
-// const todoRoutes = require("./todo-router");
-// const nutritionItemRoutes = require("./nutrition_item-router");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -29,7 +27,6 @@ connection.once("open", function () {
 
 // app.use("/todos", todoRoutes);
 app.use("/nutritionItems", nutritionItemRoutes);
-app.use("/nutritionItemsGen", nutritionItemRoutes);
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });
