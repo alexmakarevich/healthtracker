@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useState } from "react";
-import { NutritionItem, NILogic } from "../../logic/nutrition/NutritionLogic";
+import { NutritionItem } from "../../logic/nutrition/NutritionLogic";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
@@ -49,7 +49,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
 
   async function handleCreateNewFromSearch(title: string) {
     const newNI = new NutritionItem(title);
-    const createResult = await NILogic.API.CREATE(newNI);
+    const createResult = await NIContext.create(newNI);
     const createdNI: NutritionItem = createResult.item;
     onAdd(createdNI._id);
   }

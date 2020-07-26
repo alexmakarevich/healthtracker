@@ -6,7 +6,6 @@ import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { NutritionContext } from "../../context/NIContext";
 import Ingredients from "./Ingredients";
-import Dummy from "../generic/Dummy";
 
 const useStyles = createUseStyles(
   {
@@ -94,9 +93,9 @@ const NITableRow = ({ item, initialMode }: Props) => {
 
   function addIngredient(id: string) {
     if (mode === NutritionItemModes.Edit || mode === NutritionItemModes.Show) {
-      // NIContext.update(NILogic.LocalOperations.add_ingredient(NIState, id))
+      // NIContext.update(NILogic.add_ingredient(NIState, id))
       console.log("mode is edit or show, add ingredient: " + id);
-      const newNI = NILogic.LocalOperations.add_ingredient(NIState, id);
+      const newNI = NILogic.add_ingredient(NIState, id);
       console.log("row newNI: ");
       console.log(newNI);
       NIContext.update(newNI);
@@ -106,9 +105,9 @@ const NITableRow = ({ item, initialMode }: Props) => {
 
   function removeIngredient(id: string) {
     if (mode === NutritionItemModes.Edit || mode === NutritionItemModes.Show) {
-      // NIContext.update(NILogic.LocalOperations.add_ingredient(NIState, id))
+      // NIContext.update(NILogic.add_ingredient(NIState, id))
       console.log("mode is edit or show, remove ingredient: " + id);
-      const newNI = NILogic.LocalOperations.remove_ingredient(NIState, id);
+      const newNI = NILogic.remove_ingredient(NIState, id);
       console.log("row newNI: ");
       console.log(newNI);
       NIContext.update(newNI);
