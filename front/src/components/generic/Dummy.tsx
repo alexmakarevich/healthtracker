@@ -1,6 +1,6 @@
 // use this component to test random shit
 import React, { useContext } from "react";
-import { NutritionContext } from "../../context/NIContext";
+import { NutritionContext } from "../../context/NutritionItemContextProvider";
 
 const Dummy = () => {
   const context = useContext(NutritionContext);

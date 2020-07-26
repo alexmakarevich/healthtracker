@@ -4,7 +4,7 @@ import { NutritionItem } from "../../logic/nutritionItemLogic";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { NutritionContext } from "../../context/NIContext";
+import { NutritionContext } from "../../context/NutritionItemContextProvider";
 import { NutritionItemModes } from "./NITableRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";

@@ -1,12 +1,10 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { createContext, useContext } from "react";
 // import {useState} from 'react';
 import { NutritionItem } from "../../logic/nutritionItemLogic";
 import { NutritionItemModes } from "./NITableRow";
 import { createUseStyles } from "react-jss";
-import { NutritionContext } from "../../context/NIContext";
+import { NutritionContext } from "../../context/NutritionItemContextProvider";
 import NITableRow from "./NITableRow";
-
-export const TestContext = createContext("test context value");
 
 const styles = () => ({
   list: {
@@ -22,7 +20,6 @@ const NutritionTable = () => {
   const NIContext = useContext(NutritionContext);
 
   const classes = useStyles();
-  const [expandList, setExpandList] = useState(false);
 
   console.log("all NI in table: ");
   console.log(NIContext.all);

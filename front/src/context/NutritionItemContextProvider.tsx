@@ -12,9 +12,8 @@ interface Props {
   children: ReactNode;
 }
 
-function NIContext({ children }: Props) {
+function NutritionItemContextProvider({ children }: Props) {
   return (
-    //TODO: figure out why context updates are inconsistent, especially when it comes to a refresh, following a change
     <ContextGenerator
       apiBaseUrl={"http://localhost:4000/nutritionItems"}
       context={NutritionContext}
@@ -24,4 +23,4 @@ function NIContext({ children }: Props) {
   );
 }
 
-export default NIContext;
+export default NutritionItemContextProvider;

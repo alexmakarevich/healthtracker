@@ -2,21 +2,21 @@ const mongoose = require("mongoose");
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
-let NutririonItem = new Schema({
+let Event = new Schema({
   createdOn: {
     type: String,
   },
   lastModifiedOn: {
     type: String,
   },
-  title: {
+  timeStart: {
     type: String,
   },
-  ingredientIds: {
-    type: Array,
+  timeEnd: {
+    type: String,
   },
 });
 
-const nutritionItemRoutes = generateRoutes("NutritionItem", NutririonItem);
+const eventRoutes = generateRoutes("Event", Event);
 
-export { nutritionItemRoutes };
+export { eventRoutes };
