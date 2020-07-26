@@ -6,13 +6,15 @@ const timestamp = () => {
   return timestamp;
 };
 
+// TODO: refactor using generics to get proper typing
+
 export interface ContextProps {
   all: any[];
-  create: Function;
-  update: Function;
-  delete: Function;
-  getOneFromContext: Function;
-  refresh: Function;
+  create: (objectToCreate: any) => any;
+  update: (objectToUpdate: any) => any;
+  delete: (objectToDelete: any) => any;
+  getOneFromContext: (idOfObjectToGet: string) => any;
+  refresh: () => void;
 }
 
 export const initialContextValue = {
@@ -42,7 +44,6 @@ function NIContext({ apiBaseUrl, children, context }: Props) {
   async function refresh() {
     const allNutr: any[] = await API.READ_ALL();
     setNutrition(allNutr);
-    return all;
   }
 
   function getOneFromContext(id: any["_id"]) {
