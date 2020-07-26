@@ -8,84 +8,120 @@ const timestamp = () => {
 
 // TODO: refactor using generics to get proper typing
 
-export interface ContextProps {
-  all: any[];
-  create: (objectToCreate: any) => any;
-  update: (objectToUpdate: any) => any;
-  delete: (objectToDelete: any) => any;
-  getOneFromContext: (idOfObjectToGet: string) => any;
-  refresh: () => void;
-}
+// export interface ContextProps {
+//   all: any[];
+//   create: (objectToCreate: any) => any;
+//   update: (objectToUpdate: any) => any;
+//   delete: (objectToDelete: any) => any;
+//   getOneFromContext: (idOfObjectToGet: string) => any;
+//   refresh: () => void;
+// }
 
-export const initialContextValue = {
-  all: [],
-  update: () => {},
-  create: () => {},
-  delete: () => {},
-  getOneFromContext: () => {},
-  refresh: () => {},
-};
+// export const initialContextValue = {
+//   all: [],
+//   update: () => {},
+//   create: () => {},
+//   delete: () => {},
+//   getOneFromContext: () => {},
+//   refresh: () => {},
+// };
 
-interface Props {
+interface GeneratorProps {
   apiBaseUrl: string;
-  children: ReactNode;
-  context: React.Context<ContextProps>;
 }
 
-function NIContext({ apiBaseUrl, children, context }: Props) {
-  const [all, setNutrition]: [any[], Function] = useState([]);
-
-  const API = generateCRUD(apiBaseUrl);
-
-  useEffect(() => {
-    refresh();
-  }, []);
-
-  async function refresh() {
-    const allNutr: any[] = await API.READ_ALL();
-    setNutrition(allNutr);
+function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
+  interface ContextProps {
+    all: itemType[];
+    // likely return type: Promise<itemType>
+    create: (objectToCreate: itemType) => any;
+    update: (objectToUpdate: itemType) => any;
+    delete: (objectToDelete: itemType) => any;
+    getOneFromContext: (idOfObjectToGet: string) => any;
+    refresh: () => void;
   }
 
-  function getOneFromContext(id: any["_id"]) {
-    const item = all.find((item) => item._id === id);
-    return item;
-  }
-
-  async function createOne(item: any) {
-    let result;
-    await API.CREATE(item).then((res) => {
-      refresh();
-      console.log("res");
-      console.log(res);
-      result = res;
-    });
-    console.log("result");
-    console.log(result);
-    return result;
-  }
-
-  async function updateOne(item: any) {
-    const itemWithModifiedTimestamp = { ...item, lastModifiedOn: timestamp() };
-    await API.UPDATE_BY_ID(itemWithModifiedTimestamp).then(() => refresh());
-  }
-
-  async function deleteOne(id: any["_id"]) {
-    await API.DELETE_BY_ID(id).then(() => refresh());
-  }
-
-  const providerValues = {
-    all: all,
-    update: updateOne,
-    create: createOne,
-    delete: deleteOne,
-    getOneFromContext: getOneFromContext,
-    refresh: refresh,
+  const initialContextValue = {
+    all: [],
+    update: () => {},
+    create: () => {},
+    delete: () => {},
+    getOneFromContext: () => {},
+    refresh: () => {},
   };
 
-  return (
-    //TODO: figure out why context updates are inconsistent, especially when it comes to a refresh, following a change
-    <context.Provider value={providerValues}>{children}</context.Provider>
-  );
+  const Context = createContext<ContextProps>(initialContextValue);
+
+  interface Props {
+    children: ReactNode;
+  }
+
+  function ContextProvider({ children }: Props) {
+    const [all, setNutrition]: [any[], Function] = useState([]);
+
+    const API = generateCRUD(apiBaseUrl);
+
+    useEffect(() => {
+      refresh();
+    }, []);
+
+    async function refresh() {
+      const allNutr: any[] = await API.READ_ALL();
+      setNutrition(allNutr);
+    }
+
+    function getOneFromContext(id: any["_id"]) {
+      const item = all.find((item) => item._id === id);
+      return item;
+    }
+
+    async function createOne(item: any) {
+      let result;
+      await API.CREATE(item).then((res) => {
+        refresh();
+        console.log("res");
+        console.log(res);
+        result = res;
+      });
+      console.log("result");
+      console.log(result);
+      return result;
+    }
+
+    async function updateOne(item: any) {
+      const itemWithModifiedTimestamp = {
+        ...item,
+        lastModifiedOn: timestamp(),
+      };
+      await API.UPDATE_BY_ID(itemWithModifiedTimestamp).then(() => refresh());
+    }
+
+    async function deleteOne(id: any["_id"]) {
+      await API.DELETE_BY_ID(id).then(() => refresh());
+    }
+
+    const providerValues = {
+      all: all,
+      update: updateOne,
+      create: createOne,
+      delete: deleteOne,
+      getOneFromContext: getOneFromContext,
+      refresh: refresh,
+    };
+
+    return (
+      //TODO: figure out why context updates are inconsistent, especially when it comes to a refresh, following a change
+      <Context.Provider value={providerValues}>{children}</Context.Provider>
+    );
+  }
+
+  const toReturn = {
+    contextProvider: ContextProvider,
+    context: Context,
+  };
+
+  // unsure if to return declaration or result
+  return toReturn;
 }
 
-export default NIContext;
+export default contextGeneratorFn;

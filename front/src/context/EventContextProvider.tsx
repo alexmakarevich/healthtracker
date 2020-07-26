@@ -1,24 +1,22 @@
-import React, { createContext, ReactNode } from "react";
-import ContextGenerator, {
-  ContextProps,
-  initialContextValue,
-} from "./ContextGenerator";
-
-export const EventContext = createContext<ContextProps>(initialContextValue);
+import React, { ReactNode } from "react";
+import contextGeneratorFn from "./ContextGenerator";
+import { Event } from "./../logic/eventLogic";
 
 interface Props {
   children: ReactNode;
 }
 
+const {
+  context: EventContext,
+  contextProvider: ContextProvider,
+} = contextGeneratorFn<Event>({
+  apiBaseUrl: "http://localhost:4000/events",
+});
+
 function EContext({ children }: Props) {
-  return (
-    <ContextGenerator
-      apiBaseUrl={"http://localhost:4000/events"}
-      context={EventContext}
-    >
-      <div>{children}</div>
-    </ContextGenerator>
-  );
+  return <ContextProvider>{children}</ContextProvider>;
 }
+
+export { EventContext };
 
 export default EContext;
