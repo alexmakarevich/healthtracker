@@ -1,6 +1,9 @@
 import React, { createContext, useContext } from "react";
 // import {useState} from 'react';
-import { NutritionItem } from "../../logic/nutritionItemLogic";
+import {
+  NutritionItem,
+  nutritionItemDefaults,
+} from "../../logic/nutritionItemLogic";
 import { NutritionItemModes } from "./NITableRow";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
@@ -42,7 +45,7 @@ const NutritionTable = () => {
           />
         ))}
         <NITableRow
-          item={new NutritionItem("")}
+          item={nutritionItemDefaults}
           initialMode={NutritionItemModes.New}
         />
       </tbody>

@@ -3,9 +3,9 @@ const timestamp = () => {
   return timestamp;
 };
 
-export class Basic {
-  _id: string = "not yet in db";
-  createdOn: string = timestamp();
-  lastModifiedOn: string = timestamp();
-  _v: number = 0;
+export interface Basic {
+  _id: string;
+  createdOn: string;
+  lastModifiedOn: string ;
+  _v?: number ;
 }

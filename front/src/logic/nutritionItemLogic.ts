@@ -1,17 +1,18 @@
 import { Basic } from "./sharedLogic";
 
-export class NutritionItem extends Basic {
-  title!: string;
-  ingredientIds: NutritionItem["_id"][] = [];
-
-  constructor(title: string, ingredientIds?: NutritionItem["ingredientIds"]) {
-    super();
-    this.title = title;
-    ingredientIds !== undefined
-      ? (this.ingredientIds = ingredientIds)
-      : (this.ingredientIds = []);
-  }
+export interface NutritionItem extends Basic {
+  title: string;
+  ingredientIds: NutritionItem["_id"][];
 }
+
+export const nutritionItemDefaults: NutritionItem = {
+  _id: "not yet saved",
+  createdOn: new Date().toISOString(),
+  lastModifiedOn: new Date().toISOString(),
+  _v: -1,
+  title: "",
+  ingredientIds: [],
+};
 
 export const NILogic = {
   add_ingredient: (ni: NutritionItem, ingredientId: NutritionItem["_id"]) => {

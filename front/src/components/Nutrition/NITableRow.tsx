@@ -1,6 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { useState } from "react";
-import { NutritionItem, NILogic } from "../../logic/nutritionItemLogic";
+import {
+  NutritionItem,
+  NILogic,
+  nutritionItemDefaults,
+} from "../../logic/nutritionItemLogic";
 import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
@@ -110,7 +114,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
   }
 
   async function createAndAddIngredient(title: string) {
-    const newNI = new NutritionItem(title);
+    const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
     const createResult = await NIContext.create(newNI);
     const createdNI: NutritionItem = createResult.item;
     addIngredient(createdNI._id);

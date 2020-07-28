@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
 import EContext, { EventContext } from "../../context/EventContextProvider";
-import { Event } from "../../logic/eventLogic";
+import { Event, eventsDefaults } from "../../logic/eventLogic";
 
 const EventTable = () => {
   const EventsFromContext = useContext(EventContext);
 
-  const newTestEvent = new Event();
-
+  const newTestEvent = eventsDefaults;
   return (
     <div>
       <table>

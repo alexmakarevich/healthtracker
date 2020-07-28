@@ -1,12 +1,21 @@
 import { Basic } from "./sharedLogic";
 
-export class Event extends Basic {
-  timeStart: string = new Date().toISOString();
-  timeEnd: string = new Date().toISOString();
-
-  constructor(timeStart?: Event["timeStart"], timeEnd?: Event["timeEnd"]) {
-    super();
-    timeStart && (this.timeStart = timeStart);
-    timeEnd && (this.timeEnd = timeEnd);
-  }
+export interface Event extends Basic {
+  timeStart: string;
+  timeEnd: string;
+  children: {
+    nutritionItemIds: string[];
+  };
 }
+
+export const eventsDefaults: Event = {
+  _id: "not yet saved",
+  createdOn: new Date().toISOString(),
+  lastModifiedOn: new Date().toISOString(),
+  _v: -1,
+  timeStart: new Date().toISOString(),
+  timeEnd: new Date().toISOString(),
+  children: {
+    nutritionItemIds: [],
+  },
+};
