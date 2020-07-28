@@ -1,11 +1,17 @@
 import React, { useContext } from "react";
 import EContext, { EventContext } from "../../context/EventContextProvider";
-import { Event, eventsDefaults } from "../../logic/eventLogic";
+import { Event, eventDefaults } from "../../logic/eventLogic";
+import EventTableRow from "./EventTableRow";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 
 const EventTable = () => {
   const EventsFromContext = useContext(EventContext);
+  const NIContext = useContext(NutritionItemContext);
 
-  const newTestEvent = eventsDefaults;
+  const newTestEvent = {
+    ...eventDefaults,
+    children: { nutritionItemIds: ["5f1db52ab1db3608f0f85c41"] },
+  };
   return (
     <div>
       <table>
@@ -17,12 +23,8 @@ const EventTable = () => {
           </tr>
         </thead>
         <tbody>
-          {EventsFromContext.all.map((event) => (
-            <tr>
-              <td>{event._id}</td>
-              <td>{event.timeStart}</td>
-              <td>{event.timeEnd}</td>
-            </tr>
+          {EventsFromContext.all.map((event, index) => (
+            <EventTableRow event={event} key={index} />
           ))}
         </tbody>
       </table>

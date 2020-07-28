@@ -8,7 +8,7 @@ export interface Event extends Basic {
   };
 }
 
-export const eventsDefaults: Event = {
+export const eventDefaults: Event = {
   _id: "not yet saved",
   createdOn: new Date().toISOString(),
   lastModifiedOn: new Date().toISOString(),

@@ -6,37 +6,22 @@ const timestamp = () => {
   return timestamp;
 };
 
-// TODO: refactor using generics to get proper typing
-
-// export interface ContextProps {
-//   all: any[];
-//   create: (objectToCreate: any) => any;
-//   update: (objectToUpdate: any) => any;
-//   delete: (objectToDelete: any) => any;
-//   getOneFromContext: (idOfObjectToGet: string) => any;
-//   refresh: () => void;
-// }
-
-// export const initialContextValue = {
-//   all: [],
-//   update: () => {},
-//   create: () => {},
-//   delete: () => {},
-//   getOneFromContext: () => {},
-//   refresh: () => {},
-// };
-
 interface GeneratorProps {
   apiBaseUrl: string;
 }
 
+/**
+ * creates a context and its provider with standard CRUD for a collection of items
+ * make sure to provide item types
+ * make sure to give the context & provider a unique name
+ */
 function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
   interface ContextProps {
     all: itemType[];
     // likely return type: Promise<itemType>
     create: (objectToCreate: itemType) => any;
     update: (objectToUpdate: itemType) => any;
-    delete: (objectToDelete: itemType) => any;
+    delete: (idToDelete: string) => any;
     getOneFromContext: (idOfObjectToGet: string) => any;
     refresh: () => void;
   }
@@ -96,7 +81,7 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
       await API.UPDATE_BY_ID(itemWithModifiedTimestamp).then(() => refresh());
     }
 
-    async function deleteOne(id: any["_id"]) {
+    async function deleteOne(id: string) {
       await API.DELETE_BY_ID(id).then(() => refresh());
     }
 

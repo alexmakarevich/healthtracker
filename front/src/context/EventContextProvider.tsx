@@ -8,13 +8,13 @@ interface Props {
 
 const {
   context: EventContext,
-  contextProvider: ContextProvider,
+  contextProvider: EContextProvider,
 } = contextGeneratorFn<Event>({
   apiBaseUrl: "http://localhost:4000/events",
 });
 
 function EContext({ children }: Props) {
-  return <ContextProvider>{children}</ContextProvider>;
+  return <EContextProvider>{children}</EContextProvider>;
 }
 
 export { EventContext };

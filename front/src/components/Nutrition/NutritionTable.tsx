@@ -8,6 +8,7 @@ import { NutritionItemModes } from "./NITableRow";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import NITableRow from "./NITableRow";
+import { EventContext } from "../../context/EventContextProvider";
 
 const styles = () => ({
   list: {
@@ -21,6 +22,7 @@ const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
 const NutritionTable = () => {
   const NIContext = useContext(NutritionItemContext);
+  const EventsFromContext = useContext(EventContext);
 
   const classes = useStyles();
 

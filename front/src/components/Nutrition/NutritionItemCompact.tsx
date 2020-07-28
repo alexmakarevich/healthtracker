@@ -27,6 +27,9 @@ interface Props {
 }
 
 const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
+  console.log("ni compact");
+  console.log(item);
+
   const {
     obj: itemState,
     setObj: setItemState,
@@ -47,7 +50,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   return (
     <div className={classes.wrapper} {...rest}>
       <TextWithEdit
-        text={itemState.title}
+        text={item.title}
         isEdit={
           mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
         }

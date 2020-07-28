@@ -15,6 +15,9 @@ let Event = new Schema({
   timeEnd: {
     type: String,
   },
+  children: {
+    type: Object,
+  },
 });
 
 const eventRoutes = generateRoutes("Event", Event);

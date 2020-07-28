@@ -8,13 +8,13 @@ interface Props {
 
 const {
   context: NutritionItemContext,
-  contextProvider: ContextProvider,
+  contextProvider: NIContextProvider,
 } = contextGeneratorFn<NutritionItem>({
   apiBaseUrl: "http://localhost:4000/nutritionItems",
 });
 
 function NutritionItemContextProvider({ children }: Props) {
-  return <ContextProvider>{children}</ContextProvider>;
+  return <NIContextProvider>{children}</NIContextProvider>;
 }
 
 export { NutritionItemContext };

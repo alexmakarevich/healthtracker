@@ -10,12 +10,12 @@ export const TestContext = createContext<any>("test context value");
 function App() {
   return (
     <div className="App">
-      <NutritionItemContextProvider>
-        <EContext>
+      <EContext>
+        <NutritionItemContextProvider>
           <NutritionTable />
           <EventTable />
-        </EContext>
-      </NutritionItemContextProvider>
+        </NutritionItemContextProvider>
+      </EContext>
     </div>
   );
 }
