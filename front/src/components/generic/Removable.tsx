@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement, ReactNode, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createUseStyles } from "react-jss";
 
@@ -28,29 +28,40 @@ const useStyles = createUseStyles(styles, { name: "Removable" });
 
 interface Props {
   children: ReactNode;
-  onRemove?: () => void;
+  onRemove: () => void;
 }
 
 // TODO: fix or remove animation
 
 const Removable = ({ children, onRemove }: Props) => {
   const classes = useStyles();
+  const [isHRemoved, setIsHRemoved] = useState(false);
+  const durationInSec = 0.15;
+
+  function removeWithAnimation() {
+    setIsHRemoved(true);
+    setTimeout(() => onRemove(), durationInSec * 1000);
+  }
+
   return (
     <AnimatePresence initial={false}>
-      {children && (
+      {!isHRemoved && (
         <motion.div
           key="content"
           initial="collapsed"
           animate="open"
           exit="collapsed"
-          transition={{ duration: 0.15 }}
+          transition={{ duration: durationInSec }}
           variants={{
             open: { opacity: 1, width: "auto", height: "auto" },
             collapsed: { opacity: 0, width: 0, height: 0 },
           }}
         >
           <div className={classes.wrapper}>
-            <button className={classes.removeButton} onClick={onRemove}>
+            <button
+              className={classes.removeButton}
+              onClick={() => removeWithAnimation()}
+            >
               X
             </button>
             {children}

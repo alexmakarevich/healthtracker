@@ -79,11 +79,13 @@ const PickOrAdd = ({
 
   const allSelected = dropdownItems
     .filter((item) => item.isSelected)
-    .map((item) => (
-      <Removable onRemove={onUnselect && (() => onUnselect(item.id))}>
-        {item.node}
-      </Removable>
-    ));
+    .map((item) =>
+      onUnselect ? (
+        <Removable onRemove={() => onUnselect(item.id)}>{item.node}</Removable>
+      ) : (
+        <div>{item.node}</div>
+      )
+    );
 
   const allUnselected = dropdownItems.filter((item) => !item.isSelected);
 
