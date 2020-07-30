@@ -9,6 +9,9 @@ import { NutritionItemModes } from "./NITableRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
 import { AnimatePresence, motion } from "framer-motion";
+import AddNutritionItem from "./AddNutritionItem";
+
+// TODO: move adder to separate generic component
 
 const useStyles = createUseStyles(
   {
@@ -48,6 +51,8 @@ const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
       item._id !== parent._id && !parent.ingredientIds.includes(item._id)
   );
 
+  const idsToExclude = [parent._id, ...parent.ingredientIds];
+
   return (
     <div className={classes.wrapper}>
       {parent.ingredientIds.map((id, index) => (
@@ -83,22 +88,7 @@ const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
           <button onClick={() => setIsAddOpen(false)}>cancel</button>
         </Collapsible>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={isAddOpen}>
-          <PickOrAdd
-            dropdownItems={dropdownItems.map((item) => ({
-              id: item._id,
-              node: (
-                <NutritionItemCompact
-                  key={item._id}
-                  item={NIContext.getOneFromContext(item._id)}
-                  initialMode={NutritionItemModes.Show}
-                />
-              ),
-              isSelected: false,
-              searchableText: item.title,
-            }))}
-            onSelect={(id) => onAdd(id)}
-            onCreateNew={onCreateAndAdd}
-          />
+          <AddNutritionItem onAdd={onAdd} idsToExclude={idsToExclude} />
         </Collapsible>
       </div>
     </div>
