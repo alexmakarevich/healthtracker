@@ -58,7 +58,7 @@ const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
       {parent.ingredientIds.map(
         (id, index) =>
           NIContext.getOneFromContext(id) && (
-            <Removable onRemove={() => onRemove(id)} key={index}>
+            <Removable onRemove={() => onRemove(id)} key={id}>
               <NutritionItemCompact
                 item={NIContext.getOneFromContext(id)}
                 initialMode={NutritionItemModes.Show}

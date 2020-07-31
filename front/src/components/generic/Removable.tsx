@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode, useState } from "react";
+import React, { ReactElement, ReactNode, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createUseStyles } from "react-jss";
 
@@ -31,20 +31,22 @@ interface Props {
   onRemove: () => void;
 }
 
-// TODO: fix or remove animation
-
 const Removable = ({ children, onRemove }: Props) => {
   const classes = useStyles();
   const [isHRemoved, setIsHRemoved] = useState(false);
   const durationInSec = 0.15;
 
+  // console.log(children);
+  // console.log(isHRemoved);
+
   function removeWithAnimation() {
+    // console.log("remove with animation triggered");
     setIsHRemoved(true);
     setTimeout(() => onRemove(), durationInSec * 1000);
   }
 
   return (
-    <AnimatePresence initial={false}>
+    <AnimatePresence>
       {!isHRemoved && (
         <motion.div
           key="content"

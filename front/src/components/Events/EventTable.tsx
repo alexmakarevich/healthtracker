@@ -10,7 +10,6 @@ const EventTable = () => {
 
   const newTestEvent = {
     ...eventDefaults,
-    children: { nutritionItemIds: ["5f1db52ab1db3608f0f85c41"] },
   };
   return (
     <div>
