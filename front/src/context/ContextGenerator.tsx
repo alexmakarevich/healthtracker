@@ -64,12 +64,12 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
       let result;
       await API.CREATE(item).then((res) => {
         refresh();
-        console.log("res");
-        console.log(res);
+        // console.log("res");
+        // console.log(res);
         result = res;
       });
-      console.log("result");
-      console.log(result);
+      // console.log("result");
+      // console.log(result);
       return result;
     }
 

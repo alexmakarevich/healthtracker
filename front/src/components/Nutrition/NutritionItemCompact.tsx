@@ -27,8 +27,8 @@ interface Props {
 }
 
 const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
-  console.log("ni compact");
-  console.log(item);
+  // console.log("ni compact");
+  // console.log(item);
 
   const {
     obj: itemState,

@@ -26,8 +26,8 @@ const NutritionTable = () => {
 
   const classes = useStyles();
 
-  console.log("all NI in table: ");
-  console.log(NIContext.all);
+  // console.log("all NI in table: ");
+  // console.log(NIContext.all);
 
   return (
     <table>

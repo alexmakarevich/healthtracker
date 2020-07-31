@@ -1,3 +1,5 @@
+import { nutritionItemDefaults } from "./nutritionItemLogic";
+import { Children } from "react";
 import { Basic } from "./sharedLogic";
 
 export interface Event extends Basic {
@@ -17,5 +19,32 @@ export const eventDefaults: Event = {
   timeEnd: new Date().toISOString(),
   children: {
     nutritionItemIds: [],
+  },
+};
+
+export const eventLogic = {
+  addNI: (event: Event, niId: string) => {
+    const newNiIds = [...event.children.nutritionItemIds, niId];
+    const newEvent = {
+      ...event,
+      children: {
+        ...event.children,
+        nutritionItemIds: newNiIds,
+      },
+    };
+    return newEvent;
+  },
+  removeNI: (event: Event, niId: string) => {
+    const newNiIds = event.children.nutritionItemIds.filter(
+      (id) => id !== niId
+    );
+    const newEvent = {
+      ...event,
+      children: {
+        ...event.children,
+        nutritionItemIds: newNiIds,
+      },
+    };
+    return newEvent;
   },
 };

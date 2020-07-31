@@ -35,7 +35,7 @@ interface Props {
   onAdd: (id: NutritionItem["_id"]) => void;
 }
 
-const Ingredients = ({ idsToExclude, onAdd }: Props) => {
+const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
   const NIContext = useContext(NutritionItemContext);
   const classes = useStyles();
 
@@ -72,4 +72,4 @@ const Ingredients = ({ idsToExclude, onAdd }: Props) => {
   );
 };
 
-export default Ingredients;
+export default AddNutritionItem;
