@@ -1,30 +1,34 @@
 import { useState, KeyboardEvent } from "react";
 import React from "react";
-import { render } from "@testing-library/react";
 import { InputText } from "./InputText";
 
-interface Props {
+interface Props extends React.DOMAttributes<any> {
   text: string;
   isEdit: boolean;
   className?: string;
-  handleChange: (eventTartgetValue: string) => void;
+  onTextChange: (eventTartgetValue: string) => void;
   onEnter?: () => void;
 }
 
-const TextWithEdit = ({
+const TextWithEdit: React.FC<Props> = ({
   text,
+  isEdit,
   className,
-  isEdit = false,
-  handleChange,
+  onTextChange,
   onEnter,
-}: Props) => {
-  return (
-    <div className={className}>
-      {isEdit ? (
-        <InputText value={text} onChange={handleChange} onEnter={onEnter} />
-      ) : (
-        <div>{text}</div>
-      )}
+  ...rest
+}) => {
+  return isEdit ? (
+    <InputText
+      className={className}
+      value={text}
+      onTextChange={onTextChange}
+      onEnter={onEnter}
+      {...rest}
+    />
+  ) : (
+    <div className={className} {...rest}>
+      {text}
     </div>
   );
 };
