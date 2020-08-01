@@ -38,10 +38,9 @@ interface Props {
   parent: NutritionItem;
   onAdd: (id: NutritionItem["_id"]) => void;
   onRemove: (id: NutritionItem["_id"]) => void;
-  onCreateAndAdd: (title: string) => void;
 }
 
-const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
+const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
   const NIContext = useContext(NutritionItemContext);
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -56,7 +55,7 @@ const Ingredients = ({ parent, onAdd, onRemove, onCreateAndAdd }: Props) => {
   return (
     <div className={classes.wrapper}>
       {parent.ingredientIds.map(
-        (id, index) =>
+        (id) =>
           NIContext.getOneFromContext(id) && (
             <Removable onRemove={() => onRemove(id)} key={id}>
               <NutritionItemCompact

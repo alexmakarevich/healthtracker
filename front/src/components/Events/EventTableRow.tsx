@@ -1,12 +1,10 @@
 import React, { useContext } from "react";
 import EContext, { EventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
-import NutritionItemCompact, {
-  NutritionItemModes,
-} from "../Nutrition/NutritionItemCompact";
+import NutritionItemCompact from "../Nutrition/NutritionItemCompact";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { NutritionItem } from "../../logic/nutritionItemLogic";
-import NITableRow from "../Nutrition/NITableRow";
+import NITableRow, { NutritionItemModes } from "../Nutrition/NITableRow";
 import AddNutritionItem from "./../Nutrition/AddNutritionItem";
 import Removable from "../generic/Removable";
 

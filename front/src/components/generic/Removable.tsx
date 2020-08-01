@@ -46,7 +46,7 @@ const Removable = ({ children, onRemove }: Props) => {
   }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence initial={false}>
       {!isHRemoved && (
         <motion.div
           key="content"

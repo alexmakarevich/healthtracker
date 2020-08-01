@@ -43,7 +43,7 @@ const NutritionTable = () => {
           <NITableRow
             key={nutritionItem._id}
             item={nutritionItem}
-            initialMode={NutritionItemModes.Show}
+            initialMode={NutritionItemModes.QuickEdit}
           />
         ))}
         <NITableRow

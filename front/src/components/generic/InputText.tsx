@@ -23,7 +23,7 @@ interface Props {
   value?: string;
   className?: string;
   children?: ReactNode;
-  onChange: (eventTartgetValue: string) => void;
+  onTextChange: (eventTartgetValue: string) => void;
   onEnter?: () => void;
 }
 
@@ -31,7 +31,7 @@ const InputText = ({
   value,
   className,
   children,
-  onChange,
+  onTextChange,
   onEnter,
   ...rest
 }: Props) => {
@@ -50,7 +50,7 @@ const InputText = ({
       <input
         className={classes.input}
         value={value}
-        onChange={(event) => onChange(event.target.value)}
+        onChange={(event) => onTextChange(event.target.value)}
         onKeyPress={handleKeyPress}
       />
     </div>

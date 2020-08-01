@@ -4,6 +4,7 @@ import { NutritionItem } from "../../logic/nutritionItemLogic";
 import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
+import { NutritionItemModes } from "./../Nutrition/NITableRow";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -13,12 +14,6 @@ const useStyles = createUseStyles({
     padding: "5px 7px",
   },
 });
-
-export enum NutritionItemModes {
-  Show,
-  Edit,
-  New,
-}
 
 interface Props {
   item: NutritionItem;
@@ -54,7 +49,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
         isEdit={
           mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
         }
-        handleChange={(newText: string) => {
+        onTextChange={(newText: string) => {
           updateItemProperty("title", newText);
         }}
       />

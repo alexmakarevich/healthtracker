@@ -67,7 +67,7 @@ const SearchWithDropdown = ({
 
   return (
     <div {...rest} className={classes.wrapper}>
-      <InputText value={searchTextValue} onChange={onSearchChange}>
+      <InputText value={searchTextValue} onTextChange={onSearchChange}>
         {inputChildren}
       </InputText>
       <SelectList

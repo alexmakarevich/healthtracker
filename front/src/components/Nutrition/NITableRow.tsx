@@ -10,6 +10,7 @@ import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import Ingredients from "./Ingredients";
+import TextWithEditAndState from "../generic/TextWithEditAndState";
 
 const useStyles = createUseStyles(
   {
@@ -50,6 +51,7 @@ const useStyles = createUseStyles(
 export enum NutritionItemModes {
   Show,
   Edit,
+  QuickEdit,
   New,
 }
 
@@ -59,65 +61,57 @@ interface Props {
 }
 
 const NITableRow = ({ item, initialMode }: Props) => {
-  const {
-    obj: NIState,
-    setObj: setNIState,
-    updateProperty: updateNIProperty,
-    resetObj: resetItemState,
-  } = useObjectState(item);
-
+  const [ni, setNi] = useState(item);
   const classes = useStyles();
   const NIContext = useContext(NutritionItemContext);
   const [mode, setMode] = useState(initialMode);
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
+    console.log("useEffect called");
     /* maintaining itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
     if (mode !== NutritionItemModes.New) {
-      resetItemState();
+      setNi(item);
     }
   }, [item]);
 
   function handleSave() {
-    NIContext.update(NIState);
-    setMode(NutritionItemModes.Show);
+    NIContext.update(ni);
+    if (mode === NutritionItemModes.Edit) {
+      setMode(NutritionItemModes.Show);
+    }
   }
 
   function handleCancel() {
-    setMode(NutritionItemModes.Show);
-    resetItemState();
+    if (mode === NutritionItemModes.Edit) {
+      setMode(NutritionItemModes.Show);
+    }
+    setNi(item);
   }
 
   async function handleCreate() {
-    NIContext.create(NIState);
-    resetItemState();
+    NIContext.create(ni);
+    setNi(item);
   }
 
   function addIngredient(id: string) {
-    if (mode === NutritionItemModes.Edit || mode === NutritionItemModes.Show) {
-      const newNI = NILogic.add_ingredient(NIState, id);
+    if (mode !== NutritionItemModes.New) {
+      const newNI = NILogic.add_ingredient(ni, id);
       NIContext.update(newNI);
     } else if (mode === NutritionItemModes.New) {
-      const newNI = NILogic.add_ingredient(NIState, id);
-      setNIState(newNI);
+      const newNI = NILogic.add_ingredient(ni, id);
+      setNi(newNI);
     }
   }
 
   function removeIngredient(id: string) {
-    if (mode === NutritionItemModes.Edit || mode === NutritionItemModes.Show) {
-      const newNI = NILogic.remove_ingredient(NIState, id);
+    if (mode !== NutritionItemModes.New) {
+      const newNI = NILogic.remove_ingredient(ni, id);
       NIContext.update(newNI);
     } else if (mode === NutritionItemModes.New) {
-      const newNI = NILogic.remove_ingredient(NIState, id);
-      setNIState(newNI);
+      const newNI = NILogic.remove_ingredient(ni, id);
+      setNi(newNI);
     }
-  }
-
-  async function createAndAddIngredient(title: string) {
-    const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
-    const createResult = await NIContext.create(newNI);
-    const createdNI: NutritionItem = createResult.item;
-    addIngredient(createdNI._id);
   }
 
   return (
@@ -138,7 +132,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
           {mode === NutritionItemModes.New && (
             <div>
               <button onClick={() => handleCreate()}>create</button>
-              <button onClick={() => resetItemState()}>reset</button>
+              <button onClick={() => setNi(item)}>reset</button>
             </div>
           )}
         </div>
@@ -146,36 +140,47 @@ const NITableRow = ({ item, initialMode }: Props) => {
       <td>
         <div className={classes.innerWrapper}>
           <div className={classes.info}>
-            <TextWithEdit
-              text={NIState.title}
-              className={classes.title}
-              isEdit={
-                mode === NutritionItemModes.Edit ||
-                mode === NutritionItemModes.New
-              }
-              handleChange={(newText: string) => {
-                updateNIProperty("title", newText);
-              }}
-              onEnter={
-                (mode === NutritionItemModes.New && (() => handleCreate())) ||
-                (mode === NutritionItemModes.Edit && (() => handleSave())) ||
-                (() => console.log("on enter not available for this mode"))
-              }
-            />
+            {mode === NutritionItemModes.QuickEdit ? (
+              <TextWithEditAndState
+                text={ni.title}
+                onCommit={(txt: string) => {
+                  console.log("onCommit");
+                  console.log(txt);
+                  const newNI = { ...ni, title: txt };
+                  NIContext.update(newNI);
+                }}
+              />
+            ) : (
+              <TextWithEdit
+                text={ni.title}
+                className={classes.title}
+                isEdit={
+                  mode === NutritionItemModes.Edit ||
+                  mode === NutritionItemModes.New
+                }
+                onTextChange={(newText: string) => {
+                  setNi({ ...item, title: newText });
+                }}
+                onEnter={
+                  (mode === NutritionItemModes.New && (() => handleCreate())) ||
+                  (mode === NutritionItemModes.Edit && (() => handleSave())) ||
+                  (() => console.log("on enter not available for this mode"))
+                }
+              />
+            )}
           </div>
         </div>
       </td>
       <td>
         <Ingredients
-          parent={NIState}
+          parent={ni}
           onAdd={(id) => addIngredient(id)}
           onRemove={(id) => removeIngredient(id)}
-          onCreateAndAdd={createAndAddIngredient}
         />
       </td>
       <td>
         {mode !== NutritionItemModes.New && (
-          <button onClick={() => NIContext.delete(NIState._id)}>delete</button>
+          <button onClick={() => NIContext.delete(ni._id)}>delete</button>
         )}
       </td>
     </tr>
