@@ -1,5 +1,6 @@
 import React, { ReactElement, KeyboardEvent, ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { generateKeyPressActions } from "./../../utils/utils";
 
 const useStyles = createUseStyles(
   {
@@ -36,13 +37,10 @@ const InputText = ({
   ...rest
 }: Props) => {
   const classes = useStyles();
-  const handleKeyPress = (e: KeyboardEvent) => {
-    if (onEnter !== undefined) {
-      if (e.charCode === 13) {
-        onEnter();
-      }
-    }
-  };
+
+  const handleEnterPress = generateKeyPressActions([
+    { code: 13, actiion: () => onEnter && onEnter() },
+  ]);
 
   return (
     <div className={`${classes.wrapper} ${className}`} {...rest}>
@@ -51,7 +49,7 @@ const InputText = ({
         className={classes.input}
         value={value}
         onChange={(event) => onTextChange(event.target.value)}
-        onKeyPress={handleKeyPress}
+        onKeyPressCapture={handleEnterPress}
       />
     </div>
   );
