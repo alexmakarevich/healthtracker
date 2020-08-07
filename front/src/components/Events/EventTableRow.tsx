@@ -31,6 +31,7 @@ const EventTableRow = ({ event }: Props) => {
     <tr>
       <td>{event._id}</td>
       <td>{event.timeStart}</td>
+      <td></td>
       <td>{event.timeEnd}</td>
       <td>
         {event.children.nutritionItemIds.map((niId) => {

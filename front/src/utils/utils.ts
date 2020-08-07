@@ -35,17 +35,31 @@ interface ArrowKeyActions {
 
 export const generateArrowKeyActions = (actions: ArrowKeyActions) => {
   const handleKeyDown = (e: KeyboardEvent) => {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.key === "ArrowUp") {
+      e.preventDefault();
       actions.up && actions.up();
     } else if (e.key === "ArrowDown") {
+      e.preventDefault();
       actions.down && actions.down();
     } else if (e.key === "ArrowRight") {
+      e.preventDefault();
       actions.right && actions.right();
     } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
       actions.left && actions.left();
     }
   };
 
   return handleKeyDown;
 };
+
+export function classConcat(...classes: (string | undefined)[]) {
+  return classes.reduce((prevClass, thisClass) =>
+    prevClass === undefined
+      ? thisClass
+      : thisClass === undefined
+      ? prevClass
+      : String.prototype.concat(prevClass, " ", thisClass)
+  );
+}

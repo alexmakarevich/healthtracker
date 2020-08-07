@@ -1,8 +1,9 @@
-import React, { DOMAttributes } from "react";
+import React, { DOMAttributes, forwardRef, Ref } from "react";
 import { createUseStyles } from "react-jss";
 import {
   generateArrowKeyActions,
   generateKeyPressActions,
+  classConcat,
 } from "../../utils/utils";
 
 const useStyles = createUseStyles(
@@ -10,6 +11,9 @@ const useStyles = createUseStyles(
     wrapper: {
       display: "flex",
       height: "1.75rem",
+    },
+    input: {
+      maxWidth: "100%",
     },
     buttons: {
       display: "flex",
@@ -33,7 +37,10 @@ const useStyles = createUseStyles(
 );
 
 interface Props /* extends DOMAttributes<HTMLInputElement> */ {
-  textValue: string;
+  textValue?: string;
+  className?: string;
+  inputClassName?: string;
+  buttonsClassName?: string;
   onTextChange: (string: string) => void;
   onIncrement: () => void;
   onDecrement: () => void;
@@ -42,10 +49,7 @@ interface Props /* extends DOMAttributes<HTMLInputElement> */ {
   onEnter?: () => void;
 }
 
-export const InputIncrementable = (
-  props: Props,
-  rest: DOMAttributes<HTMLInputElement>
-) => {
+export const InputIncrementable = forwardRef((props: Props, ref: Ref<any>) => {
   const classes = useStyles();
 
   const arrowKeyActions = generateArrowKeyActions({
@@ -60,13 +64,14 @@ export const InputIncrementable = (
   ]);
 
   return (
-    <div className={classes.wrapper}>
+    <div className={classConcat(classes.wrapper, props.className)}>
       <input
+        ref={ref}
         type={"text"}
+        className={classConcat(classes.input, props.inputClassName)}
         value={props.textValue}
         onChange={(e) => props.onTextChange(e.target.value)}
         onKeyPress={handleEnterPress}
-        {...rest}
         onKeyDown={arrowKeyActions}
       />
       <div className={classes.buttons}>
@@ -75,4 +80,4 @@ export const InputIncrementable = (
       </div>
     </div>
   );
-};
+});
