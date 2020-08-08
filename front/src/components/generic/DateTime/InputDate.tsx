@@ -1,17 +1,8 @@
-import React, {
-  ReactElement,
-  KeyboardEvent,
-  ReactNode,
-  useState,
-  useRef,
-  RefObject,
-} from "react";
+import React, { useState, useRef, RefObject } from "react";
 import { createUseStyles } from "react-jss";
 import { InputDay } from "./InputDay";
 import { InputMonth } from "./InputMonth";
 import { InputYear } from "./InputYear";
-import { InputIncrementable } from "../InputIncrementable";
-
 const useStyles = createUseStyles(
   {
     wrapper: {
@@ -44,9 +35,9 @@ const InputDate = () => {
   }
 
   function handleMonthChange(n: number) {
-    console.log("handleMonthChange", n);
-    const maxDay = daysInMonth(n, year);
-    if (day < maxDay) {
+    console.log("handleMonthChange", n, " day: ", day, " year: ", year);
+    const maxDay = daysInMonth(n - 1, year);
+    if (day <= maxDay) {
       const newMonth = new Date(year, n - 1, day);
       setDate(newMonth);
     } else {
@@ -58,7 +49,7 @@ const InputDate = () => {
   function handleYearChange(n: number) {
     console.log("handleMonthChange", n);
     const maxDay = daysInMonth(month, n);
-    if (day < maxDay) {
+    if (day <= maxDay) {
       setDate(new Date(n, month, day));
     } else {
       setDate(new Date(n, month, maxDay));
@@ -66,7 +57,9 @@ const InputDate = () => {
   }
 
   function daysInMonth(month: number, year: number) {
-    return new Date(year, month, 0).getDate();
+    const days = new Date(year, month + 1, 0).getDate();
+    console.log(days, "days in month");
+    return days;
   }
 
   const dayList = [

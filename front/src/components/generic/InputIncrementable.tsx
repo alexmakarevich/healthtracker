@@ -38,6 +38,7 @@ const useStyles = createUseStyles(
 
 interface Props /* extends DOMAttributes<HTMLInputElement> */ {
   textValue?: string;
+  hasButtons?: boolean;
   className?: string;
   inputClassName?: string;
   buttonsClassName?: string;
@@ -74,10 +75,12 @@ export const InputIncrementable = forwardRef((props: Props, ref: Ref<any>) => {
         onKeyPress={handleEnterPress}
         onKeyDown={arrowKeyActions}
       />
-      <div className={classes.buttons}>
-        <button onClick={props.onIncrement}>+</button>
-        <button onClick={props.onDecrement}>-</button>
-      </div>
+      {props.hasButtons && (
+        <div className={classes.buttons}>
+          <button onClick={props.onIncrement}>+</button>
+          <button onClick={props.onDecrement}>-</button>
+        </div>
+      )}
     </div>
   );
 });
