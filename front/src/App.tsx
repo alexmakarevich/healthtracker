@@ -25,7 +25,12 @@ function App() {
         </NutritionItemContextProvider>
       </EContext>
       <InputDate />
-      <InputTime hh={hours} mm={minutes} onHourChange={setHours} />
+      <InputTime
+        hh={hours}
+        mm={minutes}
+        onHourChange={setHours}
+        onMinuteChange={setMinutes}
+      />
     </div>
   );
 }

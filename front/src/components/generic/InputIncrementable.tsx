@@ -53,6 +53,12 @@ interface Props /* extends DOMAttributes<HTMLInputElement> */ {
 export const InputIncrementable = forwardRef((props: Props, ref: Ref<any>) => {
   const classes = useStyles();
 
+  /* TODO: make it so the right and left actions are triggered when the cursor reaches the respective edge of the input.
+  for that the arroKey actions would have to NOY override normal actions (maybe make that optional, for other use cases).
+  possibly best to move that logic to a custom InputText component, and via a custom wrapper component with arrow actions.
+
+  */
+
   const arrowKeyActions = generateArrowKeyActions({
     up: () => props.onIncrement(),
     down: () => props.onDecrement(),
