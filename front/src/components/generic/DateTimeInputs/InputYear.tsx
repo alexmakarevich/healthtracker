@@ -38,7 +38,7 @@ export const InputYear = forwardRef((props: Props, ref) => {
   console.log(yearString && noFromString(yearString));
 
   function noFromString(yearString: string | undefined) {
-    if (yearString === undefined) {
+    if (yearString === undefined || yearString === null) {
       return;
     }
     if (yearString.length === 0) {
@@ -51,10 +51,12 @@ export const InputYear = forwardRef((props: Props, ref) => {
   }
 
   function handleChange(eventValue: string) {
-    console.log(eventValue);
-    setYearString(eventValue.slice(0, 4));
-    const no = noFromString(eventValue);
-    no && handleNoUpdate(no);
+    if (eventValue.length === 4) {
+      const no = noFromString(eventValue);
+      no && handleNoUpdate(no);
+    } else {
+      setYearString(eventValue.slice(0, 4));
+    }
   }
 
   function handleNoUpdate(no: number) {
