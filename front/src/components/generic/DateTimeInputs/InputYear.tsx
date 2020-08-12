@@ -70,6 +70,7 @@ export const InputYear = forwardRef((props: Props, ref) => {
         ref={ref}
         // className={classes.input}
         inputClassName={classes.input}
+        hasButtons
         onTextChange={handleChange}
         onIncrement={() => handleNoUpdate(year + 1)}
         onDecrement={() => handleNoUpdate(year - 1)}

@@ -86,6 +86,7 @@ export const InputMonth = forwardRef((props: Props, ref) => {
         onDecrement={() => handleNoUpdate(month - 1)}
         onLeftArrow={props.onLeftArrow}
         onRightArrow={props.onRightArrow}
+        hasButtons
       />
     </div>
   );

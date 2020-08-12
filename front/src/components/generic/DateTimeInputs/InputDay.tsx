@@ -84,6 +84,7 @@ export const InputDay = forwardRef((props: Props, ref) => {
         onDecrement={() => handleNoUpdate(day - 1)}
         onLeftArrow={props.onLeftArrow}
         onRightArrow={props.onRightArrow}
+        hasButtons
       />
     </div>
   );
