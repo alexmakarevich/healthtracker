@@ -1,4 +1,10 @@
-import React, { DOMAttributes, forwardRef, Ref } from "react";
+import React, {
+  DOMAttributes,
+  forwardRef,
+  Ref,
+  useEffect,
+  useState,
+} from "react";
 import { createUseStyles } from "react-jss";
 import {
   generateArrowKeyActions,
@@ -37,31 +43,45 @@ const useStyles = createUseStyles(
 );
 
 interface Props /* extends DOMAttributes<HTMLInputElement> */ {
-  textValue?: string;
+  value: number;
+  maxNo: number;
+  minNo: number;
+  minStringLengthToParse: number;
+
   hasButtons?: boolean;
   className?: string;
   inputClassName?: string;
   buttonsClassName?: string;
-  onTextChange: (string: string) => void;
-  onIncrement: () => void;
-  onDecrement: () => void;
+  noFromString: (string: string) => number | undefined;
+  stringFromNo: (no: number) => string;
+  onProperChange: (value: number) => void;
+
   onRightArrow?: () => void;
   onLeftArrow?: () => void;
   onEnter?: () => void;
 }
 
-export const InputIncrementable = forwardRef((props: Props, ref: Ref<any>) => {
+export const InputTxtNumFn = forwardRef((props: Props, ref: Ref<any>) => {
   const classes = useStyles();
+  const [string, setString] = useState(props.stringFromNo(props.value));
 
-  /* TODO: make it so the right and left actions are triggered when the cursor reaches the respective edge of the input.
-  for that the arroKey actions would have to NOY override normal actions (maybe make that optional, for other use cases).
+  useEffect(() => {
+    console.log("useEffect: ", props.value);
+    setString(props.stringFromNo(props.value));
+  }, [props.value]);
+
+  /* 
+  TODO: make it so the right and left actions are triggered when the cursor reaches the respective edge of the input.
+  for that the arrowKey actions would have to NOT override normal actions (maybe make that optional, for other use cases).
   possibly best to move that logic to a custom InputText component, and via a custom wrapper component with arrow actions.
-
   */
 
+  const handleIncrement = () => props.onProperChange(props.value + 1);
+  const handleDecrement = () => props.onProperChange(props.value - 1);
+
   const arrowKeyActions = generateArrowKeyActions({
-    up: () => props.onIncrement(),
-    down: () => props.onDecrement(),
+    up: handleIncrement,
+    down: handleDecrement,
     right: () => props.onRightArrow && props.onRightArrow(),
     left: () => props.onLeftArrow && props.onLeftArrow(),
   });
@@ -70,21 +90,34 @@ export const InputIncrementable = forwardRef((props: Props, ref: Ref<any>) => {
     { code: 13, actiion: () => props.onEnter && props.onEnter() },
   ]);
 
+  function handleChange(eventValue: string) {
+    const no = props.noFromString(eventValue);
+    if (no) {
+      if (no <= props.maxNo && no >= props.minNo) {
+        props.onProperChange(no);
+      } else {
+        setString(eventValue);
+      }
+    } else {
+      setString(eventValue);
+    }
+  }
+
   return (
     <div className={classConcat(classes.wrapper, props.className)}>
       <input
         ref={ref}
         type={"text"}
         className={classConcat(classes.input, props.inputClassName)}
-        value={props.textValue}
-        onChange={(e) => props.onTextChange(e.target.value)}
+        value={string}
+        onChange={(e) => handleChange(e.target.value)}
         onKeyPress={handleEnterPress}
         onKeyDown={arrowKeyActions}
       />
       {props.hasButtons && (
         <div className={classes.buttons}>
-          <button onClick={props.onIncrement}>+</button>
-          <button onClick={props.onDecrement}>-</button>
+          <button onClick={handleIncrement}>+</button>
+          <button onClick={handleDecrement}>-</button>
         </div>
       )}
     </div>

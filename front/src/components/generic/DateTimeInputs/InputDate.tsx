@@ -128,7 +128,7 @@ const InputDate = () => {
         ref={dayRef}
         onProperChange={handleDayChange}
         day={date.getDate()}
-        dayList={dayList}
+        itemList={dayList}
         maxDay={maxDays}
         onRightArrow={() => focusOn(monthRef)}
       />
