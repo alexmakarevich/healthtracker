@@ -47,7 +47,7 @@ const InputDate = () => {
   }
 
   function handleYearChange(n: number) {
-    console.log("handleMonthChange", n);
+    console.log("handleYearChange", n);
     const maxDay = daysInMonth(month, n);
     if (day <= maxDay) {
       setDate(new Date(n, month, day));

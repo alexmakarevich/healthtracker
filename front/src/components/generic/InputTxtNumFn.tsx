@@ -42,10 +42,11 @@ const useStyles = createUseStyles(
   { name: "InputIncrementable" }
 );
 
-interface Props /* extends DOMAttributes<HTMLInputElement> */ {
+export interface Props /* extends DOMAttributes<HTMLInputElement> */ {
   value: number;
   maxNo: number;
   minNo: number;
+  maxStringLength?: number;
   minStringLengthToParse: number;
 
   hasButtons?: boolean;
@@ -53,7 +54,7 @@ interface Props /* extends DOMAttributes<HTMLInputElement> */ {
   inputClassName?: string;
   buttonsClassName?: string;
   noFromString: (string: string) => number | undefined;
-  stringFromNo: (no: number) => string;
+  stringFromNo: (no: number) => string | undefined;
   onProperChange: (value: number) => void;
 
   onRightArrow?: () => void;
@@ -75,9 +76,16 @@ export const InputTxtNumFn = forwardRef((props: Props, ref: Ref<any>) => {
   for that the arrowKey actions would have to NOT override normal actions (maybe make that optional, for other use cases).
   possibly best to move that logic to a custom InputText component, and via a custom wrapper component with arrow actions.
   */
+  const handleNumberChange = (no: number) => {
+    console.log("handleNumberChange, ", no, props.minNo, props.maxNo);
 
-  const handleIncrement = () => props.onProperChange(props.value + 1);
-  const handleDecrement = () => props.onProperChange(props.value - 1);
+    if (no <= props.maxNo && no >= props.minNo) {
+      console.log("onProperChnage, ", no);
+      props.onProperChange(no);
+    }
+  };
+  const handleIncrement = () => handleNumberChange(props.value + 1);
+  const handleDecrement = () => handleNumberChange(props.value - 1);
 
   const arrowKeyActions = generateArrowKeyActions({
     up: handleIncrement,
@@ -91,16 +99,19 @@ export const InputTxtNumFn = forwardRef((props: Props, ref: Ref<any>) => {
   ]);
 
   function handleChange(eventValue: string) {
+    if (props.maxStringLength && eventValue.length > props.maxStringLength) {
+      console.log("break");
+      return;
+    }
+
     const no = props.noFromString(eventValue);
     if (no) {
       if (no <= props.maxNo && no >= props.minNo) {
+        console.log("calling onProperChange");
         props.onProperChange(no);
-      } else {
-        setString(eventValue);
       }
-    } else {
-      setString(eventValue);
     }
+    setString(eventValue);
   }
 
   return (

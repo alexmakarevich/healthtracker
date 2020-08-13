@@ -27,21 +27,19 @@ export const InputDay = forwardRef((props: Props, ref) => {
   const classes = useStyles();
 
   return (
-    <div>
-      <InputTxtNumList
-        hasButtons
-        ref={ref}
-        value={props.day}
-        inputClassName={classes.input}
-        itemList={props.itemList}
-        maxNo={props.maxDay}
-        minNo={1}
-        maxStringLength={2}
-        minStringLengthToParse={2}
-        onProperChange={props.onProperChange}
-        onLeftArrow={props.onLeftArrow}
-        onRightArrow={props.onRightArrow}
-      />
-    </div>
+    <InputTxtNumList
+      hasButtons
+      ref={ref}
+      value={props.day}
+      inputClassName={classes.input}
+      itemList={props.itemList}
+      maxNo={props.maxDay}
+      minNo={1}
+      maxStringLength={2}
+      minStringLengthToParse={2}
+      onProperChange={props.onProperChange}
+      onLeftArrow={props.onLeftArrow}
+      onRightArrow={props.onRightArrow}
+    />
   );
 });

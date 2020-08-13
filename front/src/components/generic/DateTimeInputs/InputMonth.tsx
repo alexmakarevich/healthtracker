@@ -26,20 +26,18 @@ export const InputMonth = forwardRef((props: Props, ref) => {
   const classes = useStyles();
 
   return (
-    <div>
-      <InputTxtNumList
-        hasButtons
-        ref={ref}
-        value={props.month}
-        inputClassName={classes.input}
-        itemList={props.monthList}
-        maxNo={12}
-        minNo={1}
-        minStringLengthToParse={1}
-        onProperChange={props.onProperChange}
-        onLeftArrow={props.onLeftArrow}
-        onRightArrow={props.onRightArrow}
-      />
-    </div>
+    <InputTxtNumList
+      hasButtons
+      ref={ref}
+      value={props.month}
+      inputClassName={classes.input}
+      itemList={props.monthList}
+      maxNo={12}
+      minNo={1}
+      minStringLengthToParse={1}
+      onProperChange={props.onProperChange}
+      onLeftArrow={props.onLeftArrow}
+      onRightArrow={props.onRightArrow}
+    />
   );
 });

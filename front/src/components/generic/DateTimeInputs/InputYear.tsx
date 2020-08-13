@@ -44,8 +44,8 @@ export const InputYear = forwardRef((props: Props, ref) => {
       ref={ref}
       value={props.year}
       inputClassName={classes.input}
-      maxNo={12}
-      minNo={1}
+      maxNo={9999}
+      minNo={1970}
       minStringLengthToParse={1}
       onProperChange={props.onProperChange}
       onLeftArrow={props.onLeftArrow}
