@@ -9,6 +9,12 @@ let Event = new Schema({
   lastModifiedOn: {
     type: String,
   },
+  time: {
+    type: String,
+  },
+  isInterval: {
+    type: Boolean,
+  },
   timeStart: {
     type: String,
   },

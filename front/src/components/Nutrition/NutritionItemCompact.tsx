@@ -4,7 +4,7 @@ import { NutritionItem } from "../../logic/nutritionItemLogic";
 import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
-import { NutritionItemModes } from "./../Nutrition/NITableRow";
+import { ItemModes } from "../../utils/utils";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -17,7 +17,7 @@ const useStyles = createUseStyles({
 
 interface Props {
   item: NutritionItem;
-  initialMode: NutritionItemModes;
+  initialMode: ItemModes;
   refresh?: () => void;
 }
 
@@ -46,9 +46,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
     <div className={classes.wrapper} {...rest}>
       <TextWithEdit
         text={item.title}
-        isEdit={
-          mode === NutritionItemModes.Edit || mode === NutritionItemModes.New
-        }
+        isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
         onTextChange={(newText: string) => {
           updateItemProperty("title", newText);
         }}

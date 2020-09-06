@@ -4,11 +4,11 @@ import {
   NutritionItem,
   nutritionItemDefaults,
 } from "../../logic/nutritionItemLogic";
-import { NutritionItemModes } from "./NITableRow";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import NITableRow from "./NITableRow";
 import { EventContext } from "../../context/EventContextProvider";
+import { ItemModes } from "../../utils/utils";
 
 const styles = () => ({
   list: {
@@ -43,13 +43,10 @@ const NutritionTable = () => {
           <NITableRow
             key={nutritionItem._id}
             item={nutritionItem}
-            initialMode={NutritionItemModes.QuickEdit}
+            initialMode={ItemModes.QuickEdit}
           />
         ))}
-        <NITableRow
-          item={nutritionItemDefaults}
-          initialMode={NutritionItemModes.New}
-        />
+        <NITableRow item={nutritionItemDefaults} initialMode={ItemModes.New} />
       </tbody>
     </table>
   );

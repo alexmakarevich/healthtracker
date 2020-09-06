@@ -3,6 +3,7 @@ import EContext, { EventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults } from "../../logic/eventLogic";
 import EventTableRow from "./EventTableRow";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { ItemModes } from "../../utils/utils";
 
 const EventTable = () => {
   const EventsFromContext = useContext(EventContext);
@@ -16,14 +17,18 @@ const EventTable = () => {
       <table>
         <thead>
           <tr>
-            <th>id</th>
-            <th>start</th>
-            <th>end</th>
+            {/* <th>id</th> */}
+            <th>time</th>
+            <th>event substance</th>
           </tr>
         </thead>
         <tbody>
           {EventsFromContext.all.map((event, index) => (
-            <EventTableRow event={event} key={index} />
+            <EventTableRow
+              event={event}
+              key={index}
+              mode={ItemModes.QuickEdit}
+            />
           ))}
         </tbody>
       </table>

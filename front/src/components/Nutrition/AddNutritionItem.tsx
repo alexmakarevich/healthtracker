@@ -6,8 +6,8 @@ import {
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
-import { NutritionItemModes } from "./NITableRow";
 import PickOrAdd from "../generic/PickOrAdd";
+import { ItemModes } from "../../utils/utils";
 
 const useStyles = createUseStyles(
   {
@@ -59,7 +59,7 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
             <NutritionItemCompact
               key={item._id}
               item={NIContext.getOneFromContext(item._id)}
-              initialMode={NutritionItemModes.Show}
+              initialMode={ItemModes.Show}
             />
           ),
           isSelected: false,

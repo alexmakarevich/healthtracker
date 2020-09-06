@@ -4,7 +4,7 @@ import { createUseStyles } from "react-jss";
 const useStyles = createUseStyles(
   {
     input: {
-      width: "2rem",
+      // width: "2rem",
     },
   },
   { name: "InputMinutes" }
@@ -35,13 +35,13 @@ export const InputMinutes = forwardRef((props: Props, ref: Ref<any>) => {
 
   return (
     <div>
-      <input
+      {/* <InputIncrementable
         ref={ref}
         className={classes.input}
-        type={"number"}
-        value={props.hours}
-        onChange={(e) => handleChange(e.target.value)}
-      />
+        textValue={props.hours}
+        onIncrement={() => handleNoUpdate(month + 1)}
+        onDecrement={() => handleNoUpdate(month - 1)}
+      /> */}
     </div>
   );
 });

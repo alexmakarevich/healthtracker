@@ -5,11 +5,11 @@ import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
-import { NutritionItemModes } from "./NITableRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
 import { AnimatePresence, motion } from "framer-motion";
 import AddNutritionItem from "./AddNutritionItem";
+import { ItemModes } from "../../utils/utils";
 
 // TODO: move adder to separate generic component
 
@@ -60,7 +60,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
             <Removable onRemove={() => onRemove(id)} key={id}>
               <NutritionItemCompact
                 item={NIContext.getOneFromContext(id)}
-                initialMode={NutritionItemModes.Show}
+                initialMode={ItemModes.Show}
                 refresh={() => NIContext.refresh()}
               />
             </Removable>

@@ -3,6 +3,7 @@ import { Children } from "react";
 import { Basic } from "./sharedLogic";
 
 export interface Event extends Basic {
+  time: string;
   timeStart: string;
   timeEnd: string;
   children: {
@@ -15,6 +16,7 @@ export const eventDefaults: Event = {
   createdOn: new Date().toISOString(),
   lastModifiedOn: new Date().toISOString(),
   _v: -1,
+  time: new Date().toISOString(),
   timeStart: new Date().toISOString(),
   timeEnd: new Date().toISOString(),
   children: {

@@ -1,5 +1,16 @@
 import { KeyboardEvent } from "react";
 
+// item modes
+
+export enum ItemModes {
+  Show,
+  Edit,
+  QuickEdit,
+  New,
+}
+
+// keypress actions
+
 interface KeyAndAction {
   code: number;
   actiion: () => void;
@@ -53,6 +64,8 @@ export const generateArrowKeyActions = (actions: ArrowKeyActions) => {
 
   return handleKeyDown;
 };
+
+// css class concatenation
 
 export function classConcat(...classes: (string | undefined)[]) {
   return classes.reduce((prevClass, thisClass) =>

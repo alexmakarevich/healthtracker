@@ -11,6 +11,7 @@ import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import Ingredients from "./Ingredients";
 import TextWithEditAndState from "../generic/TextWithEditAndState";
+import { ItemModes } from "../../utils/utils";
 
 const useStyles = createUseStyles(
   {
@@ -48,16 +49,9 @@ const useStyles = createUseStyles(
   { name: "NutritionListItem" }
 );
 
-export enum NutritionItemModes {
-  Show,
-  Edit,
-  QuickEdit,
-  New,
-}
-
 interface Props {
   item: NutritionItem;
-  initialMode: NutritionItemModes;
+  initialMode: ItemModes;
 }
 
 const NITableRow = ({ item, initialMode }: Props) => {
@@ -70,21 +64,21 @@ const NITableRow = ({ item, initialMode }: Props) => {
   useEffect(() => {
     console.log("useEffect called");
     /* maintaining itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
-    if (mode !== NutritionItemModes.New) {
+    if (mode !== ItemModes.New) {
       setNi(item);
     }
   }, [item]);
 
   function handleSave() {
     NIContext.update(ni);
-    if (mode === NutritionItemModes.Edit) {
-      setMode(NutritionItemModes.Show);
+    if (mode === ItemModes.Edit) {
+      setMode(ItemModes.Show);
     }
   }
 
   function handleCancel() {
-    if (mode === NutritionItemModes.Edit) {
-      setMode(NutritionItemModes.Show);
+    if (mode === ItemModes.Edit) {
+      setMode(ItemModes.Show);
     }
     setNi(item);
   }
@@ -95,20 +89,20 @@ const NITableRow = ({ item, initialMode }: Props) => {
   }
 
   function addIngredient(id: string) {
-    if (mode !== NutritionItemModes.New) {
+    if (mode !== ItemModes.New) {
       const newNI = NILogic.add_ingredient(ni, id);
       NIContext.update(newNI);
-    } else if (mode === NutritionItemModes.New) {
+    } else if (mode === ItemModes.New) {
       const newNI = NILogic.add_ingredient(ni, id);
       setNi(newNI);
     }
   }
 
   function removeIngredient(id: string) {
-    if (mode !== NutritionItemModes.New) {
+    if (mode !== ItemModes.New) {
       const newNI = NILogic.remove_ingredient(ni, id);
       NIContext.update(newNI);
-    } else if (mode === NutritionItemModes.New) {
+    } else if (mode === ItemModes.New) {
       const newNI = NILogic.remove_ingredient(ni, id);
       setNi(newNI);
     }
@@ -118,18 +112,16 @@ const NITableRow = ({ item, initialMode }: Props) => {
     <tr className={classes.outerWrapper}>
       <td>
         <div className={classes.buttons}>
-          {mode === NutritionItemModes.Show && (
-            <button onClick={() => setMode(NutritionItemModes.Edit)}>
-              edit
-            </button>
+          {mode === ItemModes.Show && (
+            <button onClick={() => setMode(ItemModes.Edit)}>edit</button>
           )}
-          {mode === NutritionItemModes.Edit && (
+          {mode === ItemModes.Edit && (
             <div>
               <button onClick={() => handleSave()}>save</button>
               <button onClick={() => handleCancel()}>cancel</button>
             </div>
           )}
-          {mode === NutritionItemModes.New && (
+          {mode === ItemModes.New && (
             <div>
               <button onClick={() => handleCreate()}>create</button>
               <button onClick={() => setNi(item)}>reset</button>
@@ -140,7 +132,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
       <td>
         <div className={classes.innerWrapper}>
           <div className={classes.info}>
-            {mode === NutritionItemModes.QuickEdit ? (
+            {mode === ItemModes.QuickEdit ? (
               <TextWithEditAndState
                 text={ni.title}
                 onCommit={(txt: string) => {
@@ -154,16 +146,13 @@ const NITableRow = ({ item, initialMode }: Props) => {
               <TextWithEdit
                 text={ni.title}
                 className={classes.title}
-                isEdit={
-                  mode === NutritionItemModes.Edit ||
-                  mode === NutritionItemModes.New
-                }
+                isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
                 onTextChange={(newText: string) => {
                   setNi({ ...item, title: newText });
                 }}
                 onEnter={
-                  (mode === NutritionItemModes.New && (() => handleCreate())) ||
-                  (mode === NutritionItemModes.Edit && (() => handleSave())) ||
+                  (mode === ItemModes.New && (() => handleCreate())) ||
+                  (mode === ItemModes.Edit && (() => handleSave())) ||
                   (() => console.log("on enter not available for this mode"))
                 }
               />
@@ -179,7 +168,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
         />
       </td>
       <td>
-        {mode !== NutritionItemModes.New && (
+        {mode !== ItemModes.New && (
           <button onClick={() => NIContext.delete(ni._id)}>delete</button>
         )}
       </td>
