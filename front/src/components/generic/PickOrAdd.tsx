@@ -63,20 +63,6 @@ const PickOrAdd = ({
 
   const [searchInput, setSearchInput] = useState("");
 
-  const dropdownItemsAfterSearch = useMemo(() => itemsAfterSearch(), [
-    searchInput,
-    dropdownItems,
-  ]);
-
-  function itemsAfterSearch() {
-    const fuse = new Fuse(dropdownItems, fuseOptions);
-    const searchResult = fuse.search(searchInput);
-    const dropdownItemsAfterSearch: SearchableSelectChild[] = searchResult.map(
-      (searchItem) => searchItem.item
-    );
-    return dropdownItemsAfterSearch;
-  }
-
   const allSelected = dropdownItems
     .filter((item) => item.isSelected)
     .map((item) =>

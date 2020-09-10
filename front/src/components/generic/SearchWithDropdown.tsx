@@ -54,6 +54,10 @@ const SearchWithDropdown = ({
   const dropdownItemsAfterSearch = itemsAfterSearch();
 
   function itemsAfterSearch() {
+    if (searchTextValue.length === 0) {
+      return dropdownItems;
+    }
+
     if (dropdownItems) {
       const fuse = new Fuse(dropdownItems, fuseOptions);
       const searchResult = fuse.search(searchTextValue);
