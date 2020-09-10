@@ -13,7 +13,7 @@ interface Props {
   animation: Animations;
 }
 
-const Collapsible = ({ isExpanded, children, animation }: Props) => {
+const Collapsible = ({ isExpanded, children, animation, ...rest }: Props) => {
   const expandWidth = {
     open: { opacity: 1, width: "auto" },
     collapsed: { opacity: 0, width: 0 },

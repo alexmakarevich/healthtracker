@@ -11,6 +11,8 @@ export interface Event extends Basic {
   };
 }
 
+// whenever something gets added to an event, write the eventId as a dependency into that item
+
 export const eventDefaults: Event = {
   _id: "not yet saved",
   createdOn: new Date().toISOString(),

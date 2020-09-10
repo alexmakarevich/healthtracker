@@ -76,6 +76,7 @@ export const InputTxtNumFn = forwardRef((props: Props, ref: Ref<any>) => {
   for that the arrowKey actions would have to NOT override normal actions (maybe make that optional, for other use cases).
   possibly best to move that logic to a custom InputText component, and via a custom wrapper component with arrow actions.
   */
+
   const handleNumberChange = (no: number) => {
     console.log("handleNumberChange, ", no, props.minNo, props.maxNo);
 

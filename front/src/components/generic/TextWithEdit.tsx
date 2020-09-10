@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from "react";
+import { useState, KeyboardEvent, forwardRef, Ref } from "react";
 import React from "react";
 import { InputText } from "./InputText";
 
@@ -8,29 +8,34 @@ interface Props extends React.DOMAttributes<any> {
   className?: string;
   onTextChange: (eventTartgetValue: string) => void;
   onEnter?: () => void;
+  inputRef?: Ref<any>;
 }
 
-const TextWithEdit: React.FC<Props> = ({
-  text,
-  isEdit,
-  className,
-  onTextChange,
-  onEnter,
-  ...rest
-}) => {
-  return isEdit ? (
-    <InputText
-      className={className}
-      value={text}
-      onTextChange={onTextChange}
-      onEnter={onEnter}
-      {...rest}
-    />
-  ) : (
-    <div className={className} {...rest}>
-      {text}
-    </div>
-  );
-};
+const TextWithEdit = forwardRef(
+  ({
+    text,
+    isEdit,
+    className,
+    inputRef,
+    onTextChange,
+    onEnter,
+    ...rest
+  }: Props) => {
+    return isEdit ? (
+      <InputText
+        className={className}
+        value={text}
+        inputRef={inputRef}
+        onTextChange={onTextChange}
+        onEnter={onEnter}
+        {...rest}
+      />
+    ) : (
+      <div className={className} {...rest}>
+        {text}
+      </div>
+    );
+  }
+);
 
 export default TextWithEdit;

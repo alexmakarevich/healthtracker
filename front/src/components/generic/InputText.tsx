@@ -1,4 +1,13 @@
-import React, { ReactElement, KeyboardEvent, ReactNode } from "react";
+import React, {
+  ReactElement,
+  KeyboardEvent,
+  ReactNode,
+  forwardRef,
+  Ref,
+  DOMAttributes,
+  HTMLAttributes,
+  InputHTMLAttributes,
+} from "react";
 import { createUseStyles } from "react-jss";
 import { generateKeyPressActions } from "./../../utils/utils";
 
@@ -20,39 +29,45 @@ const useStyles = createUseStyles(
   { name: "InputText" }
 );
 
-interface Props {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   value?: string;
   className?: string;
   children?: ReactNode;
+  inputRef?: Ref<any>;
   onTextChange: (eventTartgetValue: string) => void;
   onEnter?: () => void;
 }
 
-const InputText = ({
-  value,
-  className,
-  children,
-  onTextChange,
-  onEnter,
-  ...rest
-}: Props) => {
-  const classes = useStyles();
+const InputText = forwardRef(
+  ({
+    value,
+    className,
+    children,
+    onTextChange,
+    onEnter,
+    inputRef,
+    ...rest
+  }: Props) => {
+    const classes = useStyles();
 
-  const handleEnterPress = generateKeyPressActions([
-    { code: 13, actiion: () => onEnter && onEnter() },
-  ]);
+    const handleEnterPress = generateKeyPressActions([
+      { code: 13, actiion: () => onEnter && onEnter() },
+    ]);
 
-  return (
-    <div className={`${classes.wrapper} ${className}`} {...rest}>
-      {children}
-      <input
-        className={classes.input}
-        value={value}
-        onChange={(event) => onTextChange(event.target.value)}
-        onKeyPressCapture={handleEnterPress}
-      />
-    </div>
-  );
-};
+    return (
+      <div className={`${classes.wrapper} ${className}`} {...rest}>
+        {children}
+        <input
+          ref={inputRef}
+          {...rest}
+          className={classes.input}
+          value={value}
+          onChange={(event) => onTextChange(event.target.value)}
+          onKeyPressCapture={handleEnterPress}
+        />
+      </div>
+    );
+  }
+);
 
 export { InputText };

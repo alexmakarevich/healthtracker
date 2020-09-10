@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import EContext, { EventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
 import NutritionItemCompact from "../Nutrition/NutritionItemCompact";
@@ -8,6 +8,28 @@ import NITableRow from "../Nutrition/NITableRow";
 import AddNutritionItem from "./../Nutrition/AddNutritionItem";
 import Removable from "../generic/Removable";
 import { ItemModes } from "../../utils/utils";
+import { createUseStyles } from "react-jss";
+import Collapsible, { Animations } from "../generic/Collapsible";
+
+const styles = () => ({
+  itemsWrapper: {
+    display: "flex",
+    alignItems: "center",
+  },
+  removeButton: {
+    background: "#ee3333",
+    display: "flex",
+    alignItems: "center",
+    height: "25px",
+    width: "25px",
+    color: "white",
+    borderRadius: "50%",
+    border: "none",
+    justifyContent: "center",
+  },
+});
+
+const useStyles = createUseStyles(styles, { name: "EventTableRow" });
 
 interface Props {
   event: Event;
@@ -15,20 +37,11 @@ interface Props {
 }
 
 const EventTableRow = ({ event }: Props) => {
+  const classes = useStyles();
   const time = new Date(event.time);
-  const timeOffset = time.getTimezoneOffset();
-  const timeMiliseconds = time.getMilliseconds();
-  const timeLocalMiliseconds = timeMiliseconds - timeOffset * 60000;
-
-  const timeLocal = new Date(time.setMinutes(time.getMinutes() - timeOffset));
-
-  console.log(timeOffset);
-  console.log(timeLocalMiliseconds);
-  console.log(timeLocal);
 
   const NIContext = useContext(NutritionItemContext);
   const EventsFromContext = useContext(EventContext);
-  // console.log(NIContext.all);
 
   function addNi(niId: string) {
     const newEvent = eventLogic.addNI(event, niId);
@@ -41,12 +54,12 @@ const EventTableRow = ({ event }: Props) => {
   }
 
   function changeDateTime(newDateTime: string) {
-    console.log(newDateTime);
-
     const dateTime = new Date(newDateTime);
     const newEvent = { ...event, time: dateTime.toISOString() };
     EventsFromContext.update(newEvent);
   }
+
+  const [showAddNIinput, setShowAddNIinput] = useState(false);
 
   return (
     <tr>
@@ -58,23 +71,46 @@ const EventTableRow = ({ event }: Props) => {
         />
       </td>
       <td>
-        {event.children.nutritionItemIds.map((niId) => {
-          const ni = NIContext.getOneFromContext(niId);
-          return (
-            ni && (
-              <Removable onRemove={() => removeNi(niId)} key={ni._id}>
-                <NutritionItemCompact
-                  item={NIContext.getOneFromContext(niId)}
-                  initialMode={ItemModes.Show}
-                />
-              </Removable>
-            )
-          );
-        })}
-        <AddNutritionItem
-          onAdd={addNi}
-          idsToExclude={event.children.nutritionItemIds}
-        />
+        <div className={classes.itemsWrapper}>
+          {event.children.nutritionItemIds.map((niId) => {
+            const ni = NIContext.getOneFromContext(niId);
+            return (
+              ni && (
+                <Removable onRemove={() => removeNi(niId)} key={ni._id}>
+                  <NutritionItemCompact
+                    item={NIContext.getOneFromContext(niId)}
+                    initialMode={ItemModes.Show}
+                  />
+                </Removable>
+              )
+            );
+          })}
+          <Collapsible
+            isExpanded={!showAddNIinput}
+            animation={Animations.ExpandWidth}
+          >
+            <button onClick={() => setShowAddNIinput(!showAddNIinput)}>
+              + nutrition
+            </button>
+          </Collapsible>
+          <Collapsible
+            isExpanded={showAddNIinput}
+            animation={Animations.ExpandWidth}
+          >
+            <div className={classes.itemsWrapper}>
+              <AddNutritionItem
+                onAdd={addNi}
+                idsToExclude={event.children.nutritionItemIds}
+              />
+              <button
+                className={classes.removeButton}
+                onClick={() => setShowAddNIinput(!showAddNIinput)}
+              >
+                X
+              </button>
+            </div>
+          </Collapsible>
+        </div>
       </td>
       <td>
         <button onClick={() => EventsFromContext.delete(event._id)}>
