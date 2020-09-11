@@ -1,10 +1,10 @@
-import { useState, KeyboardEvent, useMemo, ReactNode, Children } from "react";
+import { useState, KeyboardEvent, useMemo, ReactNode } from "react";
 import React from "react";
-import { render, findByLabelText } from "@testing-library/react";
 import { InputText } from "./InputText";
 import SelectList, { SelectChild } from "./SelectList";
 import Fuse from "fuse.js";
 import { createUseStyles } from "react-jss";
+import { useHover } from "../../common/useHover";
 
 const styles = () => ({
   wrapper: {
@@ -51,7 +51,11 @@ const SearchWithDropdown = ({
     keys: ["searchableText"],
   };
 
+  const [isDropdwonVisible, setIsDropdwonVisible] = useState(false);
+
   const dropdownItemsAfterSearch = itemsAfterSearch();
+
+  // TODO: add useMemo
 
   function itemsAfterSearch() {
     if (searchTextValue.length === 0) {
@@ -69,16 +73,28 @@ const SearchWithDropdown = ({
     }
   }
 
+  const [dropdownRef, isDropdownHovered] = useHover();
+
   return (
-    <div {...rest} className={classes.wrapper}>
+    <div
+      {...rest}
+      className={classes.wrapper}
+      onFocus={() => setIsDropdwonVisible(true)}
+      onBlur={() => !isDropdownHovered && setIsDropdwonVisible(false)}
+    >
       <InputText value={searchTextValue} onTextChange={onSearchChange}>
         {inputChildren}
       </InputText>
-      <SelectList
-        children={dropdownItemsAfterSearch}
-        onChangeSelection={onSelectChange}
-        className={classes.dropdown}
-      />
+      {isDropdwonVisible && (
+        <SelectList
+          ref={dropdownRef}
+          children={dropdownItemsAfterSearch}
+          onChangeSelection={onSelectChange}
+          onFocus={() => setIsDropdwonVisible(true)}
+          onBlur={() => setIsDropdwonVisible(false)}
+          className={classes.dropdown}
+        />
+      )}
     </div>
   );
 };
