@@ -10,7 +10,7 @@ import {
   generateArrowKeyActions,
   generateKeyPressActions,
   classConcat,
-} from "../../utils/utils";
+} from "../../../utils/utils";
 
 const useStyles = createUseStyles(
   {

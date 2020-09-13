@@ -9,7 +9,7 @@ import React, {
   InputHTMLAttributes,
 } from "react";
 import { createUseStyles } from "react-jss";
-import { generateKeyPressActions } from "./../../utils/utils";
+import { generateKeyPressActions } from "../../../utils/utils";
 
 const useStyles = createUseStyles(
   {

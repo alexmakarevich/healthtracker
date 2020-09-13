@@ -12,17 +12,13 @@ import { NutritionItemContext } from "../../context/NutritionItemContextProvider
 import Ingredients from "./Ingredients";
 import TextWithEditAndState from "../generic/TextWithEditAndState";
 import { ItemModes } from "../../utils/utils";
+import { Box } from "../generic/styling/Box";
 
 const useStyles = createUseStyles(
   {
     outerWrapper: {
       margin: "5px",
       width: "100%",
-    },
-    innerWrapper: {
-      background: "#84d9b0",
-      borderRadius: "10px",
-      padding: "10px",
     },
     info: {
       padding: "5px",
@@ -130,7 +126,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
         </div>
       </td>
       <td>
-        <div className={classes.innerWrapper}>
+        <Box>
           <div className={classes.info}>
             {mode === ItemModes.QuickEdit ? (
               <TextWithEditAndState
@@ -158,7 +154,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
               />
             )}
           </div>
-        </div>
+        </Box>
       </td>
       <td>
         <Ingredients

@@ -1,7 +1,7 @@
 import { useState, KeyboardEvent, useMemo } from "react";
 import React from "react";
 import { render, findByLabelText } from "@testing-library/react";
-import { InputText } from "./InputText";
+import { InputText } from "./inputs/InputText";
 import SelectList, { SelectChild } from "./SelectList";
 import Fuse from "fuse.js";
 import { createUseStyles } from "react-jss";

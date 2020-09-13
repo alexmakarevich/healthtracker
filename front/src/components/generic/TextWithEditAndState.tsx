@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import React from "react";
-import { InputText } from "./InputText";
+import { InputText } from "./inputs/InputText";
 import TextWithEdit from "./TextWithEdit";
 
 interface Props extends React.DOMAttributes<any> {

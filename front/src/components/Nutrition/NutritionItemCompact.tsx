@@ -5,11 +5,11 @@ import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
+import { Box } from "../generic/styling/Box";
 
 const useStyles = createUseStyles({
   wrapper: {
     background: "#84b0d9",
-    borderRadius: "5px",
     margin: "5px",
     padding: "5px 7px",
   },
@@ -22,9 +22,6 @@ interface Props {
 }
 
 const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
-  // console.log("ni compact");
-  // console.log(item);
-
   const {
     obj: itemState,
     setObj: setItemState,
@@ -43,7 +40,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.wrapper} {...rest}>
+    <Box className={classes.wrapper} {...rest}>
       <TextWithEdit
         text={item.title}
         isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
@@ -51,7 +48,7 @@ const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
           updateItemProperty("title", newText);
         }}
       />
-    </div>
+    </Box>
   );
 };
 

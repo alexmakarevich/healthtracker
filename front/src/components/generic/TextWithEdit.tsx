@@ -1,6 +1,6 @@
 import { useState, KeyboardEvent, forwardRef, Ref } from "react";
 import React from "react";
-import { InputText } from "./InputText";
+import { InputText } from "./inputs/InputText";
 
 interface Props extends React.DOMAttributes<any> {
   text: string;

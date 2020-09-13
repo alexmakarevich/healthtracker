@@ -1,6 +1,6 @@
 import { useState, KeyboardEvent, useMemo, ReactNode } from "react";
 import React from "react";
-import { InputText } from "./InputText";
+import { InputText } from "./inputs/InputText";
 import SelectList, { SelectChild } from "./SelectList";
 import Fuse from "fuse.js";
 import { createUseStyles } from "react-jss";

@@ -4,9 +4,9 @@ import NutritionTable from "./components/Nutrition/NutritionTable";
 import EventTable from "./components/Events/EventTable";
 import NutritionItemContextProvider from "./context/NutritionItemContextProvider";
 import EContext from "./context/EventContextProvider";
-import { InputDay } from "./components/generic/DateTimeInputs/InputDay";
-import { InputDate } from "./components/generic/DateTimeInputs/InputDate";
-import { InputTime } from "./components/generic/DateTimeInputs/InputTime";
+import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
+import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
+import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
 
 export const TestContext = createContext<any>("test context value");
 
