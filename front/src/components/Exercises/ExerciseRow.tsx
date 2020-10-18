@@ -1,18 +1,11 @@
-import React, { useEffect, useContext } from "react";
-import { useState } from "react";
-import {
-  NutritionItem,
-  NILogic,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
-import useObjectState from "../../common/useObjectState";
-import TextWithEdit from "../generic/TextWithEdit";
+import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
-import Ingredients from "./Ingredients";
-import TextWithEditAndState from "../generic/TextWithEditAndState";
+import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
+import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
+import TextWithEdit from "../generic/TextWithEdit";
+import TextWithEditAndState from "../generic/TextWithEditAndState";
 
 const useStyles = createUseStyles(
   {
@@ -46,26 +39,26 @@ const useStyles = createUseStyles(
 );
 
 interface Props {
-  item: NutritionItem;
+  item: ExerciseType;
   initialMode: ItemModes;
 }
 
-const NITableRow = ({ item, initialMode }: Props) => {
-  const [ni, setNi] = useState(item);
+const ExerciseRow = ({ item, initialMode: iexercisetialMode }: Props) => {
+  const [exercise, setExercise] = useState(item);
   const classes = useStyles();
-  const NIContext = useContext(NutritionItemContext);
-  const [mode, setMode] = useState(initialMode);
+  const ETContext = useContext(ExerciseTypeContext);
+  const [mode, setMode] = useState(iexercisetialMode);
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
-    /* maintaining itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
+    /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
     if (mode !== ItemModes.New) {
-      setNi(item);
+      setExercise(item);
     }
   }, [item]);
 
   function handleSave() {
-    NIContext.update(ni);
+    ETContext.update(exercise);
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
@@ -75,32 +68,12 @@ const NITableRow = ({ item, initialMode }: Props) => {
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
-    setNi(item);
+    setExercise(item);
   }
 
   async function handleCreate() {
-    NIContext.create(ni);
-    setNi(item);
-  }
-
-  function addIngredient(id: string) {
-    if (mode !== ItemModes.New) {
-      const newNI = NILogic.add_ingredient(ni, id);
-      NIContext.update(newNI);
-    } else if (mode === ItemModes.New) {
-      const newNI = NILogic.add_ingredient(ni, id);
-      setNi(newNI);
-    }
-  }
-
-  function removeIngredient(id: string) {
-    if (mode !== ItemModes.New) {
-      const newNI = NILogic.remove_ingredient(ni, id);
-      NIContext.update(newNI);
-    } else if (mode === ItemModes.New) {
-      const newNI = NILogic.remove_ingredient(ni, id);
-      setNi(newNI);
-    }
+    ETContext.create(exercise);
+    setExercise(item);
   }
 
   return (
@@ -119,7 +92,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
           {mode === ItemModes.New && (
             <div>
               <button onClick={() => handleCreate()}>create</button>
-              <button onClick={() => setNi(item)}>reset</button>
+              <button onClick={() => setExercise(item)}>reset</button>
             </div>
           )}
         </div>
@@ -129,21 +102,21 @@ const NITableRow = ({ item, initialMode }: Props) => {
           <div className={classes.info}>
             {mode === ItemModes.QuickEdit ? (
               <TextWithEditAndState
-                text={ni.title}
+                text={exercise.title}
                 onCommit={(txt: string) => {
                   console.log("onCommit");
                   console.log(txt);
-                  const newNI = { ...ni, title: txt };
-                  NIContext.update(newNI);
+                  const newNI = { ...exercise, title: txt };
+                  ETContext.update(newNI);
                 }}
               />
             ) : (
               <TextWithEdit
-                text={ni.title}
+                text={exercise.title}
                 className={classes.title}
                 isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
                 onTextChange={(newText: string) => {
-                  setNi({ ...item, title: newText });
+                  setExercise({ ...item, title: newText });
                 }}
                 onEnter={
                   (mode === ItemModes.New && (() => handleCreate())) ||
@@ -156,19 +129,12 @@ const NITableRow = ({ item, initialMode }: Props) => {
         </Box>
       </td>
       <td>
-        <Ingredients
-          parent={ni}
-          onAdd={(id) => addIngredient(id)}
-          onRemove={(id) => removeIngredient(id)}
-        />
-      </td>
-      <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => NIContext.delete(ni._id)}>delete</button>
+          <button onClick={() => ETContext.delete(exercise._id)}>delete</button>
         )}
       </td>
     </tr>
   );
 };
 
-export default NITableRow;
+export { ExerciseRow };

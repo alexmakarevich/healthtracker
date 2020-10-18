@@ -1,12 +1,14 @@
 import React, { createContext, useState } from "react";
 import "./App.css";
-import NutritionTable from "./components/Nutrition/NutritionTable";
+import NutritionItemTable from "./components/Nutrition/NutritionItemTable";
 import EventTable from "./components/Events/EventTable";
 import NutritionItemContextProvider from "./context/NutritionItemContextProvider";
 import EContext from "./context/EventContextProvider";
 import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
+import ExerciseTypeContextProvider from "./context/ExerciseTypeContextProvider";
+import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -20,10 +22,13 @@ function App() {
     <div className="App">
       <EContext>
         <NutritionItemContextProvider>
-          <NutritionTable />
+          <NutritionItemTable />
           <EventTable />
         </NutritionItemContextProvider>
       </EContext>
+      <ExerciseTypeContextProvider>
+        <ExerciseTypeTable />
+      </ExerciseTypeContextProvider>
       <InputDate />
       <InputTime
         hh={hours}

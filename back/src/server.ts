@@ -4,6 +4,7 @@
 // https://dev.to/aurelkurtula/building-a-restful-api-with-express-and-mongodb--3mmh
 import { nutritionItemRoutes } from "./nutrition_item-router";
 import { eventRoutes } from "./event-router";
+import { exerciseTypeRoutes } from "./exercise_type_router";
 
 const express = require("express");
 
@@ -29,6 +30,7 @@ connection.once("open", function () {
 // app.use("/todos", todoRoutes);
 app.use("/nutritionItems", nutritionItemRoutes);
 app.use("/events", eventRoutes);
+app.use("/exerciseTypes", exerciseTypeRoutes);
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
 });

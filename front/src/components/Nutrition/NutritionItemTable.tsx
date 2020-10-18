@@ -20,36 +20,38 @@ const styles = () => ({
 
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
-const NutritionTable = () => {
+const NutritionItemTable = () => {
   const NIContext = useContext(NutritionItemContext);
-  const EventsFromContext = useContext(EventContext);
 
   const classes = useStyles();
 
-  // console.log("all NI in table: ");
-  // console.log(NIContext.all);
-
   return (
-    <table>
-      <thead>
-        <tr>
-          <th></th>
-          <th>Title</th>
-          <th>Ingredients</th>
-        </tr>
-      </thead>
-      <tbody className={classes.list}>
-        {NIContext.all.map((nutritionItem) => (
+    <>
+      <h2>Nutrition Item Table</h2>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Title</th>
+            <th>Ingredients</th>
+          </tr>
+        </thead>
+        <tbody className={classes.list}>
+          {NIContext.all.map((nutritionItem) => (
+            <NITableRow
+              key={nutritionItem._id}
+              item={nutritionItem}
+              initialMode={ItemModes.QuickEdit}
+            />
+          ))}
           <NITableRow
-            key={nutritionItem._id}
-            item={nutritionItem}
-            initialMode={ItemModes.QuickEdit}
+            item={nutritionItemDefaults}
+            initialMode={ItemModes.New}
           />
-        ))}
-        <NITableRow item={nutritionItemDefaults} initialMode={ItemModes.New} />
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </>
   );
 };
 
-export default NutritionTable;
+export default NutritionItemTable;

@@ -14,6 +14,8 @@ const EventTable = () => {
   };
   return (
     <div>
+      <h2>Event Table</h2>
+
       <table>
         <thead>
           <tr>
