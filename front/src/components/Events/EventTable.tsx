@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import EContext, { EventContext } from "../../context/EventContextProvider";
+import { EventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults } from "../../logic/eventLogic";
 import EventTableRow from "./EventTableRow";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";

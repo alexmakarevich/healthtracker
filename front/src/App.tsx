@@ -2,12 +2,12 @@ import React, { createContext, useState } from "react";
 import "./App.css";
 import NutritionItemTable from "./components/Nutrition/NutritionItemTable";
 import EventTable from "./components/Events/EventTable";
-import NutritionItemContextProvider from "./context/NutritionItemContextProvider";
-import EContext from "./context/EventContextProvider";
+import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
+import { EventProvider } from "./context/EventContextProvider";
 import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
-import ExerciseTypeContextProvider from "./context/ExerciseTypeContextProvider";
+import {ExerciseTypeProvider, } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 
 export const TestContext = createContext<any>("test context value");
@@ -20,15 +20,15 @@ function App() {
 
   return (
     <div className="App">
-      <EContext>
-        <NutritionItemContextProvider>
+      <EventProvider>
+        <NutritionItemProvider>
           <NutritionItemTable />
           <EventTable />
-        </NutritionItemContextProvider>
-      </EContext>
-      <ExerciseTypeContextProvider>
+        </NutritionItemProvider>
+      </EventProvider>
+      <ExerciseTypeProvider>
         <ExerciseTypeTable />
-      </ExerciseTypeContextProvider>
+      </ExerciseTypeProvider>
       <InputDate />
       <InputTime
         hh={hours}
