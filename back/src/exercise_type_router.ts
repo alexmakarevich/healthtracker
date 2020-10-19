@@ -12,6 +12,9 @@ let ExerciseType = new Schema({
   title: {
     type: String,
   },
+  measuredFields: {
+    type: Object
+  }
 });
 
 const exerciseTypeRoutes = generateRoutes("ExerciseType", ExerciseType);
