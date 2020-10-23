@@ -3,10 +3,8 @@ import { createUseStyles } from "react-jss";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
-import { CreateEditResetCancel } from "../generic/buttons/CreateEditResetCamcel";
-import { Box } from "../generic/styling/Box";
-import TextWithEdit from "../generic/TextWithEdit";
-import TextWithEditAndState from "../generic/TextWithEditAndState";
+import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
+import { TextWithModes } from "../EntityElements/TextWithModes";
 
 const useStyles = createUseStyles(
   {
@@ -81,35 +79,14 @@ export const useExerciseFields = ({
   }
 
   const Title = () => (
-    <Box>
-      <div className={classes.info}>
-        {mode === ItemModes.QuickEdit ? (
-          <TextWithEditAndState
-            text={exercise.title}
-            onCommit={(txt: string) => {
-              console.log("onCommit");
-              console.log(txt);
-              const newNI = { ...exercise, title: txt };
-              ETContext.update(newNI);
-            }}
-          />
-        ) : (
-          <TextWithEdit
-            text={exercise.title}
-            className={classes.title}
-            isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
-            onTextChange={(newText: string) => {
-              setExercise({ ...item, title: newText });
-            }}
-            onEnter={
-              (mode === ItemModes.New && (() => handleCreate())) ||
-              (mode === ItemModes.Edit && (() => handleSave())) ||
-              (() => console.log("on enter not available for this mode"))
-            }
-          />
-        )}
-      </div>
-    </Box>
+    <TextWithModes
+      mode={mode}
+      text={exercise.title}
+      onUpdate={(text) => ETContext.update({ ...exercise, title: text })}
+      onCreate={handleCreate}
+      onSet={(text) => setExercise({ ...exercise, title: text })}
+      onSave={handleSave}
+    />
   );
 
   const Buttons = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
-import { ItemModes } from "../../../utils/utils";
+import { ItemModes } from "../../utils/utils";
 
 interface Props {
   mode: ItemModes;
