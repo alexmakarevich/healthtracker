@@ -1,41 +1,18 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { useComplexState } from "../../common/useComplexState";
+import { useEntityBase } from "../../common/useEntityBase";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
+import { DeleteButton } from "../EntityElements/Delete";
 import { TextWithModes } from "../EntityElements/TextWithModes";
 
 const useStyles = createUseStyles(
-  {
-    outerWrapper: {
-      margin: "5px",
-      width: "100%",
-    },
-    info: {
-      padding: "5px",
-      display: "flex",
-      justifyContent: "center",
-    },
-    title: {
-      display: "flex",
-      alignItems: "center",
-    },
-    buttons: {
-      padding: "5px",
+  {},
 
-      "& > div": {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        "& > button": {
-          flexGrow: 1,
-        },
-      },
-    },
-  },
-  { name: "NutritionListItem" }
+  { name: "ExerciseFields" }
 );
 
 export interface ExerciseTypeFieldProps {
@@ -47,49 +24,28 @@ export const useExerciseFields = ({
   item,
   initialMode,
 }: ExerciseTypeFieldProps) => {
-  const ETContext = useContext(ExerciseTypeContext);
-  const [mode, setMode] = useState(initialMode);
-
   const {
-    complexState: exercise,
-    setComplexState: setExercise,
+    complexState,
+    mode,
+    setMode,
+    handleCreate,
+    handleCancel,
+    handleUpdate,
+    handleSave,
+    handleDelete,
+    setComplexState,
     reset,
-  } = useComplexState(item);
+  } = useEntityBase(item, ExerciseTypeContext, initialMode);
 
-  // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
-  useEffect(() => {
-    /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
-    if (mode !== ItemModes.New) {
-      reset();
-    }
-  }, [item]);
-
-  function handleSave() {
-    ETContext.update(exercise);
-    if (mode === ItemModes.Edit) {
-      setMode(ItemModes.Show);
-    }
-  }
-
-  function handleCancel() {
-    if (mode === ItemModes.Edit) {
-      setMode(ItemModes.Show);
-    }
-    reset();
-  }
-
-  async function handleCreate() {
-    ETContext.create(exercise);
-    reset();
-  }
+  const { title } = complexState;
 
   const Title = () => (
     <TextWithModes
       mode={mode}
-      text={exercise.title}
-      onUpdate={(text) => ETContext.update({ ...exercise, title: text })}
+      text={title}
+      onUpdate={(text) => handleUpdate({ title: text })}
       onCreate={handleCreate}
-      onSet={(text) => setExercise({ title: text })}
+      onSet={(text) => setComplexState({ title: text })}
       onSave={handleSave}
     />
   );
@@ -100,19 +56,14 @@ export const useExerciseFields = ({
         mode={mode}
         onCreate={handleCreate}
         onCancel={handleCancel}
-        onReset={() => setExercise(item)}
+        onReset={reset}
         onSave={handleSave}
         onSetMode={setMode}
       />
     );
   };
 
-  const Delete = () =>
-    mode !== ItemModes.New ? (
-      <button onClick={() => ETContext.delete(exercise._id)}>delete</button>
-    ) : (
-      <></>
-    );
+  const Delete = () => <DeleteButton mode={mode} onDelete={handleDelete} />;
 
   return { Title, Buttons, Delete };
 };
