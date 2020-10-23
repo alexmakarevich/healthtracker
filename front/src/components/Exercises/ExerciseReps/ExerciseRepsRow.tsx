@@ -1,11 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
-import { ExerciseType } from "../../logic/exerciseTypeLogic";
-import { ItemModes } from "../../utils/utils";
-import { Box } from "../generic/styling/Box";
-import TextWithEdit from "../generic/TextWithEdit";
-import TextWithEditAndState from "../generic/TextWithEditAndState";
+import { ExerciseRepsContext, ExerciseRepsProvider } from "../../../context/ExerciseRepsContextProvider";
+import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
+import { ItemModes } from "../../../utils/utils";
+import { Box } from "../../generic/styling/Box";
 
 const useStyles = createUseStyles(
   {
@@ -39,26 +37,28 @@ const useStyles = createUseStyles(
 );
 
 interface Props {
-  item: ExerciseType;
+  item: ExerciseReps;
   initialMode: ItemModes;
 }
 
-const ExerciseRow = ({ item, initialMode }: Props) => {
-  const [exercise, setExercise] = useState(item);
+const ExerciseRepsRow = ({ item, initialMode }: Props) => {
+  const [exerciseReps, setExerciseReps] = useState(item);
   const classes = useStyles();
-  const ETContext = useContext(ExerciseTypeContext);
+  const exerciseRepsContext = useContext(ExerciseRepsContext);
   const [mode, setMode] = useState(initialMode);
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
-    /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
+    /* maintain itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
     if (mode !== ItemModes.New) {
-      setExercise(item);
+      setExerciseReps(item);
     }
   }, [item]);
 
+  // TODO: extract save, cancel, create to hook 
+
   function handleSave() {
-    ETContext.update(exercise);
+    exerciseRepsContext.update(exerciseReps);
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
@@ -68,12 +68,21 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
-    setExercise(item);
+    setExerciseReps(item);
   }
 
   async function handleCreate() {
-    ETContext.create(exercise);
-    setExercise(item);
+    exerciseRepsContext.create(exerciseReps);
+    setExerciseReps(item);
+  }
+
+  function updateReps (value: number) {
+    const newReps = { ...exerciseReps, repetitions: value }
+    if (mode === ItemModes.QuickEdit) {
+      exerciseRepsContext.update(newReps)
+    } else {
+    setExerciseReps(newReps)
+    }
   }
 
   return (
@@ -92,7 +101,7 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
           {mode === ItemModes.New && (
             <div>
               <button onClick={() => handleCreate()}>create</button>
-              <button onClick={() => setExercise(item)}>reset</button>
+              <button onClick={() => setExerciseReps(item)}>reset</button>
             </div>
           )}
         </div>
@@ -100,41 +109,20 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
       <td>
         <Box>
           <div className={classes.info}>
-            {mode === ItemModes.QuickEdit ? (
-              <TextWithEditAndState
-                text={exercise.title}
-                onCommit={(txt: string) => {
-                  console.log("onCommit");
-                  console.log(txt);
-                  const newNI = { ...exercise, title: txt };
-                  ETContext.update(newNI);
-                }}
-              />
-            ) : (
-              <TextWithEdit
-                text={exercise.title}
-                className={classes.title}
-                isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
-                onTextChange={(newText: string) => {
-                  setExercise({ ...item, title: newText });
-                }}
-                onEnter={
-                  (mode === ItemModes.New && (() => handleCreate())) ||
-                  (mode === ItemModes.Edit && (() => handleSave())) ||
-                  (() => console.log("on enter not available for this mode"))
-                }
-              />
-            )}
+            {exerciseReps.exerciseId}
           </div>
         </Box>
       </td>
       <td>
+        <input value={exerciseReps.repetitions} onChange={e => updateReps(parseInt(e.target.value))} />
+      </td>
+      <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => ETContext.delete(exercise._id)}>delete</button>
+          <button onClick={() => exerciseRepsContext.delete(exerciseReps._id)}>delete</button>
         )}
       </td>
     </tr>
   );
 };
 
-export { ExerciseRow };
+export { ExerciseRepsRow };
