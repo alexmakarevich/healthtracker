@@ -3,7 +3,12 @@ import { createUseStyles } from "react-jss";
 import { ExerciseRepsContext } from "../../../context/ExerciseRepsContextProvider";
 import { exerciseRepsDefaults } from "../../../logic/exerciseRepsLogic";
 import { ItemModes } from "../../../utils/utils";
-import { ExerciseRepsRow} from "./ExerciseRepsRow";
+import { SimpleRow } from "../../generic/layout/SimpleRow";
+import { ExerciseRepsRow } from "./ExerciseRepsRow";
+import {
+  ExerciseRepsFieldProps,
+  useExerciseRepsFields,
+} from "./useExerciseRepsFilelds";
 // import {useState} from 'react';
 
 const styles = () => ({
@@ -34,20 +39,29 @@ const ExerciseRepsTable = () => {
         </thead>
         <tbody className={classes.list}>
           {exerciseReps.all.map((exercise) => (
-            <ExerciseRepsRow
+            <Row
               key={exercise._id}
               item={exercise}
               initialMode={ItemModes.QuickEdit}
             />
           ))}
-          <ExerciseRepsRow
-            item={exerciseRepsDefaults}
-            initialMode={ItemModes.New}
-          />
+          <Row item={exerciseRepsDefaults} initialMode={ItemModes.New} />
         </tbody>
       </table>
     </>
   );
 };
 
-export {ExerciseRepsTable};
+const Row = (props: ExerciseRepsFieldProps) => {
+  const { Buttons, Delete, Repetitions } = useExerciseRepsFields(props);
+
+  return (
+    <SimpleRow>
+      <Buttons />
+      <Repetitions />
+      <Delete />
+    </SimpleRow>
+  );
+};
+
+export { ExerciseRepsTable };
