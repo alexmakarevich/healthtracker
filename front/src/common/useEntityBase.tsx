@@ -51,6 +51,16 @@ export function useEntityBase<I>(
     await context.delete(complexState);
   }
 
+  async function handleSetOrUpdate(newProps: Partial<I>) {
+    if (mode === ItemModes.QuickEdit) {
+      handleUpdate(newProps);
+    } else {
+      setComplexState(newProps);
+    }
+  }
+
+  //   TODO: add handleSetOrUpdate
+
   return {
     complexState,
     setComplexState,
@@ -63,5 +73,6 @@ export function useEntityBase<I>(
     handleCreate,
     handleUpdate,
     handleDelete,
+    handleSetOrUpdate,
   };
 }
