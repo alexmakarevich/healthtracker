@@ -5,7 +5,6 @@ import {
   NILogic,
   nutritionItemDefaults,
 } from "../../logic/nutritionItemLogic";
-import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";

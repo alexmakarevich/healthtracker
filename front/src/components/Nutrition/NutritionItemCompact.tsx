@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { NutritionItem } from "../../logic/nutritionItemLogic";
-import useObjectState from "../../common/useObjectState";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
+import { useComplexState } from "../../common/useComplexState";
 
 const useStyles = createUseStyles({
   wrapper: {
@@ -23,29 +23,21 @@ interface Props {
 
 const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   const {
-    obj: itemState,
-    setObj: setItemState,
-    updateProperty: updateItemProperty,
-    resetObj: resetItemState,
-    ...rest
-  }: {
-    obj: NutritionItem;
-    setObj: any;
-    updateProperty: any;
-    resetObj: any;
-  } = useObjectState(item);
+    state: nutritionItem,
+    setComplexState: setNutritionItem,
+  } = useComplexState(item);
 
   const [mode, setMode] = useState(initialMode);
 
   const classes = useStyles();
 
   return (
-    <Box className={classes.wrapper} {...rest}>
+    <Box className={classes.wrapper}>
       <TextWithEdit
-        text={item.title}
+        text={nutritionItem.title}
         isEdit={mode === ItemModes.Edit || mode === ItemModes.New}
         onTextChange={(newText: string) => {
-          updateItemProperty("title", newText);
+          setNutritionItem({ title: newText });
         }}
       />
     </Box>
