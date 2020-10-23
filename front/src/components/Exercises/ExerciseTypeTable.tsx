@@ -3,6 +3,7 @@ import { createUseStyles } from "react-jss";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
+import { SimpleRow } from "../generic/layout/SimpleRow";
 import { ExerciseTypeFieldProps, useExerciseFields } from "./ExerciseFilelds";
 import { ExerciseRow } from "./ExerciseRow";
 // import {useState} from 'react';
@@ -53,13 +54,12 @@ const ExerciseTypeTable = () => {
 
 const Row = (props: ExerciseTypeFieldProps) => {
   const { Title, Buttons, Delete } = useExerciseFields(props);
-  const cells = [<Buttons />, <Title />, <Delete />];
   return (
-    <tr>
-      {cells.map((cell, index) => (
-        <td key={index}>{cell}</td>
-      ))}
-    </tr>
+    <SimpleRow>
+      <Buttons />
+      <Title />
+      <Delete />
+    </SimpleRow>
   );
 };
 
