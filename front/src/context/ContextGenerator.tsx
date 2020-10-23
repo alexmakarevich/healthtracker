@@ -10,21 +10,25 @@ interface GeneratorProps {
   apiBaseUrl: string;
 }
 
+export interface ContextProps<Item> {
+  all: Item[];
+  // likely return type: Promise<itemType>
+  create: (objectToCreate: Item) => any;
+  update: (objectToUpdate: Item) => any;
+  delete: (idToDelete: string) => any;
+  getOneFromContext: (idOfObjectToGet: string) => any;
+  refresh: () => void;
+}
+
 /**
  * creates a context and its provider with standard CRUD for a collection of items
  * make sure to provide item types
  * make sure to give the context & provider a unique name
  */
 function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
-  interface ContextProps {
-    all: itemType[];
-    // likely return type: Promise<itemType>
-    create: (objectToCreate: itemType) => any;
-    update: (objectToUpdate: itemType) => any;
-    delete: (idToDelete: string) => any;
-    getOneFromContext: (idOfObjectToGet: string) => any;
-    refresh: () => void;
-  }
+  type ItemWithId = itemType & {
+    _id: string;
+  };
 
   const initialContextValue = {
     all: [],
@@ -35,14 +39,14 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
     refresh: () => {},
   };
 
-  const Context = createContext<ContextProps>(initialContextValue);
+  const Context = createContext<ContextProps<ItemWithId>>(initialContextValue);
 
   interface Props {
     children: ReactNode;
   }
 
   function ContextProvider({ children }: Props) {
-    const [all, setNutrition]: [any[], Function] = useState([]);
+    const [all, setAll]: [ItemWithId[], Function] = useState([]);
 
     const API = generateCRUD(apiBaseUrl);
 
@@ -51,16 +55,16 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
     }, []);
 
     async function refresh() {
-      const allNutr: any[] = await API.READ_ALL();
-      setNutrition(allNutr);
+      const all: ItemWithId[] = await API.READ_ALL();
+      setAll(all);
     }
 
-    function getOneFromContext(id: any["_id"]) {
+    function getOneFromContext(id: string) {
       const item = all.find((item) => item._id === id);
       return item;
     }
 
-    async function createOne(item: any) {
+    async function createOne(item: ItemWithId) {
       let result;
       await API.CREATE(item).then((res) => {
         refresh();
@@ -73,7 +77,7 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
       return result;
     }
 
-    async function updateOne(item: any) {
+    async function updateOne(item: ItemWithId) {
       const itemWithModifiedTimestamp = {
         ...item,
         lastModifiedOn: timestamp(),

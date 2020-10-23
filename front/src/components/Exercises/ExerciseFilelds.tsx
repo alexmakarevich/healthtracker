@@ -47,12 +47,11 @@ export const useExerciseFields = ({
   item,
   initialMode,
 }: ExerciseTypeFieldProps) => {
-  const classes = useStyles();
   const ETContext = useContext(ExerciseTypeContext);
   const [mode, setMode] = useState(initialMode);
 
   const {
-    state: exercise,
+    complexState: exercise,
     setComplexState: setExercise,
     reset,
   } = useComplexState(item);

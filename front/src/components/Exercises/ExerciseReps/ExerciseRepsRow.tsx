@@ -1,6 +1,9 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { ExerciseRepsContext, ExerciseRepsProvider } from "../../../context/ExerciseRepsContextProvider";
+import {
+  ExerciseRepsContext,
+  ExerciseRepsProvider,
+} from "../../../context/ExerciseRepsContextProvider";
 import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
 import { ItemModes } from "../../../utils/utils";
 import { Box } from "../../generic/styling/Box";
@@ -55,7 +58,7 @@ const ExerciseRepsRow = ({ item, initialMode }: Props) => {
     }
   }, [item]);
 
-  // TODO: extract save, cancel, create to hook 
+  // TODO: extract save, cancel, create to hook
 
   function handleSave() {
     exerciseRepsContext.update(exerciseReps);
@@ -76,12 +79,12 @@ const ExerciseRepsRow = ({ item, initialMode }: Props) => {
     setExerciseReps(item);
   }
 
-  function updateReps (value: number) {
-    const newReps = { ...exerciseReps, repetitions: value }
+  function updateReps(value: number) {
+    const newReps = { ...exerciseReps, repetitions: value };
     if (mode === ItemModes.QuickEdit) {
-      exerciseRepsContext.update(newReps)
+      exerciseRepsContext.update(newReps);
     } else {
-    setExerciseReps(newReps)
+      setExerciseReps(newReps);
     }
   }
 
@@ -108,17 +111,21 @@ const ExerciseRepsRow = ({ item, initialMode }: Props) => {
       </td>
       <td>
         <Box>
-          <div className={classes.info}>
-            {exerciseReps.exerciseId}
-          </div>
+          <div className={classes.info}>{exerciseReps.exerciseId}</div>
         </Box>
       </td>
       <td>
-        <input value={exerciseReps.repetitions} onChange={e => updateReps(parseInt(e.target.value))} />
+        <input
+          type={"number"}
+          value={exerciseReps.repetitions}
+          onChange={(e) => updateReps(parseInt(e.target.value))}
+        />
       </td>
       <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => exerciseRepsContext.delete(exerciseReps._id)}>delete</button>
+          <button onClick={() => exerciseRepsContext.delete(exerciseReps._id)}>
+            delete
+          </button>
         )}
       </td>
     </tr>

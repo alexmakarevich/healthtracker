@@ -23,7 +23,7 @@ interface Props {
 
 const NutritionItemCompact = ({ item, initialMode, refresh }: Props) => {
   const {
-    state: nutritionItem,
+    complexState: nutritionItem,
     setComplexState: setNutritionItem,
   } = useComplexState(item);
 
