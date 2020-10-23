@@ -163,7 +163,7 @@ const NITableRow = ({ item, initialMode }: Props) => {
       </td>
       <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => NIContext.delete(ni._id)}>delete</button>
+          <button onClick={() => NIContext.delete(ni)}>delete</button>
         )}
       </td>
     </tr>
