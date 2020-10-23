@@ -1,13 +1,4 @@
-import React, {
-  ReactElement,
-  KeyboardEvent,
-  ReactNode,
-  forwardRef,
-  Ref,
-  DOMAttributes,
-  HTMLAttributes,
-  InputHTMLAttributes,
-} from "react";
+import React, { ReactNode, forwardRef, Ref, InputHTMLAttributes } from "react";
 import { createUseStyles } from "react-jss";
 import { generateKeyPressActions } from "../../../utils/utils";
 

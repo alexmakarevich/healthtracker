@@ -1,10 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useState } from "react";
-import {
-  NutritionItem,
-  NILogic,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
+import { NutritionItem, NILogic } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";

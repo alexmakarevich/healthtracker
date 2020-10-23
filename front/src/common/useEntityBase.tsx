@@ -13,10 +13,6 @@ export function useEntityBase<I>(
   const [mode, setMode] = useState(initialMode);
   const { complexState, setComplexState, reset } = useComplexState(item);
 
-  type IWithId = I & {
-    _id: string;
-  };
-
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
     /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
