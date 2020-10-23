@@ -4,13 +4,15 @@ import { ItemModes } from "../utils/utils";
 import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";
 
-interface Props {
-  contextSource: React.Context<any>;
-  initialMode: ItemModes;
-  item: any;
-}
+type AnyWithId = any & {
+  _id: string;
+};
 
-export const useEntityBase = ({ item, contextSource, initialMode }: Props) => {
+export const useEntityBase = (
+  item: AnyWithId,
+  contextSource: React.Context<any>,
+  initialMode: ItemModes
+) => {
   const context: ContextProps<typeof item> = useContext(contextSource);
   const [mode, setMode] = useState(initialMode);
   const { complexState, setComplexState, reset } = useComplexState(item);
@@ -38,12 +40,19 @@ export const useEntityBase = ({ item, contextSource, initialMode }: Props) => {
   }
 
   async function handleCreate() {
+    console.log("handleCreate");
+
     await context.create(item);
     reset();
   }
 
   async function handleUpdate(newProps: Partial<typeof item>) {
-    await context.update(updateObject(item)(newProps));
+    const newObject = updateObject(item)(newProps);
+    await context.update(newObject);
+  }
+
+  async function handleDelete() {
+    await context.delete(complexState._id);
   }
 
   return {
@@ -57,5 +66,6 @@ export const useEntityBase = ({ item, contextSource, initialMode }: Props) => {
     handleCancel,
     handleCreate,
     handleUpdate,
+    handleDelete,
   };
 };
