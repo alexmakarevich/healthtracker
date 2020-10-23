@@ -3,6 +3,7 @@ import { createUseStyles } from "react-jss";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
+import { CreateEditResetCancel } from "../generic/buttons/CreateEditResetCamcel";
 import { Box } from "../generic/styling/Box";
 import TextWithEdit from "../generic/TextWithEdit";
 import TextWithEditAndState from "../generic/TextWithEditAndState";
@@ -113,23 +114,14 @@ export const useExerciseFields = ({
 
   const Buttons = () => {
     return (
-      <div className={classes.buttons}>
-        {mode === ItemModes.Show && (
-          <button onClick={() => setMode(ItemModes.Edit)}>edit</button>
-        )}
-        {mode === ItemModes.Edit && (
-          <div>
-            <button onClick={() => handleSave()}>save</button>
-            <button onClick={() => handleCancel()}>cancel</button>
-          </div>
-        )}
-        {mode === ItemModes.New && (
-          <div>
-            <button onClick={() => handleCreate()}>create</button>
-            <button onClick={() => setExercise(item)}>reset</button>
-          </div>
-        )}
-      </div>
+      <CreateEditResetCancel
+        mode={mode}
+        onCreate={handleCreate}
+        onCancel={handleCancel}
+        onReset={() => setExercise(item)}
+        onSave={handleSave}
+        onSetMode={setMode}
+      />
     );
   };
 
