@@ -130,7 +130,7 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
       </td>
       <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => ETContext.delete(exercise._id)}>delete</button>
+          <button onClick={() => ETContext.delete(exercise)}>delete</button>
         )}
       </td>
     </tr>

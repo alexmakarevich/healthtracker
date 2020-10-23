@@ -2,13 +2,8 @@ import React, { useReducer } from "react";
 
 // TODO: check if updateObject could be used here
 
-const useComplexState = (initialState: any) => {
-  interface PartialProps extends Partial<typeof initialState> {}
-
-  function reducer(
-    cuurentState: typeof initialState,
-    newState: PartialProps
-  ): typeof initialState {
+function useComplexState<S>(initialState: S) {
+  function reducer(cuurentState: S, newState: Partial<S>): typeof initialState {
     return { ...cuurentState, ...newState };
   }
 
@@ -17,6 +12,6 @@ const useComplexState = (initialState: any) => {
   const reset = () => setComplexState(initialState);
 
   return { complexState, setComplexState, reset };
-};
+}
 
 export { useComplexState };

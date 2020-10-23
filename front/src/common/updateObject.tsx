@@ -1,3 +1,4 @@
-export const updateObject = (object: object) => (
-  newProps: Partial<typeof object>
-) => ({ ...object, ...newProps });
+export const updateObject = <O,>(object: O) => (newProps: Partial<O>) => ({
+  ...object,
+  ...newProps,
+});

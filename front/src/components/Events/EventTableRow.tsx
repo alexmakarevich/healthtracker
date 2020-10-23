@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import  { EventContext } from "../../context/EventContextProvider";
+import { EventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
 import NutritionItemCompact from "../Nutrition/NutritionItemCompact";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
@@ -113,9 +113,7 @@ const EventTableRow = ({ event }: Props) => {
         </div>
       </td>
       <td>
-        <button onClick={() => EventsFromContext.delete(event._id)}>
-          delete
-        </button>
+        <button onClick={() => EventsFromContext.delete(event)}>delete</button>
       </td>
     </tr>
   );

@@ -15,7 +15,7 @@ export interface ContextProps<Item> {
   // likely return type: Promise<itemType>
   create: (objectToCreate: Item) => any;
   update: (objectToUpdate: Item) => any;
-  delete: (idToDelete: string) => any;
+  delete: (objectToDelete: Item) => any;
   getOneFromContext: (idOfObjectToGet: string) => any;
   refresh: () => void;
 }
@@ -85,8 +85,8 @@ function contextGeneratorFn<itemType>({ apiBaseUrl }: GeneratorProps) {
       await API.UPDATE_BY_ID(itemWithModifiedTimestamp).then(() => refresh());
     }
 
-    async function deleteOne(id: string) {
-      await API.DELETE_BY_ID(id).then(() => refresh());
+    async function deleteOne(item: ItemWithId) {
+      await API.DELETE_BY_ID(item._id).then(() => refresh());
     }
 
     const providerValues = {
