@@ -3,6 +3,7 @@ import { createUseStyles } from "react-jss";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
+import { ExerciseTypeFieldProps, useExerciseFields } from "./ExerciseFilelds";
 import { ExerciseRow } from "./ExerciseRow";
 // import {useState} from 'react';
 
@@ -33,11 +34,11 @@ const ExerciseTypeTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {ETContext.all.map((exercise) => (
-            <ExerciseRow
-              key={exercise._id}
+          {ETContext.all.map((exercise, index) => (
+            <Row
               item={exercise}
               initialMode={ItemModes.QuickEdit}
+              key={index}
             />
           ))}
           <ExerciseRow
@@ -47,6 +48,18 @@ const ExerciseTypeTable = () => {
         </tbody>
       </table>
     </>
+  );
+};
+
+const Row = (props: ExerciseTypeFieldProps) => {
+  const { Title, Buttons, Delete } = useExerciseFields(props);
+  const cells = [<Buttons />, <Title />, <Delete />];
+  return (
+    <tr>
+      {cells.map((cell) => (
+        <td>{cell}</td>
+      ))}
+    </tr>
   );
 };
 

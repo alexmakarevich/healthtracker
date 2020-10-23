@@ -3,10 +3,10 @@ import { KeyboardEvent } from "react";
 // item modes
 
 export enum ItemModes {
-  Show,
-  Edit,
-  QuickEdit,
-  New,
+  Show = "Show",
+  Edit = "Edit",
+  QuickEdit = "QuickEdit",
+  New = "New",
 }
 
 // keypress actions
