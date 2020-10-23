@@ -56,8 +56,8 @@ const Row = (props: ExerciseTypeFieldProps) => {
   const cells = [<Buttons />, <Title />, <Delete />];
   return (
     <tr>
-      {cells.map((cell) => (
-        <td>{cell}</td>
+      {cells.map((cell, index) => (
+        <td key={index}>{cell}</td>
       ))}
     </tr>
   );
