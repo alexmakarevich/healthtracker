@@ -1,10 +1,15 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
+import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
+import { DeleteButton } from "../EntityElements/Delete";
 import { SimpleRow } from "../generic/layout/SimpleRow";
-import { ExerciseTypeFieldProps, useExerciseFields } from "./ExerciseFilelds";
+import {
+  ExerciseTypeFieldProps,
+  useExerciseTypeProps,
+} from "./useExerciseFilelds";
 import { ExerciseRow } from "./ExerciseRow";
 // import {useState} from 'react';
 
@@ -42,10 +47,7 @@ const ExerciseTypeTable = () => {
               key={index}
             />
           ))}
-          <ExerciseRow
-            item={exerciseTypeDefaults}
-            initialMode={ItemModes.New}
-          />
+          <Row item={exerciseTypeDefaults} initialMode={ItemModes.New} />
         </tbody>
       </table>
     </>
@@ -53,12 +55,22 @@ const ExerciseTypeTable = () => {
 };
 
 const Row = (props: ExerciseTypeFieldProps) => {
-  const { Title, Buttons, Delete } = useExerciseFields(props);
+  console.log("Row", props.item);
+
+  const {
+    someNumberProps,
+    deleteProps,
+    buttonsProps,
+    titleProps,
+    Exercise,
+  } = useExerciseTypeProps(props);
+
   return (
     <SimpleRow>
-      <Buttons />
-      <Title />
-      <Delete />
+      <Exercise.Buttons {...buttonsProps} />
+      <Exercise.Title {...titleProps} />
+      <Exercise.SomeNumber {...someNumberProps} />
+      <Exercise.Delete {...deleteProps} />
     </SimpleRow>
   );
 };
