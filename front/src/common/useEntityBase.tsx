@@ -22,7 +22,7 @@ export function useEntityBase<I>(
   }, [item]);
 
   async function handleSave() {
-    await context.update(item);
+    await context.update(complexState);
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
@@ -36,14 +36,12 @@ export function useEntityBase<I>(
   }
 
   async function handleCreate() {
-    console.log("handleCreate");
-
-    await context.create(item);
+    await context.create(complexState);
     reset();
   }
 
   async function handleUpdate(newProps: Partial<I>) {
-    const newObject = updateObject(item)(newProps);
+    const newObject = updateObject(complexState)(newProps);
     await context.update(newObject);
   }
 
@@ -58,8 +56,6 @@ export function useEntityBase<I>(
       setComplexState(newProps);
     }
   }
-
-  //   TODO: add handleSetOrUpdate
 
   return {
     complexState,
