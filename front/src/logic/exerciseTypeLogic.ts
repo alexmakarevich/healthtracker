@@ -2,6 +2,7 @@ import { Basic } from "./sharedLogic";
 
 export interface ExerciseType extends Basic {
   title: string;
+  someNumber: number;
 }
 
 export const exerciseTypeDefaults: ExerciseType = {
@@ -10,4 +11,5 @@ export const exerciseTypeDefaults: ExerciseType = {
   lastModifiedOn: new Date().toISOString(),
   _v: -1,
   title: "",
+  someNumber: 0
 };
