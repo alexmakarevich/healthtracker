@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../common/useEntityBase";
-import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
+import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
@@ -35,7 +35,7 @@ export const useExerciseTypeProps = ({
     setComplexState,
     handleSetOrUpdate,
     reset,
-  } = useEntityBase(item, ExerciseTypeContext, initialMode);
+  } = useEntityBase(item, useExerciseContext(), initialMode);
 
   const { title, someNumber } = complexState;
 
@@ -64,6 +64,7 @@ export const useExerciseTypeProps = ({
         onSave={handleSave}
         onCancel={handleCancel}
         onSetMode={setMode}
+        valid
       />
     ),
     []

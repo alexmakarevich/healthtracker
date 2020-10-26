@@ -1,9 +1,19 @@
 import React, { createContext, useContext } from "react";
 import { createUseStyles } from "react-jss";
+import { useEntityBase } from "../../../common/useEntityBase";
 import { ExerciseRepsContext } from "../../../context/ExerciseRepsContextProvider";
+import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import { exerciseRepsDefaults } from "../../../logic/exerciseRepsLogic";
+import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
+import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
+import { DeleteButton } from "../../EntityElements/Delete";
 import { SimpleRow } from "../../generic/layout/SimpleRow";
+import PickOrAdd, { SearchableSelectChild } from "../../generic/PickOrAdd";
+import Removable from "../../generic/Removable";
+import SearchWithDropdown from "../../generic/SearchWithDropdown";
+import { Box } from "../../generic/styling/Box";
+import { ExerciseRepsRowNew } from "./ExcerciseRepsRowNew";
 import { ExerciseRepsRow } from "./ExerciseRepsRow";
 import {
   ExerciseRepsFieldProps,
@@ -19,7 +29,7 @@ const styles = () => ({
   },
 });
 
-const useStyles = createUseStyles(styles, { name: "NutritionList" });
+const useStyles = createUseStyles(styles, { name: "ExerciseReps" });
 
 const ExerciseRepsTable = () => {
   const exerciseReps = useContext(ExerciseRepsContext);
@@ -38,14 +48,18 @@ const ExerciseRepsTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {exerciseReps.all.map((exercise) => (
+          {exerciseReps.all.map((exercise, index) => (
             <Row
-              key={exercise._id}
+              key={index}
               item={exercise}
               initialMode={ItemModes.QuickEdit}
             />
           ))}
-          <Row item={exerciseRepsDefaults} initialMode={ItemModes.New} />
+          <Row
+            key={"new"}
+            item={exerciseRepsDefaults}
+            initialMode={ItemModes.New}
+          />
         </tbody>
       </table>
     </>
@@ -53,13 +67,91 @@ const ExerciseRepsTable = () => {
 };
 
 const Row = (props: ExerciseRepsFieldProps) => {
-  const { Buttons, Delete, Repetitions } = useExerciseRepsFields(props);
+  const {
+    complexState: reps,
+    setComplexState: setReps,
+    handleSetOrUpdate,
+    mode,
+    setMode,
+    handleCreate,
+    handleCancel,
+    handleDelete,
+    handleSave,
+    handleUpdate,
+    reset,
+  } = useEntityBase(
+    props.item,
+    useContext(ExerciseRepsContext),
+    props.initialMode
+  );
+
+  const exerciseContext = useExerciseContext();
+
+  const dropdownItems: SearchableSelectChild[] = exerciseContext.all.map(
+    (exercise) => ({
+      id: exercise._id,
+      isSelected: false,
+      searchableText: exercise.title,
+      node: <Box>{exercise.title}</Box>,
+    })
+  );
+
+  const noExercise = exerciseRepsDefaults.exerciseId;
+  const hasExercise = reps.exerciseId !== noExercise;
+
+  const ex = exerciseContext.getOneFromContext(reps.exerciseId);
+
+  console.log("render");
+
+  const exercise = () => {
+    console.log(hasExercise, ex?.title, !!ex?.title);
+
+    return hasExercise
+      ? ex?.title
+        ? ex?.title
+        : "exercise not found"
+      : "none";
+  };
 
   return (
     <SimpleRow>
-      <Buttons />
-      <Repetitions />
-      <Delete />
+      <CreateEditResetCancel
+        mode={mode}
+        onSetMode={setMode}
+        onCancel={handleCancel}
+        onCreate={handleCreate}
+        onReset={reset}
+        onSave={handleSave}
+        valid={reps.exerciseId !== exerciseRepsDefaults.exerciseId}
+      />
+      <div>{reps._id}</div>
+      <div>{reps.exerciseId}</div>
+      <div>
+        <Removable
+          onRemove={() =>
+            handleSetOrUpdate({ exerciseId: exerciseRepsDefaults.exerciseId })
+          }
+        >
+          {exercise()}
+        </Removable>
+        {reps.exerciseId === exerciseRepsDefaults.exerciseId && (
+          <PickOrAdd
+            dropdownItems={dropdownItems}
+            onSelect={(id: string) => setReps({ exerciseId: id })}
+            onCreateNew={(title) =>
+              exerciseContext.create({ ...exerciseTypeDefaults, title: title })
+            }
+          />
+        )}
+      </div>
+      <input
+        value={reps.repetitions}
+        type={"number"}
+        onChange={(e) =>
+          handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
+        }
+      />
+      <DeleteButton mode={mode} onDelete={handleDelete} />
     </SimpleRow>
   );
 };

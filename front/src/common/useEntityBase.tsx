@@ -1,15 +1,16 @@
 import React, { useEffect, useContext, useState } from "react";
+import { WithId } from "../api/apiGenerator";
 import contextGeneratorFn, { ContextProps } from "../context/ContextGenerator";
 import { ItemModes } from "../utils/utils";
 import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";
 
-export function useEntityBase<I>(
+export function useEntityBase<I extends WithId>(
   item: I,
-  contextSource: React.Context<any>,
+  contextSource: ContextProps<I>,
   initialMode: ItemModes
 ) {
-  const context: ContextProps<I> = useContext(contextSource);
+  const context: ContextProps<I> = contextSource;
   const [mode, setMode] = useState(initialMode);
   const { complexState, setComplexState, reset } = useComplexState(item);
 

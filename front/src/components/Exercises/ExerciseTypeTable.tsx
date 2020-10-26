@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useMemo } from "react";
 import { createUseStyles } from "react-jss";
-import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
@@ -11,6 +10,7 @@ import {
   useExerciseTypeProps,
 } from "./useExerciseFilelds";
 import { ExerciseRow } from "./ExerciseRow";
+import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 // import {useState} from 'react';
 
 const styles = () => ({
@@ -24,7 +24,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
 const ExerciseTypeTable = () => {
-  const ETContext = useContext(ExerciseTypeContext);
+  const ETContext = useExerciseContext();
 
   const classes = useStyles();
 

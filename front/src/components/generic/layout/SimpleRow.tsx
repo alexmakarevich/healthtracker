@@ -1,7 +1,13 @@
-import React, { ReactElement } from "react";
+import React, {
+  ReactChild,
+  ReactChildren,
+  ReactElement,
+  ReactNode,
+} from "react";
+import { JsxElement } from "typescript";
 
 interface Props {
-  children: ReactElement[];
+  children: ReactChild[];
 }
 
 export const SimpleRow = ({ children: cells }: Props) => {

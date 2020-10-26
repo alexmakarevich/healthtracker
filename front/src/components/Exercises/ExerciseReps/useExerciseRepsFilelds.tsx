@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useRef, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
 import { ExerciseRepsContext } from "../../../context/ExerciseRepsContextProvider";
@@ -28,15 +28,13 @@ export const useExerciseRepsFields = ({
     setMode,
     handleCreate,
     handleCancel,
-    handleUpdate,
     handleSetOrUpdate,
     handleSave,
     handleDelete,
-    setComplexState,
     reset,
-  } = useEntityBase(item, ExerciseRepsContext, initialMode);
+  } = useEntityBase(item, useContext(ExerciseRepsContext), initialMode);
 
-  const { repetitions, exerciseId } = complexState;
+  const { repetitions, exerciseId, durationSeconds, weightKg } = complexState;
 
   const Buttons = () => {
     return (
@@ -47,21 +45,38 @@ export const useExerciseRepsFields = ({
         onReset={reset}
         onSave={handleSave}
         onSetMode={setMode}
+        valid={!!exerciseId}
       />
     );
   };
 
-  const Repetitions = () => (
-    <input
-      type={"number"}
-      value={repetitions}
-      onChange={(e) =>
-        handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
-      }
-    />
+  const Repetitions = useMemo(
+    () => () => (
+      <input
+        type={"number"}
+        value={repetitions}
+        onChange={(e: React.ChangeEvent<any>) =>
+          handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
+        }
+      />
+    ),
+    []
+  );
+
+  const ExerciseId = useMemo(
+    () => () => (
+      <input
+        type={"text"}
+        defaultValue={exerciseId}
+        onChange={(e: React.ChangeEvent<any>) =>
+          handleSetOrUpdate({ exerciseId: e.target.value })
+        }
+      />
+    ),
+    []
   );
 
   const Delete = () => <DeleteButton mode={mode} onDelete={handleDelete} />;
 
-  return { Buttons, Delete, Repetitions };
+  return { Buttons, Delete, Repetitions, ExerciseId };
 };

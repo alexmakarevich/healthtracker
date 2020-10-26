@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
+import { useEntityBase } from "../../common/useEntityBase";
+import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
@@ -44,37 +45,59 @@ interface Props {
 }
 
 const ExerciseRow = ({ item, initialMode }: Props) => {
-  const [exercise, setExercise] = useState(item);
   const classes = useStyles();
-  const ETContext = useContext(ExerciseTypeContext);
-  const [mode, setMode] = useState(initialMode);
+  // const [exercise, setExercise] = useState(item);
 
-  // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
-  useEffect(() => {
-    /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
-    if (mode !== ItemModes.New) {
-      setExercise(item);
-    }
-  }, [item]);
+  // const ETContext = useContext(ExerciseTypeContext);
+  // const [mode, setMode] = useState(initialMode);
 
-  function handleSave() {
-    ETContext.update(exercise);
-    if (mode === ItemModes.Edit) {
-      setMode(ItemModes.Show);
-    }
-  }
+  // // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
+  // useEffect(() => {
+  //   /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
+  //   if (mode !== ItemModes.New) {
+  //     setExercise(item);
+  //   }
+  // }, [item]);
 
-  function handleCancel() {
-    if (mode === ItemModes.Edit) {
-      setMode(ItemModes.Show);
-    }
-    setExercise(item);
-  }
+  // function handleSave() {
+  //   ETContext.update(exercise);
+  //   if (mode === ItemModes.Edit) {
+  //     setMode(ItemModes.Show);
+  //   }
+  // }
 
-  async function handleCreate() {
-    ETContext.create(exercise);
-    setExercise(item);
-  }
+  // function handleCancel() {
+  //   if (mode === ItemModes.Edit) {
+  //     setMode(ItemModes.Show);
+  //   }
+  //   setExercise(item);
+  // }
+
+  // async function handleCreate() {
+  //   ETContext.create(exercise);
+  //   setExercise(item);
+  // }
+
+  const {
+    complexState: exercise,
+    mode,
+    setMode,
+    handleUpdate,
+    handleSave,
+    handleCancel,
+    handleCreate,
+    handleDelete,
+    handleSetOrUpdate,
+    setComplexState: setExercise,
+  } = useEntityBase(item, useExerciseContext(), initialMode);
+
+  const someNumberProps = {
+    type: "number",
+    value: exercise.someNumber,
+    key: "check",
+    onChange: (e: React.ChangeEvent<any>) =>
+      handleSetOrUpdate({ someNumber: parseInt(e.target.value) }),
+  };
 
   return (
     <tr className={classes.outerWrapper}>
@@ -106,8 +129,9 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
                 onCommit={(txt: string) => {
                   console.log("onCommit");
                   console.log(txt);
-                  const newNI = { ...exercise, title: txt };
-                  ETContext.update(newNI);
+                  // const newNI = { ...exercise, title: txt };
+                  // ETContext.update(newNI);
+                  handleUpdate({ title: txt });
                 }}
               />
             ) : (
@@ -129,8 +153,11 @@ const ExerciseRow = ({ item, initialMode }: Props) => {
         </Box>
       </td>
       <td>
+        <input {...someNumberProps} />
+      </td>
+      <td>
         {mode !== ItemModes.New && (
-          <button onClick={() => ETContext.delete(exercise)}>delete</button>
+          <button onClick={handleDelete}>delete</button>
         )}
       </td>
     </tr>
