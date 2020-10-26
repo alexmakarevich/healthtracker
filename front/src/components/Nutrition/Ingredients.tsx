@@ -6,8 +6,6 @@ import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import Collapsible, { Animations } from "../generic/Collapsible";
-import PickOrAdd from "../generic/PickOrAdd";
-import { AnimatePresence, motion } from "framer-motion";
 import AddNutritionItem from "./AddNutritionItem";
 import { ItemModes } from "../../utils/utils";
 

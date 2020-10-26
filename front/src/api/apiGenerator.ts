@@ -1,14 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 
-const nutritionItemsInstance = axios.create({
-  baseURL: "http://localhost:4000/nutritionItems",
-});
 
 export interface WithId {
   _id: string
 }
 
 // standard generic apis
+// TODO: ensure response typing here is consistent with actual response structures
 
 export function generateCRUD <Item extends WithId>(baseURL: string) {
   const axiosInstance = axios.create({
