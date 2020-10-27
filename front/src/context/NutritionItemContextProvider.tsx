@@ -1,9 +1,9 @@
-import contextGeneratorFn from "./ContextGenerator";
 import { NutritionItem } from "./../logic/nutritionItemLogic";
+import { generateDefinedContext } from "./generateDefinedContext";
 
 export const {
-  context: NutritionItemContext,
-  contextProvider: NutritionItemProvider,
-} = contextGeneratorFn<NutritionItem>({
-  apiBaseUrl: "http://localhost:4000/nutritionItems",
-});
+  ContextProvider: NutritionItemProvider,
+  useContextDefined: useNutritionItemContext,
+} = generateDefinedContext<NutritionItem>(
+  "http://localhost:4000/nutritionItems"
+);

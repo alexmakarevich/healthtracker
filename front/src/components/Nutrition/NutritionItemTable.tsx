@@ -1,13 +1,9 @@
 import React, { createContext, useContext } from "react";
 // import {useState} from 'react';
-import {
-  NutritionItem,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
+import { nutritionItemDefaults } from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import NITableRow from "./NITableRow";
-import { EventContext } from "../../context/EventContextProvider";
 import { ItemModes } from "../../utils/utils";
 
 const styles = () => ({
@@ -21,7 +17,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
 const NutritionItemTable = () => {
-  const NIContext = useContext(NutritionItemContext);
+  const NIContext = useNutritionItemContext();
 
   const classes = useStyles();
 

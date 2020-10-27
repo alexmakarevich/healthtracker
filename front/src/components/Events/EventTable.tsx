@@ -1,13 +1,11 @@
 import React, { useContext } from "react";
-import { EventContext } from "../../context/EventContextProvider";
+import { useEventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults } from "../../logic/eventLogic";
 import EventTableRow from "./EventTableRow";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
 
 const EventTable = () => {
-  const EventsFromContext = useContext(EventContext);
-  const NIContext = useContext(NutritionItemContext);
+  const EventsFromContext = useEventContext();
 
   const newTestEvent = {
     ...eventDefaults,

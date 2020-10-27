@@ -1,7 +1,7 @@
 import React, { createContext, useContext } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
-import { ExerciseRepsContext } from "../../../context/ExerciseRepsContextProvider";
+import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import { exerciseRepsDefaults } from "../../../logic/exerciseRepsLogic";
 import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
@@ -32,7 +32,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "ExerciseReps" });
 
 const ExerciseRepsTable = () => {
-  const exerciseReps = useContext(ExerciseRepsContext);
+  const exerciseReps = useRepsContext();
 
   const classes = useStyles();
 
@@ -79,11 +79,7 @@ const Row = (props: ExerciseRepsFieldProps) => {
     handleSave,
     handleUpdate,
     reset,
-  } = useEntityBase(
-    props.item,
-    useContext(ExerciseRepsContext),
-    props.initialMode
-  );
+  } = useEntityBase(props.item, useRepsContext(), props.initialMode);
 
   const exerciseContext = useExerciseContext();
 

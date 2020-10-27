@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { WithId } from "../api/apiGenerator";
-import contextGeneratorFn, { ContextProps } from "../context/ContextGenerator";
+import { ContextProps } from "../context/generateDefinedContext";
+
 import { ItemModes } from "../utils/utils";
 import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";

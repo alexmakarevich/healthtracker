@@ -1,10 +1,8 @@
 import React, { useContext, useState } from "react";
-import { EventContext } from "../../context/EventContextProvider";
+import { useEventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
 import NutritionItemCompact from "../Nutrition/NutritionItemCompact";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
-import { NutritionItem } from "../../logic/nutritionItemLogic";
-import NITableRow from "../Nutrition/NITableRow";
+import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import AddNutritionItem from "./../Nutrition/AddNutritionItem";
 import Removable from "../generic/Removable";
 import { ItemModes } from "../../utils/utils";
@@ -40,8 +38,8 @@ const EventTableRow = ({ event }: Props) => {
   const classes = useStyles();
   const time = new Date(event.time);
 
-  const NIContext = useContext(NutritionItemContext);
-  const EventsFromContext = useContext(EventContext);
+  const NIContext = useNutritionItemContext();
+  const EventsFromContext = useEventContext();
 
   function addNi(niId: string) {
     const newEvent = eventLogic.addNI(event, niId);

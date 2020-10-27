@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState, useRef } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
-import { ExerciseRepsContext } from "../../../context/ExerciseRepsContextProvider";
+import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
 import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
@@ -35,7 +35,7 @@ export const ExerciseRepsRowNew = ({
     handleDelete,
     setComplexState,
     reset,
-  } = useEntityBase(item, useContext(ExerciseRepsContext), initialMode);
+  } = useEntityBase(item, useRepsContext(), initialMode);
 
   const { repetitions, exerciseId } = complexState;
 

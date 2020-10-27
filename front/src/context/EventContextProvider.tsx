@@ -1,9 +1,7 @@
-import contextGeneratorFn from "./ContextGenerator";
 import { Event } from "./../logic/eventLogic";
+import { generateDefinedContext } from "./generateDefinedContext";
 
 export const {
-  context: EventContext,
-  contextProvider: EventProvider,
-} = contextGeneratorFn<Event>({
-  apiBaseUrl: "http://localhost:4000/events",
-});
+  ContextProvider: EventProvider,
+  useContextDefined: useEventContext,
+} = generateDefinedContext<Event>("http://localhost:4000/events");

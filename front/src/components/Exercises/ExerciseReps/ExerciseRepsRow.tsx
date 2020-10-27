@@ -1,9 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import {
-  ExerciseRepsContext,
-  ExerciseRepsProvider,
-} from "../../../context/ExerciseRepsContextProvider";
+import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
 import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
 import { ItemModes } from "../../../utils/utils";
 import { Box } from "../../generic/styling/Box";
@@ -47,7 +44,7 @@ interface Props {
 const ExerciseRepsRow = ({ item, initialMode }: Props) => {
   const [exerciseReps, setExerciseReps] = useState(item);
   const classes = useStyles();
-  const exerciseRepsContext = useContext(ExerciseRepsContext);
+  const exerciseRepsContext = useRepsContext();
   const [mode, setMode] = useState(initialMode);
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)

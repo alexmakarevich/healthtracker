@@ -1,10 +1,8 @@
 import { ExerciseReps } from "../logic/exerciseRepsLogic";
-import { ExerciseType } from "../logic/exerciseTypeLogic";
-import contextGeneratorFn from "./ContextGenerator";
+
+import { generateDefinedContext } from "./generateDefinedContext";
 
 export const {
-  context: ExerciseRepsContext,
-  contextProvider: ExerciseRepsProvider,
-} = contextGeneratorFn<ExerciseReps>({
-  apiBaseUrl: "http://localhost:4000/exerciseReps",
-});
+  ContextProvider: ExerciseRepsProvider,
+  useContextDefined: useRepsContext,
+} = generateDefinedContext<ExerciseReps>("http://localhost:4000/exerciseReps");

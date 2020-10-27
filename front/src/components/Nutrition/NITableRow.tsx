@@ -3,7 +3,7 @@ import { useState } from "react";
 import { NutritionItem, NILogic } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import Ingredients from "./Ingredients";
 import TextWithEditAndState from "../generic/TextWithEditAndState";
 import { ItemModes } from "../../utils/utils";
@@ -48,7 +48,8 @@ interface Props {
 const NITableRow = ({ item, initialMode }: Props) => {
   const [ni, setNi] = useState(item);
   const classes = useStyles();
-  const NIContext = useContext(NutritionItemContext);
+  const NIContext = useNutritionItemContext();
+
   const [mode, setMode] = useState(initialMode);
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)

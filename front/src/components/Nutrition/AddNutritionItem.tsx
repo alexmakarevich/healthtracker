@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   NutritionItem,
   nutritionItemDefaults,
 } from "../../logic/nutritionItemLogic";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import PickOrAdd from "../generic/PickOrAdd";
 import { ItemModes } from "../../utils/utils";
 
@@ -36,7 +36,7 @@ interface Props {
 }
 
 const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
-  const NIContext = useContext(NutritionItemContext);
+  const NIContext = useNutritionItemContext();
   const classes = useStyles();
 
   async function handleCreateAndAdd(title: string) {

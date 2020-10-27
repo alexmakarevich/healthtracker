@@ -7,7 +7,7 @@ import { EventProvider } from "./context/EventContextProvider";
 import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
-import {ExerciseTypeProvider, } from "./context/ExerciseTypeContextProvider";
+import { ExerciseTypeProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 import { ExerciseRepsProvider } from "./context/ExerciseRepsContextProvider";
 import { ExerciseRepsTable } from "./components/Exercises/ExerciseReps/ExerciseRepsTable";
@@ -31,7 +31,7 @@ function App() {
       <ExerciseTypeProvider>
         <ExerciseTypeTable />
         <ExerciseRepsProvider>
-          <ExerciseRepsTable />   
+          <ExerciseRepsTable />
         </ExerciseRepsProvider>
       </ExerciseTypeProvider>
       <InputDate />

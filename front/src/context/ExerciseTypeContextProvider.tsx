@@ -1,5 +1,5 @@
 import { ExerciseType } from "../logic/exerciseTypeLogic";
-import { generateDefinedContext } from "./ContextGeneratorDefined";
+import { generateDefinedContext } from "./generateDefinedContext";
 
 export const {
   ContextProvider: ExerciseTypeProvider,

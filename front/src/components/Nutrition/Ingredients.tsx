@@ -4,7 +4,7 @@ import { NutritionItem } from "../../logic/nutritionItemLogic";
 import Removable from "./../generic/Removable";
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
-import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import AddNutritionItem from "./AddNutritionItem";
 import { ItemModes } from "../../utils/utils";
@@ -39,7 +39,7 @@ interface Props {
 }
 
 const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
-  const NIContext = useContext(NutritionItemContext);
+  const NIContext = useNutritionItemContext();
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
