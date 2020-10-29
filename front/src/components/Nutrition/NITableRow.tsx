@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { NutritionItem, NILogic } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";

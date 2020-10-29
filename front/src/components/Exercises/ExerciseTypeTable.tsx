@@ -1,15 +1,9 @@
-import React, { createContext, useContext, useMemo } from "react";
+import React from "react";
 import { createUseStyles } from "react-jss";
 import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
-import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
-import { DeleteButton } from "../EntityElements/Delete";
 import { SimpleRow } from "../generic/layout/SimpleRow";
-import {
-  ExerciseTypeFieldProps,
-  useExerciseTypeProps,
-} from "./useExerciseFilelds";
-import { ExerciseRow } from "./ExerciseRow";
+import { ExerciseTypeFieldProps } from "./useExerciseFilelds";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { Exercise } from "./ExerciseFields";
 // import {useState} from 'react';

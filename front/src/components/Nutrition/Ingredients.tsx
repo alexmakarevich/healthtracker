@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useState } from "react";
 import { NutritionItem } from "../../logic/nutritionItemLogic";
 import Removable from "./../generic/Removable";

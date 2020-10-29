@@ -1,9 +1,6 @@
-import { useState, KeyboardEvent, useMemo } from "react";
+import { useState } from "react";
 import React from "react";
-import { render, findByLabelText } from "@testing-library/react";
-import { InputText } from "./inputs/InputText";
-import SelectList, { SelectChild } from "./SelectList";
-import Fuse from "fuse.js";
+import { SelectChild } from "./SelectList";
 import { createUseStyles } from "react-jss";
 import SearchWithDropdown from "./SearchWithDropdown";
 import Removable from "./Removable";

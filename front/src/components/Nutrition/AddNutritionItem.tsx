@@ -6,7 +6,7 @@ import {
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import PickOrAdd, { SearchableSelectChild } from "../generic/PickOrAdd";
+import PickOrAdd from "../generic/PickOrAdd";
 import { ItemModes } from "../../utils/utils";
 
 const useStyles = createUseStyles(

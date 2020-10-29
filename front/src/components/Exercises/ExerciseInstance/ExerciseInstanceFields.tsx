@@ -18,9 +18,7 @@ import {
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../../EntityElements/Delete";
-import { TextWithModes } from "../../EntityElements/TextWithModes";
 import PickOrAdd from "../../generic/PickOrAdd";
-import Removable from "../../generic/Removable";
 import { Box } from "../../generic/styling/Box";
 
 const useStyles = createUseStyles(
