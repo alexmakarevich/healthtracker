@@ -11,6 +11,7 @@ import {
 } from "./useExerciseFilelds";
 import { ExerciseRow } from "./ExerciseRow";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
+import { Exercise } from "./ExerciseFields";
 // import {useState} from 'react';
 
 const styles = () => ({
@@ -54,24 +55,37 @@ const ExerciseTypeTable = () => {
   );
 };
 
+// const Row = (props: ExerciseTypeFieldProps) => {
+//   console.log("Row", props.item);
+
+//   const {
+//     someNumberProps,
+//     deleteProps,
+//     buttonsProps,
+//     titleProps,
+//     Exercise,
+//   } = useExerciseTypeProps(props);
+
+//   return (
+//     <SimpleRow>
+//       <Exercise.Buttons {...buttonsProps} />
+//       <Exercise.Title {...titleProps} />
+//       <Exercise.SomeNumber {...someNumberProps} />
+//       <Exercise.Delete {...deleteProps} />
+//     </SimpleRow>
+//   );
+// };
+
 const Row = (props: ExerciseTypeFieldProps) => {
-  console.log("Row", props.item);
-
-  const {
-    someNumberProps,
-    deleteProps,
-    buttonsProps,
-    titleProps,
-    Exercise,
-  } = useExerciseTypeProps(props);
-
   return (
-    <SimpleRow>
-      <Exercise.Buttons {...buttonsProps} />
-      <Exercise.Title {...titleProps} />
-      <Exercise.SomeNumber {...someNumberProps} />
-      <Exercise.Delete {...deleteProps} />
-    </SimpleRow>
+    <Exercise.Wrapper item={props.item} initialMode={props.initialMode}>
+      <SimpleRow>
+        <Exercise.Buttons />
+        <Exercise.Title />
+        <Exercise.SomeNumber />
+        <Exercise.Delete />
+      </SimpleRow>
+    </Exercise.Wrapper>
   );
 };
 

@@ -74,3 +74,17 @@ export function useEntityBase<I extends WithId>(
     handleSetOrUpdate,
   };
 }
+
+export interface EntityBaseContext<Item> {
+  complexState: Item;
+  setComplexState: React.Dispatch<Partial<Item>>;
+  mode: ItemModes;
+  setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
+  handleCreate: () => Promise<void>;
+  handleCancel: () => void;
+  handleUpdate: (newProps: Partial<Item>) => Promise<void>;
+  handleSave: () => void;
+  handleDelete: () => void;
+  reset: () => void;
+  handleSetOrUpdate: (newProps: Partial<Item>) => Promise<void>;
+}
