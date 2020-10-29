@@ -10,10 +10,10 @@ const timestamp = () => {
 export interface ContextProps<Something extends WithId> {
   all: Something[];
   // likely return type: Promise<itemType>
-  create: (objectToCreate: Something) => any;
-  update: (objectToUpdate: Something) => any;
-  delete: (objectToDelete: Something) => any;
-  getOneFromContext: (idOfObjectToGet: string) => any;
+  create: (objectToCreate: Something) => Promise<Something | undefined>;
+  update: (objectToUpdate: Something) => void;
+  delete: (objectToDelete: Something) => void;
+  getOneFromContext: (idOfObjectToGet: string) => Something | undefined;
   refresh: () => void;
 }
 
@@ -36,14 +36,14 @@ export function generateDefinedContext<Item extends WithId>(
   function ContextProvider({ children }: Props) {
     const [all, setAll]: [Item[], Function] = useState([]);
 
-    const API = generateCRUD(apiBaseUrl);
+    const API = generateCRUD<Item>(apiBaseUrl);
 
     useEffect(() => {
       refresh();
     }, []);
 
     async function refresh() {
-      const all: Item[] = await API.READ_ALL();
+      const all = await API.READ_ALL();
       setAll(all);
     }
 
@@ -53,13 +53,11 @@ export function generateDefinedContext<Item extends WithId>(
     }
 
     async function createOne(item: Item) {
-      let result;
-      await API.CREATE(item).then((res) => {
-        refresh();
-        // console.log("res");
-        // console.log(res);
-        result = res;
-      });
+      const result = await API.CREATE(item);
+      refresh();
+      // console.log("res");
+      // console.log(res);
+
       // console.log("result");
       // console.log(result);
       return result;

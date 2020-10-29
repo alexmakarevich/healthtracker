@@ -31,7 +31,7 @@ export interface SearchableSelectChild extends SelectChild {
 }
 
 interface Props {
-  dropdownItems: SearchableSelectChild[];
+  dropdownItems?: SearchableSelectChild[];
   onSelect: (value: string) => void;
   onUnselect?: (value: string) => void;
   onCreateNew: (title: string) => void;
@@ -63,17 +63,22 @@ const PickOrAdd = ({
 
   const [searchInput, setSearchInput] = useState("");
 
-  const allSelected = dropdownItems
-    .filter((item) => item.isSelected)
-    .map((item) =>
-      onUnselect ? (
-        <Removable onRemove={() => onUnselect(item.id)}>{item.node}</Removable>
-      ) : (
-        <div>{item.node}</div>
-      )
-    );
+  const allSelected =
+    dropdownItems &&
+    dropdownItems
+      .filter((item) => item.isSelected)
+      .map((item) =>
+        onUnselect ? (
+          <Removable onRemove={() => onUnselect(item.id)}>
+            {item.node}
+          </Removable>
+        ) : (
+          <div>{item.node}</div>
+        )
+      );
 
-  const allUnselected = dropdownItems.filter((item) => !item.isSelected);
+  const allUnselected =
+    dropdownItems && dropdownItems.filter((item) => !item.isSelected);
 
   return (
     <div {...rest} className={classes.wrapper}>
@@ -105,7 +110,7 @@ const PickOrAdd = ({
       </Collapsible>
       <Collapsible
         animation={Animations.ExpandWidth}
-        isExpanded={allSelected.length > 0}
+        isExpanded={!!allSelected && allSelected.length > 0}
       >
         <button onClick={onCommitSelected}> add selected </button>
       </Collapsible>

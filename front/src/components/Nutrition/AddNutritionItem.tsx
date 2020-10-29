@@ -6,7 +6,7 @@ import {
 import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import PickOrAdd from "../generic/PickOrAdd";
+import PickOrAdd, { SearchableSelectChild } from "../generic/PickOrAdd";
 import { ItemModes } from "../../utils/utils";
 
 const useStyles = createUseStyles(
@@ -42,29 +42,32 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
   async function handleCreateAndAdd(title: string) {
     const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
     const createResult = await NIContext.create(newNI);
-    const createdNI: NutritionItem = createResult.item;
-    onAdd(createdNI._id);
+    createResult && onAdd(createResult._id);
   }
 
-  const dropdownItems = NIContext.all.filter(
+  const dropdownItemIds = NIContext.all.filter(
     (item) => item._id && !idsToExclude?.includes(item._id)
   );
+
+  // const dropdownItems: SearchableSelectChild[] | undefined = dropdownItemIds.map((id) => NIContext.getOneFromContext(id))
 
   return (
     <div className={classes.wrapper}>
       <PickOrAdd
-        dropdownItems={dropdownItems.map((item) => ({
-          id: item._id,
-          node: (
-            <NutritionItemCompact
-              key={item._id}
-              item={NIContext.getOneFromContext(item._id)}
-              initialMode={ItemModes.Show}
-            />
-          ),
-          isSelected: false,
-          searchableText: item.title,
-        }))}
+        dropdownItems={dropdownItemIds.map((item) => {
+          return {
+            id: item._id,
+            node: (
+              <NutritionItemCompact
+                key={item._id}
+                item={item}
+                initialMode={ItemModes.Show}
+              />
+            ),
+            isSelected: false,
+            searchableText: item.title,
+          };
+        })}
         onSelect={onAdd}
         onCreateNew={handleCreateAndAdd}
       />

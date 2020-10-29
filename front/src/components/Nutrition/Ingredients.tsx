@@ -43,27 +43,23 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const dropdownItems = NIContext.all.filter(
-    (item) =>
-      item._id !== parent._id && !parent.ingredientIds.includes(item._id)
+  const ingredients = NIContext.all.filter(
+    (item) => item._id !== parent._id && parent.ingredientIds.includes(item._id)
   );
 
   const idsToExclude = [parent._id, ...parent.ingredientIds];
 
   return (
     <div className={classes.wrapper}>
-      {parent.ingredientIds.map(
-        (id) =>
-          NIContext.getOneFromContext(id) && (
-            <Removable onRemove={() => onRemove(id)} key={id}>
-              <NutritionItemCompact
-                item={NIContext.getOneFromContext(id)}
-                initialMode={ItemModes.Show}
-                refresh={() => NIContext.refresh()}
-              />
-            </Removable>
-          )
-      )}
+      {ingredients.map((item) => (
+        <Removable onRemove={() => onRemove(item._id)} key={item._id}>
+          <NutritionItemCompact
+            item={item}
+            initialMode={ItemModes.Show}
+            refresh={() => NIContext.refresh()}
+          />
+        </Removable>
+      ))}
       <div className={classes.addSection}>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={!isAddOpen}>
           <button onClick={() => setIsAddOpen(true)}>+</button>

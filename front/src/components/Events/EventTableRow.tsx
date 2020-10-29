@@ -76,7 +76,7 @@ const EventTableRow = ({ event }: Props) => {
               ni && (
                 <Removable onRemove={() => removeNi(niId)} key={ni._id}>
                   <NutritionItemCompact
-                    item={NIContext.getOneFromContext(niId)}
+                    item={ni}
                     initialMode={ItemModes.Show}
                   />
                 </Removable>
