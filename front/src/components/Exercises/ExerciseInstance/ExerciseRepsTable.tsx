@@ -1,9 +1,9 @@
 import React, { createContext, useContext } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
-import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
+import { useRepsContext } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
-import { exerciseRepsDefaults } from "../../../logic/exerciseRepsLogic";
+import { exerciseInstanceDefaults } from "../../../logic/exerciseInstanceLogic";
 import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
@@ -57,7 +57,7 @@ const ExerciseRepsTable = () => {
           ))}
           <Row
             key={"new"}
-            item={exerciseRepsDefaults}
+            item={exerciseInstanceDefaults}
             initialMode={ItemModes.New}
           />
         </tbody>
@@ -92,7 +92,7 @@ const Row = (props: ExerciseRepsFieldProps) => {
     })
   );
 
-  const noExercise = exerciseRepsDefaults.exerciseId;
+  const noExercise = exerciseInstanceDefaults.exerciseId;
   const hasExercise = reps.exerciseId !== noExercise;
 
   const ex = exerciseContext.getOneFromContext(reps.exerciseId);
@@ -118,19 +118,21 @@ const Row = (props: ExerciseRepsFieldProps) => {
         onCreate={handleCreate}
         onReset={reset}
         onSave={handleSave}
-        valid={reps.exerciseId !== exerciseRepsDefaults.exerciseId}
+        valid={reps.exerciseId !== exerciseInstanceDefaults.exerciseId}
       />
       <div>{reps._id}</div>
       <div>{reps.exerciseId}</div>
       <div>
         <Removable
           onRemove={() =>
-            handleSetOrUpdate({ exerciseId: exerciseRepsDefaults.exerciseId })
+            handleSetOrUpdate({
+              exerciseId: exerciseInstanceDefaults.exerciseId,
+            })
           }
         >
           {exercise()}
         </Removable>
-        {reps.exerciseId === exerciseRepsDefaults.exerciseId && (
+        {reps.exerciseId === exerciseInstanceDefaults.exerciseId && (
           <PickOrAdd
             dropdownItems={dropdownItems}
             onSelect={(id: string) => setReps({ exerciseId: id })}

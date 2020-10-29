@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
-import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
+import { useRepsContext } from "../../../context/ExerciseInstanceContextProvider";
+import { ExerciseInstance } from "../../../logic/exerciseInstanceLogic";
 import { ItemModes } from "../../../utils/utils";
 import { Box } from "../../generic/styling/Box";
 
@@ -37,7 +37,7 @@ const useStyles = createUseStyles(
 );
 
 interface Props {
-  item: ExerciseReps;
+  item: ExerciseInstance;
   initialMode: ItemModes;
 }
 

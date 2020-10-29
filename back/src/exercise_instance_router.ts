@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
-let ExerciseReps = new Schema({
+let ExerciseInstance = new Schema({
   createdOn: {
     type: String,
   },
@@ -24,6 +24,6 @@ let ExerciseReps = new Schema({
 
 });
 
-const exerciseRepsRoutes = generateRoutes("ExerciseReps", ExerciseReps);
+const exerciseInstanceRoutes = generateRoutes("ExerciseInstance", ExerciseInstance);
 
-export { exerciseRepsRoutes };
+export { exerciseInstanceRoutes };

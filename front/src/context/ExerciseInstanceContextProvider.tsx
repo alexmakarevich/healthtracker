@@ -1,8 +1,10 @@
-import { ExerciseReps } from "../logic/exerciseRepsLogic";
+import { ExerciseInstance } from "../logic/exerciseInstanceLogic";
 
 import { generateDefinedContext } from "./generateDefinedContext";
 
 export const {
   ContextProvider: ExerciseRepsProvider,
   useContextDefined: useRepsContext,
-} = generateDefinedContext<ExerciseReps>("http://localhost:4000/exerciseReps");
+} = generateDefinedContext<ExerciseInstance>(
+  "http://localhost:4000/exerciseInstances"
+);

@@ -1,8 +1,8 @@
 import React, { useEffect, useContext, useState, useRef, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
-import { useRepsContext } from "../../../context/ExerciseRepsContextProvider";
-import { ExerciseReps } from "../../../logic/exerciseRepsLogic";
+import { useRepsContext } from "../../../context/ExerciseInstanceContextProvider";
+import { ExerciseInstance } from "../../../logic/exerciseInstanceLogic";
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../../EntityElements/Delete";
@@ -14,7 +14,7 @@ const useStyles = createUseStyles(
 );
 
 export interface ExerciseRepsFieldProps {
-  item: ExerciseReps;
+  item: ExerciseInstance;
   initialMode: ItemModes;
 }
 

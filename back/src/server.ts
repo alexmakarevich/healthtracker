@@ -5,7 +5,7 @@
 import { nutritionItemRoutes } from "./nutrition_item-router";
 import { eventRoutes } from "./event-router";
 import { exerciseTypeRoutes } from "./exercise_type_router";
-import { exerciseRepsRoutes } from "./exercise_reps_router";
+import { exerciseInstanceRoutes } from "./exercise_instance_router";
 
 const express = require("express");
 
@@ -32,7 +32,7 @@ connection.once("open", function () {
 app.use("/nutritionItems", nutritionItemRoutes);
 app.use("/events", eventRoutes);
 app.use("/exerciseTypes", exerciseTypeRoutes);
-app.use("/exerciseReps", exerciseRepsRoutes);
+app.use("/exerciseInstances", exerciseInstanceRoutes);
 
 app.listen(PORT, function () {
   console.log("Server is running on Port: " + PORT);
