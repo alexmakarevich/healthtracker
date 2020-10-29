@@ -16,8 +16,9 @@ import PickOrAdd, { SearchableSelectChild } from "../../generic/PickOrAdd";
 import Removable from "../../generic/Removable";
 import SearchWithDropdown from "../../generic/SearchWithDropdown";
 import { Box } from "../../generic/styling/Box";
+import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
 
-interface ExerciseRepsFieldProps {
+interface ExerciseInstanceFieldProps {
   item: ExerciseInstance;
   initialMode: ItemModes;
 }
@@ -39,7 +40,7 @@ const ExerciseInstanceTable = () => {
 
   return (
     <>
-      <h2>Exercise Reps Table</h2>
+      <h2>Exercise Instance Table</h2>
       <table>
         <thead>
           <tr>
@@ -67,7 +68,21 @@ const ExerciseInstanceTable = () => {
   );
 };
 
-const Row = (props: ExerciseRepsFieldProps) => {
+const Row = (props: ExerciseInstanceFieldProps) => {
+  return (
+    <ExerciseInstanceFields.Wrapper {...props}>
+      <SimpleRow>
+        <ExerciseInstanceFields.Buttons />
+        <ExerciseInstanceFields.ExerciseId />
+        <ExerciseInstanceFields.Exercise />
+        <ExerciseInstanceFields.Repetitions />
+        <ExerciseInstanceFields.Delete />
+      </SimpleRow>
+    </ExerciseInstanceFields.Wrapper>
+  );
+};
+
+const BadRow = (props: ExerciseInstanceFieldProps) => {
   const {
     complexState: reps,
     setComplexState: setReps,

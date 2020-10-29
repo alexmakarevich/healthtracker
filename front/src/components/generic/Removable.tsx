@@ -27,7 +27,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "Removable" });
 
 interface Props {
-  children: ReactNode;
+  children?: ReactNode;
   onRemove: () => void;
 }
 
