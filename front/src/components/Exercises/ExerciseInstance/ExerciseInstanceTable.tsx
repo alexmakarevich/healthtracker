@@ -1,9 +1,12 @@
 import React, { createContext, useContext } from "react";
 import { createUseStyles } from "react-jss";
 import { useEntityBase } from "../../../common/useEntityBase";
-import { useRepsContext } from "../../../context/ExerciseInstanceContextProvider";
+import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
-import { exerciseInstanceDefaults } from "../../../logic/exerciseInstanceLogic";
+import {
+  ExerciseInstance,
+  exerciseInstanceDefaults,
+} from "../../../logic/exerciseInstanceLogic";
 import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
@@ -13,13 +16,11 @@ import PickOrAdd, { SearchableSelectChild } from "../../generic/PickOrAdd";
 import Removable from "../../generic/Removable";
 import SearchWithDropdown from "../../generic/SearchWithDropdown";
 import { Box } from "../../generic/styling/Box";
-import { ExerciseRepsRowNew } from "./ExcerciseRepsRowNew";
-import { ExerciseRepsRow } from "./ExerciseRepsRow";
-import {
-  ExerciseRepsFieldProps,
-  useExerciseRepsFields,
-} from "./useExerciseRepsFilelds";
-// import {useState} from 'react';
+
+interface ExerciseRepsFieldProps {
+  item: ExerciseInstance;
+  initialMode: ItemModes;
+}
 
 const styles = () => ({
   list: {
@@ -31,8 +32,8 @@ const styles = () => ({
 
 const useStyles = createUseStyles(styles, { name: "ExerciseReps" });
 
-const ExerciseRepsTable = () => {
-  const exerciseReps = useRepsContext();
+const ExerciseInstanceTable = () => {
+  const exerciseReps = useExerciseInstanceContext();
 
   const classes = useStyles();
 
@@ -79,7 +80,11 @@ const Row = (props: ExerciseRepsFieldProps) => {
     handleSave,
     handleUpdate,
     reset,
-  } = useEntityBase(props.item, useRepsContext(), props.initialMode);
+  } = useEntityBase(
+    props.item,
+    useExerciseInstanceContext(),
+    props.initialMode
+  );
 
   const exerciseContext = useExerciseContext();
 
@@ -154,4 +159,4 @@ const Row = (props: ExerciseRepsFieldProps) => {
   );
 };
 
-export { ExerciseRepsTable };
+export { ExerciseInstanceTable };

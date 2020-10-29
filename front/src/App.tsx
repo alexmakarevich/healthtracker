@@ -9,8 +9,8 @@ import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate"
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
 import { ExerciseTypeProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
-import { ExerciseRepsProvider } from "./context/ExerciseInstanceContextProvider";
-import { ExerciseRepsTable } from "./components/Exercises/ExerciseInstance/ExerciseRepsTable";
+import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
+import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -30,9 +30,9 @@ function App() {
       </EventProvider>
       <ExerciseTypeProvider>
         <ExerciseTypeTable />
-        <ExerciseRepsProvider>
-          <ExerciseRepsTable />
-        </ExerciseRepsProvider>
+        <ExerciseInstanceProvider>
+          <ExerciseInstanceTable />
+        </ExerciseInstanceProvider>
       </ExerciseTypeProvider>
       <InputDate />
       <InputTime
