@@ -49,34 +49,12 @@ const ExerciseTypeTable = () => {
   );
 };
 
-// const Row = (props: ExerciseTypeFieldProps) => {
-//   console.log("Row", props.item);
-
-//   const {
-//     someNumberProps,
-//     deleteProps,
-//     buttonsProps,
-//     titleProps,
-//     Exercise,
-//   } = useExerciseTypeProps(props);
-
-//   return (
-//     <SimpleRow>
-//       <Exercise.Buttons {...buttonsProps} />
-//       <Exercise.Title {...titleProps} />
-//       <Exercise.SomeNumber {...someNumberProps} />
-//       <Exercise.Delete {...deleteProps} />
-//     </SimpleRow>
-//   );
-// };
-
 const Row = (props: ExerciseTypeFieldProps) => {
   return (
     <Exercise.Wrapper item={props.item} initialMode={props.initialMode}>
       <SimpleRow>
         <Exercise.Buttons />
         <Exercise.Title />
-        <Exercise.SomeNumber />
         <Exercise.Delete />
       </SimpleRow>
     </Exercise.Wrapper>

@@ -29,6 +29,8 @@ interface Props {
   onSet: (text: string) => void;
 }
 
+// TODO: replace with stateless modeless simpler component to leverage handleSetOrUpdate
+
 export const TextWithModes = ({
   mode,
   text,

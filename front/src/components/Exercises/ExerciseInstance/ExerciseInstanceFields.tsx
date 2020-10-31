@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode, useMemo, useState } from "react";
 import { createUseStyles } from "react-jss";
 import {
   EntityBaseContext,
@@ -11,10 +11,7 @@ import {
   ExerciseInstance,
   exerciseInstanceDefaults,
 } from "../../../logic/exerciseInstanceLogic";
-import {
-  ExerciseType,
-  exerciseTypeDefaults,
-} from "../../../logic/exerciseTypeLogic";
+import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../../EntityElements/Delete";
@@ -85,18 +82,54 @@ const Repetitions = () => {
   );
 };
 
-const ExerciseId = () => {
-  const { complexState } = useThisContext();
+const Weight = () => {
+  const { complexState, handleSetOrUpdate, mode } = useThisContext();
 
-  return <div>{complexState.exerciseId}</div>;
+  return (
+    <>
+      <input
+        disabled={mode === ItemModes.Show}
+        type={"number"}
+        value={complexState.weightKg}
+        key={"check"}
+        onChange={(e: React.ChangeEvent<any>) =>
+          handleSetOrUpdate({ weightKg: parseInt(e.target.value) })
+        }
+      />
+      Kg
+    </>
+  );
+};
+
+const Duration = () => {
+  const { complexState, handleSetOrUpdate, mode } = useThisContext();
+
+  return (
+    <>
+      <input
+        disabled={mode === ItemModes.Show}
+        type={"number"}
+        value={complexState.durationSeconds}
+        key={"check"}
+        onChange={(e: React.ChangeEvent<any>) =>
+          handleSetOrUpdate({ durationSeconds: parseInt(e.target.value) })
+        }
+      />
+      Sec
+    </>
+  );
 };
 
 const Exercise = () => {
-  const { complexState, setComplexState, handleSetOrUpdate } = useThisContext();
+  const { complexState, handleSetOrUpdate } = useThisContext();
 
   const exCtx = useExerciseContext();
 
   const exercise = exCtx.getOneFromContext(complexState.exerciseId);
+
+  const [showSelect, setShowSelect] = useState(
+    complexState.exerciseId === exerciseInstanceDefaults.exerciseId
+  );
 
   const dropdownItems = exCtx.all.map((exercise) => ({
     id: exercise._id,
@@ -106,17 +139,22 @@ const Exercise = () => {
   }));
 
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
       <span> {exercise?.title}</span>
-      <button>/</button>
-      {complexState.exerciseId === exerciseInstanceDefaults.exerciseId && (
+      {showSelect && (
         <PickOrAdd
           dropdownItems={dropdownItems}
-          onSelect={(id: string) => setComplexState({ exerciseId: id })}
+          onSelect={(id: string) => {
+            handleSetOrUpdate({ exerciseId: id });
+            setShowSelect(false);
+          }}
           onCreateNew={(title) =>
             exCtx.create({ ...exerciseTypeDefaults, title: title })
           }
         />
+      )}
+      {complexState.exerciseId !== exerciseInstanceDefaults.exerciseId && (
+        <button onClick={() => setShowSelect(!showSelect)}>/</button>
       )}
     </div>
   );
@@ -131,9 +169,10 @@ const Delete = () => {
 const ExerciseInstanceFields = {
   Wrapper,
   Buttons,
-  ExerciseId,
   Exercise,
   Repetitions,
+  Weight,
+  Duration,
   Delete,
 };
 

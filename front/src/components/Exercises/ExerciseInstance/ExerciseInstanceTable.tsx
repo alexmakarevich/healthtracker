@@ -72,9 +72,11 @@ const Row = (props: ExerciseInstanceFieldProps) => {
     <ExerciseInstanceFields.Wrapper {...props}>
       <SimpleRow>
         <ExerciseInstanceFields.Buttons />
-        <ExerciseInstanceFields.ExerciseId />
         <ExerciseInstanceFields.Exercise />
         <ExerciseInstanceFields.Repetitions />
+        <ExerciseInstanceFields.Weight />
+        <ExerciseInstanceFields.Duration />
+
         <ExerciseInstanceFields.Delete />
       </SimpleRow>
     </ExerciseInstanceFields.Wrapper>
