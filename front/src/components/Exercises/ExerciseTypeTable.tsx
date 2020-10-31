@@ -1,9 +1,11 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
-import { exerciseTypeDefaults } from "../../logic/exerciseTypeLogic";
+import {
+  ExerciseType,
+  exerciseTypeDefaults,
+} from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { SimpleRow } from "../generic/layout/SimpleRow";
-import { ExerciseTypeFieldProps } from "./useExerciseFilelds";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { Exercise } from "./ExerciseFields";
 // import {useState} from 'react';
@@ -15,6 +17,11 @@ const styles = () => ({
     borderRadius: "15px",
   },
 });
+
+export interface ExerciseTypeFieldProps {
+  item: ExerciseType;
+  initialMode: ItemModes;
+}
 
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 

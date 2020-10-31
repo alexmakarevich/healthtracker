@@ -2,6 +2,7 @@ import { useState, KeyboardEvent, forwardRef, Ref } from "react";
 import React from "react";
 import { InputText } from "./inputs/InputText";
 
+// TODO: check if this extends is proper
 interface Props extends React.DOMAttributes<any> {
   text: string;
   isEdit: boolean;

@@ -76,7 +76,6 @@ const Row = (props: ExerciseInstanceFieldProps) => {
         <ExerciseInstanceFields.Repetitions />
         <ExerciseInstanceFields.Weight />
         <ExerciseInstanceFields.Duration />
-
         <ExerciseInstanceFields.Delete />
       </SimpleRow>
     </ExerciseInstanceFields.Wrapper>

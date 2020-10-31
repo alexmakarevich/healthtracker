@@ -8,6 +8,7 @@ import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import { TextWithModes } from "../EntityElements/TextWithModes";
+import TextWithEdit from "../generic/TextWithEdit";
 
 const useStyles = createUseStyles(
   {},
@@ -54,19 +55,13 @@ const Buttons = () => {
 };
 
 const Title = () => {
-  const {
-    mode,
-    handleUpdate,
-    complexState,
-    setComplexState,
-  } = useThisContext();
+  const { mode, complexState, handleSetOrUpdate } = useThisContext();
 
   return (
-    <TextWithModes
-      mode={mode}
+    <TextWithEdit
       text={complexState.title}
-      onUpdate={(txt) => handleUpdate({ title: txt })}
-      onSet={(txt) => setComplexState({ title: txt })}
+      onTextChange={(txt) => handleSetOrUpdate({ title: txt })}
+      isEdit={mode !== ItemModes.Show}
     />
   );
 };
