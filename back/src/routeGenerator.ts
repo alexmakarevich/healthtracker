@@ -10,9 +10,9 @@ function generateRoutes(modelName: string, schema: any) {
   router.route("/").get(function (req, res) {
     Model.find(function (err, items) {
       if (err) {
-        console.log(err);
+        res.status(400).send("Server error: "+err)                
       } else {
-        res.json(items);
+        res.status(200).json(items);
       }
     });
   });
@@ -20,7 +20,13 @@ function generateRoutes(modelName: string, schema: any) {
   router.route("/:id").get(function (req, res) {
     let id = req.params.id;
     Model.findById(id, function (err, item) {
-      res.json(item);
+    if (err) {
+      res.status(400).send("Server error: "+err)                
+    } else if (!item) {
+      res.status(400).send("could not find item with id " + req.params.id )          
+    } else {
+      res.status(200).json(item)
+    }
     });
   });
 
@@ -40,15 +46,19 @@ function generateRoutes(modelName: string, schema: any) {
   });
 
   router.route("/delete/:id").delete(function (req, res) {
+    // TODO: FIX - if a bad string is passed, there's an internal error that is not visible and does not return anything
     Model.findByIdAndDelete(req.params.id, function (err, item) {
       if (err) {
         console.log(err);
+        res.status(400).send("Server error: "+err)          
       } else if (!item) {
-        res
-          .status(404)
-          .send(`item not found, there's no id ${req.params.id} in the db.`);
+        // res
+        //   .status(404)
+        //   .send(`item not found, there's no id ${req.params.id} in the db.`);
+        //   console.log("item not found - cannot delete by", req.params.id);
+        res.status(400).send("could not find item with id " + req.params.id )          
       } else {
-        res.json(`item ${req.params.id} deleted!`);
+        res.status(200).json(`item ${req.params.id} deleted!`);
       }
     });
   });
