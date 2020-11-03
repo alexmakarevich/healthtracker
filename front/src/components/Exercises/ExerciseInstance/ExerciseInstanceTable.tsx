@@ -1,20 +1,13 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
-import { useEntityBase } from "../../../common/useEntityBase";
-import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
-import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
+import { useExerciseInstanceContextUseQuery } from "../../../context/ExerciseInstanceContextProvider";
 import {
   ExerciseInstance,
   exerciseInstanceDefaults,
 } from "../../../logic/exerciseInstanceLogic";
-import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
-import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
-import { DeleteButton } from "../../EntityElements/Delete";
 import { SimpleRow } from "../../generic/layout/SimpleRow";
-import PickOrAdd, { SearchableSelectChild } from "../../generic/PickOrAdd";
-import Removable from "../../generic/Removable";
-import { Box } from "../../generic/styling/Box";
+
 import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
 
 interface ExerciseInstanceFieldProps {
@@ -33,7 +26,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "ExerciseReps" });
 
 const ExerciseInstanceTable = () => {
-  const exerciseReps = useExerciseInstanceContext();
+  const exerciseReps = useExerciseInstanceContextUseQuery();
 
   const classes = useStyles();
 
@@ -49,7 +42,7 @@ const ExerciseInstanceTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {exerciseReps.all.map((exercise, index) => (
+          {exerciseReps.all?.map((exercise, index) => (
             <Row
               key={index}
               item={exercise}

@@ -23,7 +23,7 @@ const EventTable = () => {
           </tr>
         </thead>
         <tbody>
-          {EventsFromContext.all.map((event, index) => (
+          {EventsFromContext.all?.map((event, index) => (
             <EventTableRow
               event={event}
               key={index}

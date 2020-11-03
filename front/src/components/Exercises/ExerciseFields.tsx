@@ -1,13 +1,16 @@
 import React, { ReactNode, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { EntityBaseContext, useEntityBase } from "../../common/useEntityBase";
+import {
+  EntityBaseContextUseQuery,
+  useEntityBaseUseQuery,
+} from "../../common/useEntityBaseUseQuery";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
-import { TextWithModes } from "../EntityElements/TextWithModes";
 import TextWithEdit from "../generic/TextWithEdit";
 
 const useStyles = createUseStyles(
@@ -17,7 +20,7 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContext<ExerciseType>
+  EntityBaseContextUseQuery<ExerciseType>
 >();
 
 export interface ExerciseTypeFieldProps {
@@ -27,7 +30,13 @@ export interface ExerciseTypeFieldProps {
 }
 
 const Wrapper = ({ item, initialMode, children }: ExerciseTypeFieldProps) => {
-  const contextProps = useEntityBase(item, useExerciseContext(), initialMode);
+  const contextProps = useEntityBaseUseQuery(
+    item,
+    useExerciseContext(),
+    initialMode
+  );
+
+  const { handleUpdate, handleCreate, handleDelete } = contextProps;
 
   return <Provider value={contextProps}>{children}</Provider>;
 };

@@ -42,13 +42,14 @@ const ExerciseTypeTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {ETContext.all.map((exercise, index) => (
-            <Row
-              item={exercise}
-              initialMode={ItemModes.QuickEdit}
-              key={index}
-            />
-          ))}
+          {ETContext.all &&
+            ETContext.all.map((exercise: ExerciseType, index: number) => (
+              <Row
+                item={exercise}
+                initialMode={ItemModes.QuickEdit}
+                key={index}
+              />
+            ))}
           <Row item={exerciseTypeDefaults} initialMode={ItemModes.New} />
         </tbody>
       </table>

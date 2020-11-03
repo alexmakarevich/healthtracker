@@ -1,9 +1,10 @@
 import { NutritionItem } from "./../logic/nutritionItemLogic";
-import { generateDefinedContext } from "./generateDefinedContext";
+import { generateContextUseQuery } from "./generateContextUseQuery";
 
 export const {
   ContextProvider: NutritionItemProvider,
   useContextDefined: useNutritionItemContext,
-} = generateDefinedContext<NutritionItem>(
-  "http://localhost:4000/nutritionItems"
+} = generateContextUseQuery<NutritionItem>(
+  "http://localhost:4000/nutritionItems",
+  "Nutrition"
 );

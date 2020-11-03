@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React from "react";
 // import {useState} from 'react';
 import { nutritionItemDefaults } from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
@@ -33,7 +33,7 @@ const NutritionItemTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {NIContext.all.map((nutritionItem) => (
+          {NIContext.all?.map((nutritionItem) => (
             <NITableRow
               key={nutritionItem._id}
               item={nutritionItem}

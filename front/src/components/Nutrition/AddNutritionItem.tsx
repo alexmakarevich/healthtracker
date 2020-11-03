@@ -41,20 +41,23 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
 
   async function handleCreateAndAdd(title: string) {
     const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
-    const createResult = await NIContext.create(newNI);
-    createResult && onAdd(createResult._id);
+    NIContext.create(newNI, {
+      onSuccess: (data) => {
+        onAdd(data._id);
+        console.log("add ni", data._id);
+        NIContext.refresh();
+      },
+    });
   }
 
-  const dropdownItemIds = NIContext.all.filter(
+  const dropdownItemIds = NIContext.all?.filter(
     (item) => item._id && !idsToExclude?.includes(item._id)
   );
-
-  // const dropdownItems: SearchableSelectChild[] | undefined = dropdownItemIds.map((id) => NIContext.getOneFromContext(id))
 
   return (
     <div className={classes.wrapper}>
       <PickOrAdd
-        dropdownItems={dropdownItemIds.map((item) => {
+        dropdownItems={dropdownItemIds?.map((item) => {
           return {
             id: item._id,
             node: (

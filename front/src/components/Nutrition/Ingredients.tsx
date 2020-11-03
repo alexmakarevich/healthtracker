@@ -43,7 +43,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const ingredients = NIContext.all.filter(
+  const ingredients = NIContext.all?.filter(
     (item) => item._id !== parent._id && parent.ingredientIds.includes(item._id)
   );
 
@@ -51,7 +51,7 @@ const Ingredients = ({ parent, onAdd, onRemove }: Props) => {
 
   return (
     <div className={classes.wrapper}>
-      {ingredients.map((item) => (
+      {ingredients?.map((item) => (
         <Removable onRemove={() => onRemove(item._id)} key={item._id}>
           <NutritionItemCompact
             item={item}

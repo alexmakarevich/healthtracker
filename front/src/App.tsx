@@ -7,10 +7,10 @@ import { EventProvider } from "./context/EventContextProvider";
 import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
-import { ExerciseTypeProvider } from "./context/ExerciseTypeContextProvider";
+import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
-import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
+import { ExerciseInstanceProviderUseQuery } from "./context/ExerciseInstanceContextProvider";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -28,12 +28,13 @@ function App() {
           <EventTable />
         </NutritionItemProvider>
       </EventProvider>
-      <ExerciseTypeProvider>
+      <ExerciseProvider>
         <ExerciseTypeTable />
-        <ExerciseInstanceProvider>
+        <ExerciseInstanceProviderUseQuery>
           <ExerciseInstanceTable />
-        </ExerciseInstanceProvider>
-      </ExerciseTypeProvider>
+        </ExerciseInstanceProviderUseQuery>
+      </ExerciseProvider>
+
       <InputDate />
       <InputTime
         hh={hours}

@@ -4,8 +4,12 @@ import {
   EntityBaseContext,
   useEntityBase,
 } from "../../../common/useEntityBase";
+import {
+  EntityBaseContextUseQuery,
+  useEntityBaseUseQuery,
+} from "../../../common/useEntityBaseUseQuery";
 import { createContextDefined } from "../../../context/ContextWrapper";
-import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
+import { useExerciseInstanceContextUseQuery } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import {
   ExerciseInstance,
@@ -25,7 +29,7 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContext<ExerciseInstance>
+  EntityBaseContextUseQuery<ExerciseInstance>
 >();
 
 export interface ExerciseInstanceProps {
@@ -35,9 +39,9 @@ export interface ExerciseInstanceProps {
 }
 
 const Wrapper = ({ item, initialMode, children }: ExerciseInstanceProps) => {
-  const contextProps = useEntityBase(
+  const contextProps = useEntityBaseUseQuery(
     item,
-    useExerciseInstanceContext(),
+    useExerciseInstanceContextUseQuery(),
     initialMode
   );
 
@@ -73,7 +77,7 @@ const Repetitions = () => {
     <input
       disabled={mode === ItemModes.Show}
       type={"number"}
-      value={complexState.repetitions}
+      value={complexState.repetitions ?? 0}
       key={"check"}
       onChange={(e: React.ChangeEvent<any>) =>
         handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
@@ -131,7 +135,7 @@ const Exercise = () => {
     complexState.exerciseId === exerciseInstanceDefaults.exerciseId
   );
 
-  const dropdownItems = exCtx.all.map((exercise) => ({
+  const dropdownItems = exCtx.all?.map((exercise) => ({
     id: exercise._id,
     isSelected: false,
     searchableText: exercise.title,
