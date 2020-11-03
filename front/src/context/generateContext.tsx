@@ -60,15 +60,13 @@ export function generateContext<Item extends WithId>(
       return item;
     }
 
-    const [createOne, { data: createData }] = useMutation(
-      (item: Item) => CRUD.CREATE(item),
-      {
-        onSuccess: (data) => {
-          refresh();
-          console.log(data);
-        },
-      }
-    );
+    // TODO: check if this needs to be returned
+    const [createOne] = useMutation((item: Item) => CRUD.CREATE(item), {
+      onSuccess: (data) => {
+        refresh();
+        console.log(data);
+      },
+    });
 
     const [updateOne] = useMutation(
       (item: Item) => {
