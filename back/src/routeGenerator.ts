@@ -68,7 +68,7 @@ function generateRoutes(modelName: string, schema: any) {
     item
       .save()
       .then((item) => {
-        res.status(200).json({ result: "item added successfully", item: item });
+        res.status(200).json( item );
       })
       .catch((err) => {
         res.status(400).send("adding new nutrition item failed");
