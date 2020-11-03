@@ -10,7 +10,7 @@ import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime"
 import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
-import { ExerciseInstanceProviderUseQuery } from "./context/ExerciseInstanceContextProvider";
+import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -30,9 +30,9 @@ function App() {
       </EventProvider>
       <ExerciseProvider>
         <ExerciseTypeTable />
-        <ExerciseInstanceProviderUseQuery>
+        <ExerciseInstanceProvider>
           <ExerciseInstanceTable />
-        </ExerciseInstanceProviderUseQuery>
+        </ExerciseInstanceProvider>
       </ExerciseProvider>
 
       <InputDate />

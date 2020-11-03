@@ -1,15 +1,11 @@
 import React, { ReactNode, useMemo, useState } from "react";
 import { createUseStyles } from "react-jss";
 import {
-  EntityBaseContext,
-  useEntityBase,
-} from "../../../common/useEntityBase";
-import {
   EntityBaseContextUseQuery,
   useEntityBaseUseQuery,
-} from "../../../common/useEntityBaseUseQuery";
+} from "../../../common/useEntityBase";
 import { createContextDefined } from "../../../context/ContextWrapper";
-import { useExerciseInstanceContextUseQuery } from "../../../context/ExerciseInstanceContextProvider";
+import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import {
   ExerciseInstance,
@@ -41,7 +37,7 @@ export interface ExerciseInstanceProps {
 const Wrapper = ({ item, initialMode, children }: ExerciseInstanceProps) => {
   const contextProps = useEntityBaseUseQuery(
     item,
-    useExerciseInstanceContextUseQuery(),
+    useExerciseInstanceContext(),
     initialMode
   );
 

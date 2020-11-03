@@ -5,20 +5,15 @@ export interface WithId {
   _id: string
 }
 
-// standard generic apis
-// TODO: ensure response typing here is consistent with actual response structures
+// standard generic CRUD api
 
-export function generateCRUDForHook<Item extends WithId>(baseURL: string) {
+export function generateCRUD<Item extends WithId>(baseURL: string) {
   const axiosInstance = axios.create({
     baseURL: baseURL,
   });
 
   axiosInstance.interceptors.response.use()
 
-  interface CreateResponse {
-    result: string;
-    item: Item
-  }
 
   const CREATE = async (object: Item) => {
     let apiRes;

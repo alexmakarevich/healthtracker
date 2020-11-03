@@ -1,7 +1,7 @@
 import { Event } from "./../logic/eventLogic";
-import { generateContextUseQuery } from "./generateContextUseQuery";
+import { generateContext } from "./generateContext";
 
 export const {
   ContextProvider: EventProvider,
   useContextDefined: useEventContext,
-} = generateContextUseQuery<Event>("http://localhost:4000/events", "Event");
+} = generateContext<Event>("http://localhost:4000/events", "Event");

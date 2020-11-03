@@ -1,12 +1,15 @@
-import React, { useEffect, useContext, useState } from "react";
-import { WithId } from "../api/apiGenerator";
-import { ContextProps } from "../context/generateDefinedContext";
+import React, { useEffect, useState } from "react";
+import { ContextProps } from "../context/generateContext";
 
 import { ItemModes } from "../utils/utils";
 import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";
 
-export function useEntityBase<I extends WithId>(
+interface WithId {
+  _id: string;
+}
+
+export function useEntityBaseUseQuery<I extends WithId>(
   item: I,
   contextSource: ContextProps<I>,
   initialMode: ItemModes
@@ -17,18 +20,12 @@ export function useEntityBase<I extends WithId>(
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
-    /* maintaiexerciseng itemState for New items, even if global context changes. This allows to create new ingredients by adding them to New items */
+    /* maintain state, even if global context changes. This allows to create and refeence sub-items in new item */
+
     if (mode !== ItemModes.New) {
       reset();
     }
   }, [item]);
-
-  async function handleSave() {
-    await context.update(complexState);
-    if (mode === ItemModes.Edit) {
-      setMode(ItemModes.Show);
-    }
-  }
 
   function handleCancel() {
     if (mode === ItemModes.Edit) {
@@ -37,18 +34,54 @@ export function useEntityBase<I extends WithId>(
     reset();
   }
 
-  async function handleCreate() {
-    await context.create(complexState);
-    reset();
+  function handleCreate() {
+    let toReturn: boolean = false;
+    context.create(complexState, {
+      onSuccess: () => {
+        reset();
+        console.log("create", complexState);
+        toReturn = true;
+      },
+      onError: () => console.log("Cannot create", complexState),
+    });
+    if (toReturn) {
+      return complexState;
+    }
   }
 
-  async function handleUpdate(newProps: Partial<I>) {
+  function handleUpdate(newProps: Partial<I>) {
     const newObject = updateObject(complexState)(newProps);
-    await context.update(newObject);
+    context.update(newObject, {
+      onSuccess: () => {
+        context.refresh();
+        console.log("update", newObject);
+      },
+      onError: () => console.log("Cannot update", newObject),
+    });
+  }
+
+  async function handleSave() {
+    handleUpdate(complexState);
+    if (mode === ItemModes.Edit) {
+      setMode(ItemModes.Show);
+    }
   }
 
   async function handleDelete() {
-    await context.delete(complexState);
+    context.delete(
+      { ...complexState },
+
+      {
+        onSuccess: () => {
+          context.refresh();
+          console.log("onSuccess");
+        },
+        onError: (error: unknown) => {
+          console.log("onError:", error);
+        },
+        throwOnError: true,
+      }
+    );
   }
 
   async function handleSetOrUpdate(newProps: Partial<I>) {
@@ -75,14 +108,14 @@ export function useEntityBase<I extends WithId>(
   };
 }
 
-export interface EntityBaseContext<Item> {
+export interface EntityBaseContextUseQuery<Item> {
   complexState: Item;
   setComplexState: React.Dispatch<Partial<Item>>;
   mode: ItemModes;
   setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
-  handleCreate: () => Promise<void>;
+  handleCreate: () => Item | undefined;
   handleCancel: () => void;
-  handleUpdate: (newProps: Partial<Item>) => Promise<void>;
+  handleUpdate: (newProps: Partial<Item>) => void;
   handleSave: () => void;
   handleDelete: () => void;
   reset: () => void;

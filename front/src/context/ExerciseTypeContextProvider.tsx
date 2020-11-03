@@ -1,10 +1,10 @@
 import { ExerciseType } from "../logic/exerciseTypeLogic";
-import { generateContextUseQuery } from "./generateContextUseQuery";
+import { generateContext } from "./generateContext";
 
 export const {
   ContextProvider: ExerciseProvider,
   useContextDefined: useExerciseContext,
-} = generateContextUseQuery<ExerciseType>(
+} = generateContext<ExerciseType>(
   "http://localhost:4000/exerciseTypes",
   "Exercise"
 );

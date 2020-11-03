@@ -1,10 +1,9 @@
 import React, { ReactNode, useMemo } from "react";
 import { createUseStyles } from "react-jss";
-import { EntityBaseContext, useEntityBase } from "../../common/useEntityBase";
 import {
   EntityBaseContextUseQuery,
   useEntityBaseUseQuery,
-} from "../../common/useEntityBaseUseQuery";
+} from "../../common/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";

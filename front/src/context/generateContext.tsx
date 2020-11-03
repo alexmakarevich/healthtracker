@@ -1,12 +1,6 @@
-import React, { useState, useEffect, ReactNode } from "react";
-import {
-  MutateFunction,
-  MutationFunction,
-  useMutation,
-  useQuery,
-} from "react-query";
-import { generateCRUD, WithId } from "../api/apiGenerator";
-import { generateCRUDForHook } from "../api/apiGeneratorForHook";
+import React, { useEffect, ReactNode } from "react";
+import { MutateFunction, useMutation, useQuery } from "react-query";
+import { generateCRUD, WithId } from "../api/generateCRUD";
 import { createContextDefined } from "./ContextWrapper";
 
 const timestamp = () => {
@@ -28,7 +22,7 @@ export interface ContextProps<Something extends WithId> {
  * make sure to provide item types
  * make sure to give the context & provider a unique name
  */
-export function generateContextUseQuery<Item extends WithId>(
+export function generateContext<Item extends WithId>(
   apiBaseUrl: string,
   itemName: string
 ) {
@@ -41,7 +35,7 @@ export function generateContextUseQuery<Item extends WithId>(
   }
 
   function ContextProvider({ children }: Props) {
-    const CRUD = generateCRUDForHook<Item>(apiBaseUrl);
+    const CRUD = generateCRUD<Item>(apiBaseUrl);
 
     useEffect(() => {
       refresh();

@@ -1,6 +1,6 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
-import { useExerciseInstanceContextUseQuery } from "../../../context/ExerciseInstanceContextProvider";
+import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import {
   ExerciseInstance,
   exerciseInstanceDefaults,
@@ -26,7 +26,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "ExerciseReps" });
 
 const ExerciseInstanceTable = () => {
-  const exerciseReps = useExerciseInstanceContextUseQuery();
+  const exerciseReps = useExerciseInstanceContext();
 
   const classes = useStyles();
 
