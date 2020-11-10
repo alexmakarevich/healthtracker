@@ -27,7 +27,7 @@ const useStyles = createUseStyles(
       },
     },
   },
-  { name: "NutritionListItem" }
+  { name: "CreateEditResetCancel" }
 );
 
 const CreateEditResetCancel = ({

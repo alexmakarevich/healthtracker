@@ -98,4 +98,4 @@ const Delete = () => {
 
 const Exercise = { Wrapper, Buttons, Title, SomeNumber, Delete };
 
-export { Exercise };
+export { Exercise as ExerciseFields };

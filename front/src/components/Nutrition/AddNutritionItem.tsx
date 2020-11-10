@@ -3,11 +3,12 @@ import {
   NutritionItem,
   nutritionItemDefaults,
 } from "../../logic/nutritionItemLogic";
-import NutritionItemCompact from "./NutritionItemCompact";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import PickOrAdd from "../generic/PickOrAdd";
 import { ItemModes } from "../../utils/utils";
+import { Box } from "../generic/styling/Box";
+import { NutritionFields } from "./NutritionFields";
 
 const useStyles = createUseStyles(
   {
@@ -39,7 +40,7 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
   const NIContext = useNutritionItemContext();
   const classes = useStyles();
 
-  async function handleCreateAndAdd(title: string) {
+  function handleCreateAndAdd(title: string) {
     const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
     NIContext.create(newNI, {
       onSuccess: (data) => {
@@ -61,11 +62,14 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
           return {
             id: item._id,
             node: (
-              <NutritionItemCompact
-                key={item._id}
-                item={item}
-                initialMode={ItemModes.Show}
-              />
+              <Box>
+                <NutritionFields.Wrapper
+                  item={item}
+                  initialMode={ItemModes.Show}
+                >
+                  <NutritionFields.Title />
+                </NutritionFields.Wrapper>
+              </Box>
             ),
             isSelected: false,
             searchableText: item.title,

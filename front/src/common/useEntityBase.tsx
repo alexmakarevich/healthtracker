@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { ContextProps } from "../context/generateContext";
 
 import { ItemModes } from "../utils/utils";
+import { WithId } from "./types/types";
 import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";
-
-interface WithId {
-  _id: string;
-}
 
 export function useEntityBaseUseQuery<I extends WithId>(
   item: I,
   contextSource: ContextProps<I>,
-  initialMode: ItemModes
+  initialMode: ItemModes,
+  onCreate?: (i: I) => void
 ) {
   const context: ContextProps<I> = contextSource;
   const [mode, setMode] = useState(initialMode);
@@ -35,18 +33,14 @@ export function useEntityBaseUseQuery<I extends WithId>(
   }
 
   function handleCreate() {
-    let toReturn: boolean = false;
     context.create(complexState, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         reset();
-        console.log("create", complexState);
-        toReturn = true;
+        console.log("create", data);
+        onCreate && onCreate(data);
       },
       onError: () => console.log("Cannot create", complexState),
     });
-    if (toReturn) {
-      return complexState;
-    }
   }
 
   function handleUpdate(newProps: Partial<I>) {
@@ -113,7 +107,7 @@ export interface EntityBaseContextUseQuery<Item> {
   setComplexState: React.Dispatch<Partial<Item>>;
   mode: ItemModes;
   setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
-  handleCreate: () => Item | undefined;
+  handleCreate: () => void;
   handleCancel: () => void;
   handleUpdate: (newProps: Partial<Item>) => void;
   handleSave: () => void;

@@ -1,5 +1,5 @@
-import { nutritionItemDefaults } from "./nutritionItemLogic";
-import { Children } from "react";
+import { Children } from 'react';
+import { updateObject } from './../common/updateObject';
 import { Basic } from "./sharedLogic";
 
 export interface Event extends Basic {
@@ -8,7 +8,16 @@ export interface Event extends Basic {
   timeEnd: string;
   children: {
     nutritionItemIds: string[];
+    exerciseInstanceIds: string[]
   };
+   // TODO: probably delete
+  items: {type: EventItemTypes, id: string}[]
+}
+
+// TODO: probably delete
+export enum EventItemTypes {
+  NUTRITION = "nutrition",
+  EXERCISE = "exercise"
 }
 
 // whenever something gets added to an event, write the eventId as a dependency into that item
@@ -23,11 +32,16 @@ export const eventDefaults: Event = {
   timeEnd: new Date().toISOString(),
   children: {
     nutritionItemIds: [],
+    exerciseInstanceIds: []
   },
+    // TODO: probably delete
+  items: []
 };
 
-export const eventLogic = {
-  addNI: (event: Event, niId: string) => {
+export const eventLogic = (event: Event) => {
+  const updateEvent = updateObject(event)
+  const updateChildren = updateObject(event.children)
+  const addNI = (niId: string) => {
     const newNiIds = [...event.children.nutritionItemIds, niId];
     const newEvent = {
       ...event,
@@ -37,8 +51,8 @@ export const eventLogic = {
       },
     };
     return newEvent;
-  },
-  removeNI: (event: Event, niId: string) => {
+  }
+  const removeNI = (niId: string) => {
     const newNiIds = event.children.nutritionItemIds.filter(
       (id) => id !== niId
     );
@@ -50,5 +64,17 @@ export const eventLogic = {
       },
     };
     return newEvent;
-  },
+  }
+
+  const addExercise = (exerciseInstanceid: string) => {
+    const newChildren = updateChildren({exerciseInstanceIds: [...event.children.exerciseInstanceIds, exerciseInstanceid]})
+    return updateEvent({children: newChildren})
+  }
+
+  const removeExercise = (exerciseInstanceid: string) => {
+    const newChildren = updateChildren({ exerciseInstanceIds: event.children.exerciseInstanceIds.filter(id => id !== exerciseInstanceid)})
+    return updateEvent({children: newChildren})
+  }
+
+  return {addNI, removeNI, addExercise, removeExercise}
 };

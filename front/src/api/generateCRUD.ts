@@ -1,9 +1,6 @@
 import axios from "axios";
+import { WithId } from "../common/types/types";
 
-
-export interface WithId {
-  _id: string
-}
 
 // standard generic CRUD api
 

@@ -1,10 +1,15 @@
 import React from "react";
 // import {useState} from 'react';
-import { nutritionItemDefaults } from "../../logic/nutritionItemLogic";
+import {
+  NutritionItem,
+  nutritionItemDefaults,
+} from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import NITableRow from "./NITableRow";
 import { ItemModes } from "../../utils/utils";
+import { NutritionFields, NutritionProps } from "./NutritionFields";
+import { SimpleRow } from "../generic/layout/SimpleRow";
+import { ExerciseType } from "../../logic/exerciseTypeLogic";
 
 const styles = () => ({
   list: {
@@ -16,7 +21,7 @@ const styles = () => ({
 
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
-const NutritionItemTable = () => {
+export const NutritionItemTable = () => {
   const NIContext = useNutritionItemContext();
 
   const classes = useStyles();
@@ -34,20 +39,28 @@ const NutritionItemTable = () => {
         </thead>
         <tbody className={classes.list}>
           {NIContext.all?.map((nutritionItem) => (
-            <NITableRow
+            <Row
               key={nutritionItem._id}
               item={nutritionItem}
               initialMode={ItemModes.QuickEdit}
             />
           ))}
-          <NITableRow
-            item={nutritionItemDefaults}
-            initialMode={ItemModes.New}
-          />
+          <Row item={nutritionItemDefaults} initialMode={ItemModes.New} />
         </tbody>
       </table>
     </>
   );
 };
 
-export default NutritionItemTable;
+const Row = (props: { item: NutritionItem; initialMode: ItemModes }) => {
+  return (
+    <NutritionFields.Wrapper item={props.item} initialMode={props.initialMode}>
+      <SimpleRow>
+        <NutritionFields.Buttons />
+        <NutritionFields.Title />
+        <NutritionFields.Ingredients />
+        <NutritionFields.Delete />
+      </SimpleRow>
+    </NutritionFields.Wrapper>
+  );
+};

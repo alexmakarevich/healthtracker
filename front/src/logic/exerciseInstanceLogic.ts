@@ -10,7 +10,5 @@ export interface ExerciseInstance extends Basic {
 export const exerciseInstanceDefaults: ExerciseInstance = {
   ...BASIC_DEFAULTS,
   exerciseId: "no id yet",
-  repetitions: 0,
-  weightKg: 0,
-  durationSeconds: 0 
+
 };

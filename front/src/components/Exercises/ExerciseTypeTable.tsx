@@ -7,7 +7,7 @@ import {
 import { ItemModes } from "../../utils/utils";
 import { SimpleRow } from "../generic/layout/SimpleRow";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
-import { Exercise } from "./ExerciseFields";
+import { ExerciseFields } from "./ExerciseFields";
 // import {useState} from 'react';
 
 const styles = () => ({
@@ -59,13 +59,13 @@ const ExerciseTypeTable = () => {
 
 const Row = (props: ExerciseTypeFieldProps) => {
   return (
-    <Exercise.Wrapper item={props.item} initialMode={props.initialMode}>
+    <ExerciseFields.Wrapper item={props.item} initialMode={props.initialMode}>
       <SimpleRow>
-        <Exercise.Buttons />
-        <Exercise.Title />
-        <Exercise.Delete />
+        <ExerciseFields.Buttons />
+        <ExerciseFields.Title />
+        <ExerciseFields.Delete />
       </SimpleRow>
-    </Exercise.Wrapper>
+    </ExerciseFields.Wrapper>
   );
 };
 

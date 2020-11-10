@@ -76,3 +76,14 @@ export function classConcat(...classes: (string | undefined)[]) {
       : String.prototype.concat(prevClass, " ", thisClass)
   );
 }
+
+export const  splitArray = <Something>(array?: Something[]) => (filterCallback: (something: Something) => boolean) => {
+  let trueArray : Something[] = []
+  let falseArray: Something[] = []
+
+  array?.forEach((item) => {
+    filterCallback(item) ? trueArray.push(item) : falseArray.push(item)
+  })
+
+  return {trueArray, falseArray}
+}

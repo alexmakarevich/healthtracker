@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import "./App.css";
-import NutritionItemTable from "./components/Nutrition/NutritionItemTable";
+import { NutritionItemTable } from "./components/Nutrition/NutritionItemTable";
 import EventTable from "./components/Events/EventTable";
 import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
 import { EventProvider } from "./context/EventContextProvider";
@@ -22,18 +22,18 @@ function App() {
 
   return (
     <div className="App">
-      <EventProvider>
-        <NutritionItemProvider>
-          <NutritionItemTable />
-          <EventTable />
-        </NutritionItemProvider>
-      </EventProvider>
-      <ExerciseProvider>
-        <ExerciseTypeTable />
-        <ExerciseInstanceProvider>
+      <ExerciseInstanceProvider>
+        <ExerciseProvider>
+          <EventProvider>
+            <NutritionItemProvider>
+              <NutritionItemTable />
+              <EventTable />
+            </NutritionItemProvider>
+          </EventProvider>
+          <ExerciseTypeTable />
           <ExerciseInstanceTable />
-        </ExerciseInstanceProvider>
-      </ExerciseProvider>
+        </ExerciseProvider>
+      </ExerciseInstanceProvider>
 
       <InputDate />
       <InputTime
@@ -42,6 +42,7 @@ function App() {
         onHourChange={setHours}
         onMinuteChange={setMinutes}
       />
+      <input type={"number"} step={"any"} />
     </div>
   );
 }

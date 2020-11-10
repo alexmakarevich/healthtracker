@@ -22,8 +22,11 @@ let Event = new Schema({
     type: String,
   },
   children: {
-    type: Object,
+    nutritionItemIds: Array,
+    exerciseInstanceIds: Array
   },
+  // TODO: probably delete
+  items: [{type: String, id: String}]
 });
 
 const eventRoutes = generateRoutes("Event", Event);

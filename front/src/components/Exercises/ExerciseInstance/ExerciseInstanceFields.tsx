@@ -19,26 +19,37 @@ import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
 
 const useStyles = createUseStyles(
-  {},
+  {
+    input: {
+      width: "40px",
+    },
+  },
 
   { name: "ExerciseFields" }
 );
-
-const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<ExerciseInstance>
->();
 
 export interface ExerciseInstanceProps {
   item: ExerciseInstance;
   initialMode: ItemModes;
   children: ReactNode;
+  onCreate?: (item: ExerciseInstance) => void;
 }
 
-const Wrapper = ({ item, initialMode, children }: ExerciseInstanceProps) => {
+const [useThisContext, Provider] = createContextDefined<
+  EntityBaseContextUseQuery<ExerciseInstance>
+>();
+
+const Wrapper = ({
+  item,
+  initialMode,
+  children,
+  onCreate,
+}: ExerciseInstanceProps) => {
   const contextProps = useEntityBaseUseQuery(
     item,
     useExerciseInstanceContext(),
-    initialMode
+    initialMode,
+    onCreate
   );
 
   return <Provider value={contextProps}>{children}</Provider>;
@@ -56,7 +67,10 @@ const Buttons = () => {
   return (
     <CreateEditResetCancel
       mode={mode}
-      onCreate={handleCreate}
+      onCreate={() => {
+        const created = handleCreate();
+        console.log("onCreate", created);
+      }}
       onReset={reset}
       onSave={handleSave}
       onCancel={handleCancel}
@@ -67,57 +81,81 @@ const Buttons = () => {
 };
 
 const Repetitions = () => {
+  const classes = useStyles();
+
   const { complexState, handleSetOrUpdate, mode } = useThisContext();
 
-  return (
-    <input
-      disabled={mode === ItemModes.Show}
-      type={"number"}
-      value={complexState.repetitions ?? 0}
-      key={"check"}
-      onChange={(e: React.ChangeEvent<any>) =>
-        handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
-      }
-    />
-  );
+  if (mode === ItemModes.Show && !complexState.repetitions) {
+    return null;
+  } else {
+    return (
+      <div>
+        <input
+          disabled={mode === ItemModes.Show}
+          type={"number"}
+          value={complexState.repetitions ?? 0}
+          key={"check"}
+          className={classes.input}
+          onChange={(e: React.ChangeEvent<any>) =>
+            handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
+          }
+        />
+        <div>reps</div>
+      </div>
+    );
+  }
 };
 
 const Weight = () => {
+  const classes = useStyles();
+
   const { complexState, handleSetOrUpdate, mode } = useThisContext();
 
-  return (
-    <>
-      <input
-        disabled={mode === ItemModes.Show}
-        type={"number"}
-        value={complexState.weightKg}
-        key={"check"}
-        onChange={(e: React.ChangeEvent<any>) =>
-          handleSetOrUpdate({ weightKg: parseInt(e.target.value) })
-        }
-      />
-      Kg
-    </>
-  );
+  if (mode === ItemModes.Show && !complexState.weightKg) {
+    return null;
+  } else {
+    return (
+      <div>
+        <input
+          disabled={mode === ItemModes.Show}
+          type={"number"}
+          value={complexState.weightKg}
+          key={"check"}
+          className={classes.input}
+          onChange={(e: React.ChangeEvent<any>) =>
+            handleSetOrUpdate({ weightKg: parseInt(e.target.value) })
+          }
+        />
+        <div>kg</div>
+      </div>
+    );
+  }
 };
 
 const Duration = () => {
+  const classes = useStyles();
+
   const { complexState, handleSetOrUpdate, mode } = useThisContext();
 
-  return (
-    <>
-      <input
-        disabled={mode === ItemModes.Show}
-        type={"number"}
-        value={complexState.durationSeconds}
-        key={"check"}
-        onChange={(e: React.ChangeEvent<any>) =>
-          handleSetOrUpdate({ durationSeconds: parseInt(e.target.value) })
-        }
-      />
-      Sec
-    </>
-  );
+  if (mode === ItemModes.Show && !complexState.durationSeconds) {
+    return null;
+  } else {
+    return (
+      <div>
+        <input
+          disabled={mode === ItemModes.Show}
+          type={"number"}
+          value={complexState.durationSeconds}
+          key={"check"}
+          className={classes.input}
+          onChange={(e: React.ChangeEvent<any>) =>
+            handleSetOrUpdate({ durationSeconds: parseInt(e.target.value) })
+          }
+        />
+        <div>sec</div>
+      </div>
+    );
+  }
 };
 
 const Exercise = () => {

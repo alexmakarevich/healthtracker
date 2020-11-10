@@ -1,6 +1,7 @@
 import React, { useEffect, ReactNode } from "react";
 import { MutateFunction, useMutation, useQuery } from "react-query";
-import { generateCRUD, WithId } from "../api/generateCRUD";
+import { generateCRUD } from "../api/generateCRUD";
+import { WithId } from "../common/types/types";
 import { createContextDefined } from "./ContextWrapper";
 
 const timestamp = () => {

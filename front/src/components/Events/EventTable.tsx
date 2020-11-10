@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults } from "../../logic/eventLogic";
-import EventTableRow from "./EventTableRow";
 import { ItemModes } from "../../utils/utils";
+import { EventFields } from "./EventFields";
+import { SimpleRow } from "../generic/layout/SimpleRow";
 
 const EventTable = () => {
   const EventsFromContext = useEventContext();
@@ -17,19 +18,42 @@ const EventTable = () => {
       <table>
         <thead>
           <tr>
-            {/* <th>id</th> */}
             <th>time</th>
             <th>event substance</th>
+            <th>items</th>
           </tr>
         </thead>
         <tbody>
           {EventsFromContext.all?.map((event, index) => (
-            <EventTableRow
+            <EventFields.Wrapper
               event={event}
+              initialMode={ItemModes.QuickEdit}
               key={index}
-              mode={ItemModes.QuickEdit}
-            />
+            >
+              <SimpleRow>
+                <EventFields.Buttons />
+                <EventFields.DateTime />
+                <>
+                  <EventFields.NutritionItems />
+                  <EventFields.ExerciseItems />
+                </>
+
+                <EventFields.Delete />
+              </SimpleRow>
+            </EventFields.Wrapper>
           ))}
+          <EventFields.Wrapper
+            event={eventDefaults}
+            initialMode={ItemModes.New}
+            key={"new"}
+          >
+            <SimpleRow>
+              <EventFields.Buttons />
+              <EventFields.DateTime />
+              <EventFields.NutritionItems />
+              <EventFields.Delete />
+            </SimpleRow>
+          </EventFields.Wrapper>
         </tbody>
       </table>
       <div>
