@@ -1,4 +1,11 @@
-import { useState, KeyboardEvent, useMemo, ReactNode } from "react";
+import {
+  useState,
+  KeyboardEvent,
+  useMemo,
+  ReactNode,
+  HTMLProps,
+  InputHTMLAttributes,
+} from "react";
 import React from "react";
 import { InputText } from "./inputs/InputText";
 import SelectList, { SelectChild } from "./SelectList";
@@ -35,6 +42,7 @@ interface Props {
   onSearchChange: (value: string) => void;
   onSelectChange: (value: string) => void;
   childrenToExcludeIds?: string[];
+  otherInputProps?: InputHTMLAttributes<HTMLInputElement>;
 }
 // stateless search + dropdown component
 const SearchWithDropdown = ({
@@ -43,6 +51,7 @@ const SearchWithDropdown = ({
   inputChildren,
   onSearchChange,
   onSelectChange,
+  otherInputProps,
   ...rest
 }: Props) => {
   const classes = useStyles();
@@ -75,6 +84,11 @@ const SearchWithDropdown = ({
 
   const [dropdownRef, isDropdownHovered] = useHover();
 
+  const { value, ...restInput } = otherInputProps ?? {
+    value: undefined,
+    undefined,
+  };
+
   return (
     <div
       {...rest}
@@ -82,7 +96,11 @@ const SearchWithDropdown = ({
       onFocus={() => setIsDropdwonVisible(true)}
       onBlur={() => !isDropdownHovered && setIsDropdwonVisible(false)}
     >
-      <InputText value={searchTextValue} onTextChange={onSearchChange}>
+      <InputText
+        value={searchTextValue}
+        onTextChange={onSearchChange}
+        {...restInput}
+      >
         {inputChildren}
       </InputText>
       {isDropdwonVisible && (

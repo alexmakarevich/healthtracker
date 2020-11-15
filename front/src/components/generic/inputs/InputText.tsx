@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef, Ref, InputHTMLAttributes } from "react";
+import React, { ReactNode, forwardRef, Ref, HTMLProps } from "react";
 import { createUseStyles } from "react-jss";
 import { generateKeyPressActions } from "../../../utils/utils";
 
@@ -20,7 +20,7 @@ const useStyles = createUseStyles(
   { name: "InputText" }
 );
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends HTMLProps<HTMLInputElement> {
   value?: string;
   className?: string;
   children?: ReactNode;
