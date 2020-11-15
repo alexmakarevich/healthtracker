@@ -23,6 +23,15 @@ const useStyles = createUseStyles(
     input: {
       width: "40px",
     },
+    repsInput: {
+      width: "32px",
+    },
+    weightInput: {
+      width: "32px",
+    },
+    durationInput: {
+      width: "48px",
+    },
   },
 
   { name: "ExerciseFields" }
@@ -95,7 +104,7 @@ const Repetitions = () => {
           type={"number"}
           value={complexState.repetitions ?? 0}
           key={"check"}
-          className={classes.input}
+          className={classes.repsInput}
           onChange={(e: React.ChangeEvent<any>) =>
             handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
           }
@@ -121,7 +130,7 @@ const Weight = () => {
           type={"number"}
           value={complexState.weightKg}
           key={"check"}
-          className={classes.input}
+          className={classes.weightInput}
           onChange={(e: React.ChangeEvent<any>) =>
             handleSetOrUpdate({ weightKg: parseInt(e.target.value) })
           }
@@ -147,7 +156,7 @@ const Duration = () => {
           type={"number"}
           value={complexState.durationSeconds}
           key={"check"}
-          className={classes.input}
+          className={classes.durationInput}
           onChange={(e: React.ChangeEvent<any>) =>
             handleSetOrUpdate({ durationSeconds: parseInt(e.target.value) })
           }

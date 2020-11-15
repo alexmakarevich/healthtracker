@@ -14,12 +14,11 @@ const EventTable = () => {
   return (
     <div>
       <h2>Event Table</h2>
-
       <table>
         <thead>
           <tr>
+            <th></th>
             <th>time</th>
-            <th>event substance</th>
             <th>items</th>
           </tr>
         </thead>
@@ -34,10 +33,13 @@ const EventTable = () => {
                 <EventFields.Buttons />
                 <EventFields.DateTime />
                 <>
-                  <EventFields.NutritionItems />
-                  <EventFields.ExerciseItems />
+                  {event.children.exerciseInstanceIds.length === 0 && (
+                    <EventFields.NutritionItems />
+                  )}
+                  {event.children.nutritionItemIds.length === 0 && (
+                    <EventFields.ExerciseItems />
+                  )}
                 </>
-
                 <EventFields.Delete />
               </SimpleRow>
             </EventFields.Wrapper>
@@ -50,7 +52,10 @@ const EventTable = () => {
             <SimpleRow>
               <EventFields.Buttons />
               <EventFields.DateTime />
-              <EventFields.NutritionItems />
+              <>
+                <EventFields.NutritionItems />
+                <EventFields.ExerciseItems />
+              </>
               <EventFields.Delete />
             </SimpleRow>
           </EventFields.Wrapper>

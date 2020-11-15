@@ -157,12 +157,14 @@ const NutritionItems = () => {
             onAdd={(id) => handleSetOrUpdate(addNI(id))}
             idsToExclude={event.children.nutritionItemIds}
           />
-          <button
-            className={classes.removeButton}
-            onClick={() => setShowAddNIinput(!showAddNIinput)}
-          >
-            X
-          </button>
+          {event.children.exerciseInstanceIds.length === 0 && (
+            <button
+              className={classes.removeButton}
+              onClick={() => setShowAddNIinput(!showAddNIinput)}
+            >
+              X
+            </button>
+          )}
         </div>
       </Collapsible>
     </div>
@@ -173,14 +175,6 @@ const ExerciseItems = () => {
   const classes = useStyles();
   const [showAddExerciseInstance, setShowAddExerciseInstance] = useState(false);
   const exerciseInstances = useExerciseInstanceContext();
-  const exercises = useExerciseContext();
-
-  // const {
-  //   trueArray: exerciseInstances,
-  //   falseArray: addableInstances,
-  // } = splitArray(exerciseInstances.all)((instance) =>
-  //   event.children.exerciseInstanceIds.includes(instance._id)
-  // );
 
   const excerciseInstanceContext = useExerciseInstanceContext();
 
@@ -226,11 +220,13 @@ const ExerciseItems = () => {
         isExpanded={!showAddExerciseInstance}
         animation={Animations.ExpandWidth}
       >
-        <button
-          onClick={() => setShowAddExerciseInstance(!showAddExerciseInstance)}
-        >
-          + exercise
-        </button>
+        {event.children.nutritionItemIds.length === 0 && (
+          <button
+            onClick={() => setShowAddExerciseInstance(!showAddExerciseInstance)}
+          >
+            + exercise
+          </button>
+        )}
       </Collapsible>
       <Collapsible
         isExpanded={showAddExerciseInstance}
