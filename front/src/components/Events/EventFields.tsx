@@ -206,7 +206,7 @@ const ExerciseItems = () => {
               >
                 <ExerciseInstanceFields.Wrapper
                   item={ei}
-                  initialMode={ItemModes.Show}
+                  initialMode={ItemModes.QuickEdit}
                 >
                   <Box className={classes.exerciseBox}>
                     <FlexRow childClassName={classes.item}>

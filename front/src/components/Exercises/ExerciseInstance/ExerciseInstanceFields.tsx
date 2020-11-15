@@ -192,7 +192,9 @@ const Exercise = () => {
         />
       )}
       {complexState.exerciseId !== exerciseInstanceDefaults.exerciseId && (
-        <button onClick={() => setShowSelect(!showSelect)}>/</button>
+        <button onClick={() => setShowSelect(!showSelect)}>
+          {!showSelect ? "change" : "cancel"}
+        </button>
       )}
     </div>
   );
