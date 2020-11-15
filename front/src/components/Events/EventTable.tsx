@@ -61,15 +61,6 @@ const EventTable = () => {
           </EventFields.Wrapper>
         </tbody>
       </table>
-      <div>
-        <button
-          onClick={() => {
-            EventsFromContext.create(newTestEvent);
-          }}
-        >
-          add dummy event
-        </button>
-      </div>
     </div>
   );
 };
