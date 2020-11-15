@@ -21,7 +21,6 @@ const styles = () => ({
   },
   dropdown: {
     position: "absolute",
-    background: "white",
     top: "100%",
     zIndex: "100",
   },
