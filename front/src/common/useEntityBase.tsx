@@ -32,8 +32,10 @@ export function useEntityBaseUseQuery<I extends WithId>(
     reset();
   }
 
-  function handleCreate() {
-    context.create(complexState, {
+  function handleCreate(partialIem?: Partial<I>) {
+    const itemToCreate = { ...complexState, ...partialIem };
+
+    context.create(itemToCreate, {
       onSuccess: (data) => {
         reset();
         console.log("create", data);
@@ -107,7 +109,7 @@ export interface EntityBaseContextUseQuery<Item> {
   setComplexState: React.Dispatch<Partial<Item>>;
   mode: ItemModes;
   setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
-  handleCreate: () => void;
+  handleCreate: (partialItem?: Partial<Item>) => void;
   handleCancel: () => void;
   handleUpdate: (newProps: Partial<Item>) => void;
   handleSave: () => void;

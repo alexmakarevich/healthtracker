@@ -17,7 +17,6 @@ const EventTable = () => {
       <table>
         <thead>
           <tr>
-            <th></th>
             <th>time</th>
             <th>items</th>
           </tr>
@@ -30,7 +29,7 @@ const EventTable = () => {
               key={index}
             >
               <SimpleRow>
-                <EventFields.Buttons />
+                {/* <EventFields.Buttons /> */}
                 <EventFields.DateTime />
                 <>
                   {event.children.exerciseInstanceIds.length === 0 && (
@@ -50,7 +49,7 @@ const EventTable = () => {
             key={"new"}
           >
             <SimpleRow>
-              <EventFields.Buttons />
+              {/* <EventFields.Buttons /> */}
               <EventFields.DateTime />
               <>
                 <EventFields.NutritionItems />

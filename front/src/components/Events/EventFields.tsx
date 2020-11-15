@@ -178,7 +178,11 @@ const ExerciseItems = () => {
 
   const excerciseInstanceContext = useExerciseInstanceContext();
 
-  const { handleSetOrUpdate, complexState: event } = useThisContext();
+  const {
+    handleSetOrUpdate,
+    complexState: event,
+    handleCreate,
+  } = useThisContext();
   const { addExercise, removeExercise } = eventLogic(event);
 
   const eiIds = event.children.exerciseInstanceIds;
@@ -239,6 +243,7 @@ const ExerciseItems = () => {
             onCreate={(item) => {
               console.log("onCreate", item);
               handleSetOrUpdate(addExercise(item._id));
+              handleCreate(addExercise(item._id));
               setShowAddExerciseInstance(false);
             }}
           >
