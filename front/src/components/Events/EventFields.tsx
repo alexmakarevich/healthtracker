@@ -118,7 +118,12 @@ const NutritionItems = () => {
   const [showAddNIinput, setShowAddNIinput] = useState(false);
   const nutritionContext = useNutritionItemContext();
 
-  const { handleSetOrUpdate, complexState: event } = useThisContext();
+  const {
+    handleSetOrUpdate,
+    complexState: event,
+    mode,
+    handleCreate,
+  } = useThisContext();
   const { addNI, removeNI } = eventLogic(event);
 
   return (
@@ -154,7 +159,15 @@ const NutritionItems = () => {
       >
         <div className={classes.itemsWrapper}>
           <AddNutritionItem
-            onAdd={(id) => handleSetOrUpdate(addNI(id))}
+            onAdd={(id) => {
+              const newItem = addNI(id);
+              if (mode === ItemModes.New) {
+                handleCreate(newItem);
+              } else {
+                handleSetOrUpdate(newItem);
+                setShowAddNIinput(false);
+              }
+            }}
             idsToExclude={event.children.nutritionItemIds}
           />
           {event.children.exerciseInstanceIds.length === 0 && (
@@ -182,6 +195,7 @@ const ExerciseItems = () => {
     handleSetOrUpdate,
     complexState: event,
     handleCreate,
+    mode,
   } = useThisContext();
   const { addExercise, removeExercise } = eventLogic(event);
 
@@ -242,9 +256,12 @@ const ExerciseItems = () => {
             initialMode={ItemModes.New}
             onCreate={(item) => {
               console.log("onCreate", item);
-              handleSetOrUpdate(addExercise(item._id));
-              handleCreate(addExercise(item._id));
-              setShowAddExerciseInstance(false);
+              if (mode === ItemModes.New) {
+                handleCreate(addExercise(item._id));
+                setShowAddExerciseInstance(false);
+              } else {
+                handleSetOrUpdate(addExercise(item._id));
+              }
             }}
           >
             <FlexRow childClassName={classes.item}>
