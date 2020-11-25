@@ -12,6 +12,7 @@ const useStyles = createUseStyles(
     container: {
       display: "flex",
       alignItems: "center",
+      flexWrap: "wrap",
     },
     child: {
       padding: "5px",
