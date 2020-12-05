@@ -4,13 +4,13 @@ import { NutritionItemTable } from "./components/Nutrition/NutritionItemTable";
 import EventTable from "./components/Events/EventTable";
 import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
 import { EventProvider } from "./context/EventContextProvider";
-import { InputDay } from "./components/generic/inputs/DateTimeInputs/InputDay";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
 import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
+import { SampleVisualization } from "./components/Data/SampleVisualization";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -26,6 +26,7 @@ function App() {
         <ExerciseProvider>
           <EventProvider>
             <NutritionItemProvider>
+              <SampleVisualization />
               <NutritionItemTable />
               <EventTable />
             </NutritionItemProvider>
