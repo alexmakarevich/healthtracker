@@ -30,8 +30,8 @@ function App() {
           <EventProvider>
             <NutritionItemProvider>
               <SampleVisualizationUpdate />
-              {/* <SampleVisualizationTime /> */}
-              {/* <ExerciseVisualization /> */}
+              <SampleVisualizationTime />
+              <ExerciseVisualization />
               <NutritionItemTable />
               <EventTable />
             </NutritionItemProvider>

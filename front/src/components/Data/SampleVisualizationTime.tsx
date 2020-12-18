@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import * as d3 from "d3";
 
 export const SampleVisualizationTime = () => {
@@ -23,18 +23,21 @@ export const SampleVisualizationTime = () => {
     { x: new Date("2020-12-18"), y: 35, radius: 7 },
   ];
 
+  const ref = useRef(null);
+
   useEffect(() => {
     // append the svg object to the body of the page
-    const svg = d3
-      .select("#scatter_area")
-      .append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    const svg = d3.select(ref.current);
+
+    // .select("#scatter_area")
+    // .append("svg")
+    // .attr("width", width + margin.left + margin.right)
+    // .attr("height", height + margin.top + margin.bottom)
+    // .append("g")
+    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // X scale and Axis
-    var x = d3
+    const x = d3
       .scaleTime()
       .domain([new Date("2020-12-01"), new Date("2020-12-20")]) // This is the min and the max of the data: 0 to 100 if percentages
       .range([0, width]); // This is the corresponding value I want in Pixel
@@ -44,7 +47,7 @@ export const SampleVisualizationTime = () => {
       .call(d3.axisBottom(x));
 
     // Y scale and Axis
-    var y = d3
+    const y = d3
       .scaleLinear()
       .domain([0, 100]) // This is the min and the max of the data: 0 to 100 if percentages
       .range([height, 0]); // This is the corresponding value I want in Pixel
@@ -79,5 +82,14 @@ export const SampleVisualizationTime = () => {
       .style("stroke-width", 10);
   }, []);
 
-  return <div id="scatter_area" />;
+  return (
+    //  <div id="scatter_area" />
+
+    <svg
+      width={width + margin.left + margin.right}
+      height={height + margin.top + margin.bottom}
+    >
+      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`} />
+    </svg>
+  );
 };
