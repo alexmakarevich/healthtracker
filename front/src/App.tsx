@@ -11,6 +11,9 @@ import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
 import { SampleVisualization } from "./components/Data/SampleVisualization";
+import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
+import { SampleVisualizationTime } from "./components/Data/SampleVisualizationTime";
+import { SampleVisualizationUpdate } from "./components/Data/SampleVisualizationUpdate";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -26,7 +29,9 @@ function App() {
         <ExerciseProvider>
           <EventProvider>
             <NutritionItemProvider>
-              <SampleVisualization />
+              <SampleVisualizationUpdate />
+              {/* <SampleVisualizationTime /> */}
+              {/* <ExerciseVisualization /> */}
               <NutritionItemTable />
               <EventTable />
             </NutritionItemProvider>
