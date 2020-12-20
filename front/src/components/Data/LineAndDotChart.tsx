@@ -69,39 +69,48 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   }, []);
 
   useEffect(() => {
+    // get svg base
     const svg = d3.select(ref.current);
 
-    const lineGroup = svg.select("g .line").datum(data);
-    lineGroup.remove();
+    // add/update line
     svg
-      .append("g")
-      .attr("class", "line")
-      .append("path")
-      .datum(data)
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5)
+      .selectAll("path.line")
+      .data([data])
+      .join("path")
+      .transition()
+      .duration(150)
       .attr(
         "d",
         d3
           .line<DefinedData>()
           .x((d) => x(d.x))
           .y((d) => y(d.y))
-      );
+          .curve(d3.curveCardinal)
+      )
+      .attr("class", "line")
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5);
 
-    svg.selectAll("circle").data(data).remove();
-    svg
-      .selectAll("circle")
-      .remove()
-      .data(data)
+    // add/update dots
+    const circles = svg
+      .selectAll<SVGCircleElement, DefinedData>("circle")
+      .data(data);
+
+    circles
       .enter()
       .append("circle")
+      .merge(circles)
+      .transition()
+      .duration(150)
       .attr("cx", (d) => x(d.x))
       .attr("cy", (d) => y(d.y))
-      .attr("r", (d) => x(d.radius))
+      .attr("r", (d) => d.radius)
       .style("fill", "lime")
       .style("stroke", "black")
       .style("stroke-width", 10);
+
+    circles.exit().remove();
   }, [data]);
 
   return (
@@ -109,7 +118,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
       width={width + margin.left + margin.right}
       height={height + margin.top + margin.bottom}
     >
-      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`} />
+      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}></g>
     </svg>
   );
 };

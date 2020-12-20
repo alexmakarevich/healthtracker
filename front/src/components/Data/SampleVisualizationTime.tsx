@@ -29,13 +29,6 @@ export const SampleVisualizationTime = () => {
     // append the svg object to the body of the page
     const svg = d3.select(ref.current);
 
-    // .select("#scatter_area")
-    // .append("svg")
-    // .attr("width", width + margin.left + margin.right)
-    // .attr("height", height + margin.top + margin.bottom)
-    // .append("g")
-    // .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
     // X scale and Axis
     const x = d3
       .scaleTime()

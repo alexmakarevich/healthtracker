@@ -37,6 +37,17 @@ export const SampleVisualizationUpdate = () => {
                 setData(newData);
               }}
             />
+            <button
+              onClick={() => {
+                const newData = [
+                  ...data.slice(0, index),
+                  ...data.slice(index + 1, data.length),
+                ];
+                setData(newData);
+              }}
+            >
+              delete
+            </button>
           </li>
         ))}
       </ul>
