@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { axisBottom, sort } from "d3";
 
 export enum Scales {
   Linear = "Linear",
@@ -7,31 +8,43 @@ export enum Scales {
 }
 
 interface Data<xType extends Scales, yType extends Scales> {
-  x: xType extends Scales.Linear
-    ? number
-    : xType extends Scales.Time
-    ? Date
-    : number;
-  y: yType extends Scales.Linear
-    ? number
-    : yType extends Scales.Time
-    ? Date
-    : number;
+  x: xType extends Scales.Time ? Date : number;
+  y: yType extends Scales.Time ? Date : number;
   radius: number;
 }
 
-interface LineAndDotChartProps<xType extends Scales, yType extends Scales> {
-  xAxis: xType;
-  yAxis: yType;
-  data: Data<xType, yType>[];
+interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
+  xScale: XScale;
+  yScale: YScale;
+  data: Data<XScale, YScale>[];
+  sortX?: boolean;
+  minX?: Data<XScale, YScale>["x"];
+  maxX?: Data<XScale, YScale>["x"];
+  minY?: Data<XScale, YScale>["y"];
+  maxY?: Data<XScale, YScale>["y"];
 }
 
 export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   data,
-  xAxis,
-  yAxis,
+  xScale,
+  yScale,
+  sortX = xScale === Scales.Time,
+  minX: minXForce,
+  maxX: maxXForce,
+  minY: minYForce,
+  maxY: maxYForce,
 }: LineAndDotChartProps<xType, yType>) => {
   type DefinedData = Data<xType, yType>;
+
+  const dataSortedByX = data.slice().sort((a, b) => (a.x < b.x ? -1 : 0));
+  const dataSortedByY = data.slice().sort((a, b) => (a.y < b.y ? -1 : 0));
+
+  const minX = minXForce ?? dataSortedByX[0].x;
+  const maxX = maxXForce ?? dataSortedByX[dataSortedByX.length - 1].x;
+  const minY = minYForce ?? dataSortedByY[0].y;
+  const maxY = maxYForce ?? dataSortedByY[dataSortedByX.length - 1].y;
+
+  const adjustedData = sortX ? dataSortedByX : data;
 
   // set the dimensions and margins of the graph
   const margin = { top: 10, right: 40, bottom: 30, left: 30 },
@@ -42,40 +55,35 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 
   const axis = (which: "x" | "y") => (dataType: Scales) => {
     const range = which === "x" ? [0, width] : [height, 0];
+    const domain = which === "x" ? [minX, maxX] : [minY, maxY];
 
     const axis =
       dataType === Scales.Time
-        ? d3
-            .scaleTime()
-            .domain([new Date("2020-12-01"), new Date("2020-12-20")])
-            .range(range)
-        : d3.scaleLinear().domain([0, 100]).range(range);
+        ? d3.scaleTime().domain(domain).range(range)
+        : d3.scaleLinear().domain(domain).range(range);
 
     return axis;
   };
 
-  const x = axis("x")(xAxis);
-  const y = axis("y")(yAxis);
-
-  useEffect(() => {
-    const svg = d3.select(ref.current);
-
-    svg
-      .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(axis("x")(xAxis)));
-
-    svg.append("g").call(d3.axisLeft(y));
-  }, []);
+  const x = axis("x")(xScale);
+  const y = axis("y")(yScale);
 
   useEffect(() => {
     // get svg base
     const svg = d3.select(ref.current);
 
+    // add/update axes
+    svg
+      .select<SVGGElement>(".x-axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(axisBottom(x));
+
+    svg.select<SVGGElement>(".y-axis").call(d3.axisLeft(y));
+
     // add/update line
     svg
       .selectAll("path.line")
-      .data([data])
+      .data([adjustedData])
       .join("path")
       .transition()
       .duration(150)
@@ -85,7 +93,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
           .line<DefinedData>()
           .x((d) => x(d.x))
           .y((d) => y(d.y))
-          .curve(d3.curveCardinal)
+          .curve(d3.curveLinear)
       )
       .attr("class", "line")
       .attr("fill", "none")
@@ -95,7 +103,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
     // add/update dots
     const circles = svg
       .selectAll<SVGCircleElement, DefinedData>("circle")
-      .data(data);
+      .data(adjustedData);
 
     circles
       .enter()
@@ -118,7 +126,10 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
       width={width + margin.left + margin.right}
       height={height + margin.top + margin.bottom}
     >
-      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}></g>
+      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}>
+        <g className={"x-axis"} />
+        <g className={"y-axis"} />
+      </g>
     </svg>
   );
 };

@@ -16,7 +16,12 @@ export const SampleVisualizationUpdate = () => {
 
   return (
     <div>
-      <LineAndDotChart data={data} xAxis={Scales.Time} yAxis={Scales.Linear} />
+      <LineAndDotChart
+        data={data}
+        xScale={Scales.Time}
+        yScale={Scales.Linear}
+        minY={0}
+      />
 
       <ul>
         {data.map((d, index) => (
@@ -31,6 +36,22 @@ export const SampleVisualizationUpdate = () => {
                   {
                     ...data[index],
                     y: parseInt(newValue),
+                  },
+                  ...data.slice(index + 1, data.length),
+                ];
+                setData(newData);
+              }}
+            />
+            <input
+              type="datetime-local"
+              value={data[index].x.toISOString().slice(0, 16)}
+              onChange={(e) => {
+                const newValue = e.target.value;
+                const newData = [
+                  ...data.slice(0, index),
+                  {
+                    ...data[index],
+                    x: new Date(newValue),
                   },
                   ...data.slice(index + 1, data.length),
                 ];
