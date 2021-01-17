@@ -10,7 +10,7 @@ export enum Scales {
 interface Data<xType extends Scales, yType extends Scales> {
   x: xType extends Scales.Time ? Date : number;
   y: yType extends Scales.Time ? Date : number;
-  radius: number;
+  radius?: number;
 }
 
 interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
@@ -36,8 +36,13 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 }: LineAndDotChartProps<xType, yType>) => {
   type DefinedData = Data<xType, yType>;
 
-  const dataSortedByX = data.slice().sort((a, b) => (a.x < b.x ? -1 : 0));
-  const dataSortedByY = data.slice().sort((a, b) => (a.y < b.y ? -1 : 0));
+  const sortByX = (data: DefinedData[]) =>
+    data.slice().sort((a, b) => (a.x < b.x ? -1 : 0));
+  const sortByY = (data: DefinedData[]) =>
+    data.slice().sort((a, b) => (a.y < b.y ? -1 : 0));
+
+  const dataSortedByX = sortByX(data);
+  const dataSortedByY = sortByY(data);
 
   const minX = minXForce ?? dataSortedByX[0].x;
   const maxX = maxXForce ?? dataSortedByX[dataSortedByX.length - 1].x;
@@ -113,7 +118,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
       .duration(150)
       .attr("cx", (d) => x(d.x))
       .attr("cy", (d) => y(d.y))
-      .attr("r", (d) => d.radius)
+      .attr("r", (d) => d.radius ?? 3)
       .style("fill", "lime")
       .style("stroke", "black")
       .style("stroke-width", 10);
