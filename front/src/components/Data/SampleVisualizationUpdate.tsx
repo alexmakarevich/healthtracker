@@ -12,12 +12,18 @@ export const SampleVisualizationUpdate = () => {
     { x: new Date(), y: 90, radius: 15 },
     { x: new Date("2020-12-11"), y: 50, radius: 7 },
     { x: new Date("2020-12-18"), y: 35, radius: 7 },
+    { x: new Date("2020-12-02"), y: 10, radius: 2 },
+    { x: new Date(), y: 50, radius: 25 },
+    { x: new Date("2020-12-11"), y: 30, radius: 10 },
+    { x: new Date("2020-12-18"), y: 39, radius: 22 },
   ]);
 
   return (
     <div>
+      <h1>{SampleVisualizationUpdate.name}</h1>
+
       <LineAndDotChart
-        data={data}
+        data={[data.slice(0, 4), data.slice(4)]}
         xScale={Scales.Time}
         yScale={Scales.Linear}
         minY={0}

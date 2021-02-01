@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import * as d3 from "d3";
 import { useEventContext } from "../../context/EventContextProvider";
-import { TimeLocaleObject } from "d3";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { LineAndDotChart, Scales } from "./LineAndDotChart";
@@ -52,10 +51,13 @@ export const ExerciseVisualization = () => {
   }
 
   return (
-    <LineAndDotChart
-      xScale={Scales.Time}
-      yScale={Scales.Linear}
-      data={chartData}
-    />
+    <>
+      <h1>ExerciseVisualization</h1>
+      <LineAndDotChart
+        xScale={Scales.Time}
+        yScale={Scales.Linear}
+        data={[chartData]}
+      />
+    </>
   );
 };

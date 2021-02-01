@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { axisBottom, sort } from "d3";
+import { axisBottom } from "d3";
 
 export enum Scales {
   Linear = "Linear",
@@ -16,7 +16,7 @@ interface Data<xType extends Scales, yType extends Scales> {
 interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
   xScale: XScale;
   yScale: YScale;
-  data: Data<XScale, YScale>[];
+  data: Data<XScale, YScale>[][];
   sortX?: boolean;
   minX?: Data<XScale, YScale>["x"];
   maxX?: Data<XScale, YScale>["x"];
@@ -41,13 +41,26 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   const sortByY = (data: DefinedData[]) =>
     data.slice().sort((a, b) => (a.y < b.y ? -1 : 0));
 
-  const dataSortedByX = sortByX(data);
-  const dataSortedByY = sortByY(data);
+  const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-  const minX = minXForce ?? dataSortedByX[0].x;
-  const maxX = maxXForce ?? dataSortedByX[dataSortedByX.length - 1].x;
-  const minY = minYForce ?? dataSortedByY[0].y;
-  const maxY = maxYForce ?? dataSortedByY[dataSortedByX.length - 1].y;
+  const dataSortedByX = data.map((datum) => sortByX(datum));
+  const dataSortedByY = data.map((datum) => sortByY(datum));
+
+  const dataFlat = data.flat();
+
+  const minX = minXForce ?? sortByX(dataFlat)[0].x;
+  const maxX = maxXForce ?? sortByX(dataFlat)[dataFlat.length - 1].x;
+  const minY = minYForce ?? sortByY(dataFlat)[0].y;
+  const maxY = maxYForce ?? sortByY(dataFlat)[dataFlat.length - 1].y;
+
+  console.log({
+    dataSortedByX,
+    dataSortedByY,
+    minX,
+    maxX,
+    minY,
+    maxY,
+  });
 
   const adjustedData = sortX ? dataSortedByX : data;
 
@@ -85,45 +98,48 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 
     svg.select<SVGGElement>(".y-axis").call(d3.axisLeft(y));
 
-    // add/update line
-    svg
-      .selectAll("path.line")
-      .data([adjustedData])
-      .join("path")
-      .transition()
-      .duration(150)
-      .attr(
-        "d",
-        d3
-          .line<DefinedData>()
-          .x((d) => x(d.x))
-          .y((d) => y(d.y))
-          .curve(d3.curveLinear)
-      )
-      .attr("class", "line")
-      .attr("fill", "none")
-      .attr("stroke", "steelblue")
-      .attr("stroke-width", 1.5);
+    adjustedData.forEach((datum, index) => {
+      // add/update line
+      svg
+        .selectAll("path.line-" + index)
+        .data([datum])
+        .join("path")
+        .transition()
+        .duration(150)
+        .attr(
+          "d",
+          d3
+            .line<DefinedData>()
+            .x((d) => x(d.x))
+            .y((d) => y(d.y))
+            .curve(d3.curveLinear)
+        )
+        .attr("class", "line-" + index)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-width", 1.5);
 
-    // add/update dots
-    const circles = svg
-      .selectAll<SVGCircleElement, DefinedData>("circle")
-      .data(adjustedData);
+      // add/update dots
+      const circles = svg
+        .selectAll<SVGCircleElement, DefinedData>("circle.series-" + index)
+        .data(datum);
 
-    circles
-      .enter()
-      .append("circle")
-      .merge(circles)
-      .transition()
-      .duration(150)
-      .attr("cx", (d) => x(d.x))
-      .attr("cy", (d) => y(d.y))
-      .attr("r", (d) => d.radius ?? 3)
-      .style("fill", "lime")
-      .style("stroke", "black")
-      .style("stroke-width", 10);
+      circles
+        .enter()
+        .append("circle")
+        .merge(circles)
+        .transition()
+        .duration(150)
+        .attr("class", "series-" + index)
+        .attr("cx", (d) => x(d.x))
+        .attr("cy", (d) => y(d.y))
+        .attr("r", (d) => d.radius ?? 3)
+        .style("fill", colors(index.toString()))
+        .style("stroke", "black")
+        .style("stroke-width", 10);
 
-    circles.exit().remove();
+      circles.exit().remove();
+    });
   }, [data]);
 
   return (
