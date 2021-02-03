@@ -8,14 +8,14 @@ export const SampleVisualizationUpdate = () => {
     // { x: 10, y: 20, radius: 3 },
     // { x: 45, y: 90, radius: 15 },
     // { x: 80, y: 50, radius: 7 },
-    { x: new Date("2020-12-02"), y: 20, radius: 3 },
-    { x: new Date(), y: 90, radius: 15 },
-    { x: new Date("2020-12-11"), y: 50, radius: 7 },
-    { x: new Date("2020-12-18"), y: 35, radius: 7 },
-    { x: new Date("2020-12-02"), y: 10, radius: 2 },
-    { x: new Date(), y: 50, radius: 25 },
-    { x: new Date("2020-12-11"), y: 30, radius: 10 },
-    { x: new Date("2020-12-18"), y: 39, radius: 22 },
+    { x: new Date("2020-12-02"), y: 20, radius: 3, label: "sasay" },
+    { x: new Date(), y: 90, radius: 15, label: "basay" },
+    { x: new Date("2020-12-11"), y: 50, radius: 7, label: "smems" },
+    { x: new Date("2020-12-18"), y: 35, radius: 7, label: "slyls" },
+    { x: new Date("2020-12-02"), y: 10, radius: 2, label: "spoops" },
+    { x: new Date(), y: 50, radius: 25, label: "slals" },
+    { x: new Date("2020-12-11"), y: 30, radius: 10, label: "meem" },
+    { x: new Date("2020-12-18"), y: 39, radius: 22, label: "goog" },
   ]);
 
   return (
@@ -26,6 +26,7 @@ export const SampleVisualizationUpdate = () => {
         data={[data.slice(0, 4), data.slice(4)]}
         xScale={Scales.Time}
         yScale={Scales.Linear}
+        hasLine={false}
         minY={0}
       />
 
@@ -79,7 +80,9 @@ export const SampleVisualizationUpdate = () => {
         ))}
       </ul>
       <button
-        onClick={() => setData([...data, { x: new Date(), y: 27, radius: 5 }])}
+        onClick={() =>
+          setData([...data, { x: new Date(), y: 27, radius: 5, label: "new" }])
+        }
       >
         add
       </button>

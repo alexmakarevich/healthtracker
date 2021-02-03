@@ -77,7 +77,7 @@ export function classConcat(...classes: (string | undefined)[]) {
   );
 }
 
-export const  splitArray = <Something>(array?: Something[]) => (filterCallback: (something: Something) => boolean) => {
+export const splitArray = <Something>(array?: Something[]) => (filterCallback: (something: Something) => boolean) => {
   let trueArray : Something[] = []
   let falseArray: Something[] = []
 
@@ -86,4 +86,15 @@ export const  splitArray = <Something>(array?: Something[]) => (filterCallback: 
   })
 
   return {trueArray, falseArray}
+}
+
+export function groupBy<T extends Record<string, any>, K extends keyof T>(array: T[], key: K): Record<T[K], T[]> {
+  return array.reduce(
+    (objectsByKeyValue, obj) => {
+      const value = obj[key]
+      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
+      return objectsByKeyValue
+    },
+    {} as Record<T[K], T[]>
+  )
 }

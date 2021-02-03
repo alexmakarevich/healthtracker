@@ -7,17 +7,26 @@ export enum Scales {
   Time = "Time",
 }
 
-interface Data<xType extends Scales, yType extends Scales> {
+export interface Data<xType extends Scales, yType extends Scales> {
   x: xType extends Scales.Time ? Date : number;
   y: yType extends Scales.Time ? Date : number;
   radius?: number;
+  label?: string | number;
+}
+
+enum Sort {
+  x,
+  y,
+  none,
 }
 
 interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
   xScale: XScale;
   yScale: YScale;
   data: Data<XScale, YScale>[][];
-  sortX?: boolean;
+  hasLine?: boolean;
+  hasDots?: boolean;
+  sort?: Sort;
   minX?: Data<XScale, YScale>["x"];
   maxX?: Data<XScale, YScale>["x"];
   minY?: Data<XScale, YScale>["y"];
@@ -28,7 +37,9 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   data,
   xScale,
   yScale,
-  sortX = xScale === Scales.Time,
+  hasLine = true,
+  hasDots = true,
+  sort = xScale === Scales.Time ? Sort.x : Sort.none,
   minX: minXForce,
   maxX: maxXForce,
   minY: minYForce,
@@ -53,19 +64,11 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   const minY = minYForce ?? sortByY(dataFlat)[0].y;
   const maxY = maxYForce ?? sortByY(dataFlat)[dataFlat.length - 1].y;
 
-  console.log({
-    dataSortedByX,
-    dataSortedByY,
-    minX,
-    maxX,
-    minY,
-    maxY,
-  });
-
-  const adjustedData = sortX ? dataSortedByX : data;
+  const adjustedData =
+    sort === Sort.x ? dataSortedByX : Sort.y ? dataSortedByY : data;
 
   // set the dimensions and margins of the graph
-  const margin = { top: 10, right: 40, bottom: 30, left: 30 },
+  const margin = { top: 40, right: 40, bottom: 30, left: 30 },
     width = 450 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
@@ -89,6 +92,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   useEffect(() => {
     // get svg base
     const svg = d3.select(ref.current);
+    const format = d3.format(".2f");
 
     // add/update axes
     svg
@@ -100,45 +104,73 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 
     adjustedData.forEach((datum, index) => {
       // add/update line
-      svg
-        .selectAll("path.line-" + index)
-        .data([datum])
-        .join("path")
-        .transition()
-        .duration(150)
-        .attr(
-          "d",
-          d3
-            .line<DefinedData>()
-            .x((d) => x(d.x))
-            .y((d) => y(d.y))
-            .curve(d3.curveLinear)
-        )
-        .attr("class", "line-" + index)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5);
+      if (hasLine) {
+        svg
+          .selectAll("path.line-" + index)
+          .data([datum])
+          .join("path")
+          .transition()
+          .duration(150)
+          .attr(
+            "d",
+            d3
+              .line<DefinedData>()
+              .x((d) => x(d.x))
+              .y((d) => y(d.y))
+              .curve(d3.curveLinear)
+          )
+          .attr("class", "line-" + index)
+          .attr("fill", "none")
+          .attr("stroke", colors(index.toString()))
+          .attr("stroke-width", 1.5);
+      }
 
-      // add/update dots
-      const circles = svg
-        .selectAll<SVGCircleElement, DefinedData>("circle.series-" + index)
-        .data(datum);
+      if (hasDots) {
+        // add/update dots
+        const circles = svg
+          .selectAll<SVGCircleElement, DefinedData>("circle.series-" + index)
+          .data(datum);
 
-      circles
-        .enter()
-        .append("circle")
-        .merge(circles)
-        .transition()
-        .duration(150)
-        .attr("class", "series-" + index)
-        .attr("cx", (d) => x(d.x))
-        .attr("cy", (d) => y(d.y))
-        .attr("r", (d) => d.radius ?? 3)
-        .style("fill", colors(index.toString()))
-        .style("stroke", "black")
-        .style("stroke-width", 10);
+        circles
+          .enter()
+          .append("circle")
+          .merge(circles)
+          .transition()
+          .duration(150)
+          .attr("class", "series-" + index)
+          .attr("cx", (d) => x(d.x))
+          .attr("opacity", 0.5)
+          .attr("z-axis", 5)
+          .attr("cy", (d) => y(d.y))
+          .attr("r", (d) => d.radius ?? 3)
+          .style("fill", colors(index.toString()))
+          .style("stroke", "black")
+          .style("stroke-width", 20);
 
-      circles.exit().remove();
+        const textLabels = svg
+          .selectAll<SVGTextElement, DefinedData>("text.series-" + index)
+          .data(datum);
+
+        textLabels
+          .enter()
+          .append("text")
+          .merge(textLabels)
+          .transition()
+          .duration(150)
+          .attr("class", "series-" + index)
+          .attr("z-axis", 10)
+          .attr("text-anchor", "bottom")
+          .style("fill", colors(index.toString()))
+          .attr("alignment-baseline", "bottom")
+          .attr("dx", (d) => x(d.x))
+          .attr("dy", (d) =>
+            y(typeof d.y === "number" ? d.y + 1 + (d.radius ?? 0) / 2 : d.y)
+          )
+          .text((d) => d.label ?? "");
+
+        circles.exit().remove();
+        textLabels.exit().remove();
+      }
     });
   }, [data]);
 

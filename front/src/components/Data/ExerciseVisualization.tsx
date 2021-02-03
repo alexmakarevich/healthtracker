@@ -4,10 +4,12 @@ import { useEventContext } from "../../context/EventContextProvider";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { LineAndDotChart, Scales } from "./LineAndDotChart";
+import { groupBy } from "../../utils/utils";
 
 interface ChartData {
   x: Date;
   y: number;
+  label?: string | number;
   radius?: number;
 }
 
@@ -23,31 +25,33 @@ export const ExerciseVisualization = () => {
     { x: new Date("2020-12-18"), y: 35, radius: 7 },
   ];
 
-  let chartData: ChartData[] = dummyChartData;
+  let chartData: ChartData[][] = [dummyChartData];
 
   if (!!events.all && !!exerciseInstances.all && !!exercises.all) {
     const allEvents = events.all;
 
     console.log({ allEvents });
 
-    const realChartData = exerciseInstances.all
-      .map((ei) => {
-        const thisEvent = allEvents.find((e) =>
-          e.children.exerciseInstanceIds.find((id) => id === ei._id)
-        );
-        if (thisEvent) {
-          return {
-            y: ei.repetitions ?? 0,
-            x: new Date(thisEvent.time),
-          };
-        } else {
-          return undefined;
-        }
-      })
-      // odd TS behavior with Array.filter
-      .filter((d): d is ChartData => d !== undefined);
+    let groupedChartData: Record<string, ChartData[]> = {};
 
-    chartData = realChartData;
+    exerciseInstances.all.forEach((ei) => {
+      const thisEvent = allEvents.find((e) =>
+        e.children.exerciseInstanceIds.find((id) => id === ei._id)
+      );
+      if (thisEvent) {
+        if (!groupedChartData[ei.exerciseId]) {
+          groupedChartData[ei.exerciseId] = [];
+        }
+        groupedChartData[ei.exerciseId].push({
+          y: ei.repetitions ?? 0,
+          x: new Date(thisEvent.time),
+          radius: ei.weightKg,
+          label: `${ei.repetitions ?? 0} - ${ei.weightKg ?? 0}kg`,
+        });
+      }
+    });
+
+    chartData = Object.values(groupedChartData);
   }
 
   return (
@@ -56,7 +60,7 @@ export const ExerciseVisualization = () => {
       <LineAndDotChart
         xScale={Scales.Time}
         yScale={Scales.Linear}
-        data={[chartData]}
+        data={chartData}
       />
     </>
   );
