@@ -98,3 +98,29 @@ export function groupBy<T extends Record<string, any>, K extends keyof T>(array:
     {} as Record<T[K], T[]>
   )
 }
+
+
+/** 
+ * https://dev.to/svehla/typescript-object-fromentries-389c
+ * bypass the typescript compiler for passing invalid types 
+ * */
+type Cast<X, Y> = X extends Y ? X : Y;
+
+/**  
+ * Recursively remove all readonly notations from the data type
+ * https://dev.to/svehla/typescript-object-fromentries-389c
+ */
+type RemoveReadonly<T> = { -readonly [P in keyof T]: RemoveReadonly<T[P]> };
+
+// shape validators inspired by: https://fettblog.eu/typescript-match-the-exact-object-shape/
+
+type TypeDoesNotExtendShape = never
+type ShapeDoesNotExtendType = never
+
+export type ValidateShape<T, Shape> = T extends Shape ?
+    Exclude<keyof T, keyof Shape> extends never ?
+    T : ShapeDoesNotExtendType : TypeDoesNotExtendShape
+
+export type ValidateShapeAndReturn<TypeToValidate, Shape, Return> =
+    TypeToValidate extends Shape ?
+    Exclude<keyof TypeToValidate, keyof Shape> extends never ? Return : ShapeDoesNotExtendType : TypeDoesNotExtendShape;
