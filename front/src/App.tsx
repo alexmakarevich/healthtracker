@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import "./App.css";
 import { NutritionItemTable } from "./components/Nutrition/NutritionItemTable";
-import EventTable from "./components/Events/EventTable";
+import { EventTable } from "./components/Events/EventTable";
 import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
 import { EventProvider } from "./context/EventContextProvider";
 import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate";
@@ -14,6 +14,7 @@ import { SampleVisualization } from "./components/Data/SampleVisualization";
 import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { SampleVisualizationTime } from "./components/Data/SampleVisualizationTime";
 import { SampleVisualizationUpdate } from "./components/Data/SampleVisualizationUpdate";
+import { ExerciseEventTable } from "./components/Events/ExerciseEventTable";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -32,7 +33,8 @@ function App() {
               <SampleVisualizationUpdate />
               <SampleVisualizationTime />
               <ExerciseVisualization />
-              <NutritionItemTable />
+              {/* <NutritionItemTable /> */}
+              <ExerciseEventTable />
               <EventTable />
             </NutritionItemProvider>
           </EventProvider>

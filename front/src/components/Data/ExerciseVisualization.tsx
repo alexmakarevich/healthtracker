@@ -4,7 +4,6 @@ import { useEventContext } from "../../context/EventContextProvider";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { LineAndDotChart, Scales } from "./LineAndDotChart";
-import { groupBy } from "../../utils/utils";
 
 interface ChartData {
   x: Date;
@@ -29,8 +28,6 @@ export const ExerciseVisualization = () => {
 
   if (!!events.all && !!exerciseInstances.all && !!exercises.all) {
     const allEvents = events.all;
-
-    console.log({ allEvents });
 
     let groupedChartData: Record<string, ChartData[]> = {};
 

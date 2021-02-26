@@ -5,7 +5,7 @@ import { ItemModes } from "../../utils/utils";
 import { EventFields } from "./EventFields";
 import { SimpleRow } from "../generic/layout/SimpleRow";
 
-export const EventTable = () => {
+const ExerciseEventTable = () => {
   const EventsFromContext = useEventContext();
 
   const newTestEvent = {
@@ -13,7 +13,7 @@ export const EventTable = () => {
   };
   return (
     <div>
-      <h2>Event Table</h2>
+      <h2>{ExerciseEventTable.name}</h2>
       <table>
         <thead>
           <tr>
@@ -63,3 +63,5 @@ export const EventTable = () => {
     </div>
   );
 };
+
+export { ExerciseEventTable };

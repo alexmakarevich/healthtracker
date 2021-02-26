@@ -89,6 +89,8 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   const x = axis("x")(xScale);
   const y = axis("y")(yScale);
 
+  console.log(x.range());
+
   useEffect(() => {
     // get svg base
     const svg = d3.select(ref.current);
@@ -101,6 +103,8 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
       .call(axisBottom(x));
 
     svg.select<SVGGElement>(".y-axis").call(d3.axisLeft(y));
+
+    const defaultRadius = 3;
 
     adjustedData.forEach((datum, index) => {
       // add/update line
@@ -142,7 +146,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
           .attr("opacity", 0.5)
           .attr("z-axis", 5)
           .attr("cy", (d) => y(d.y))
-          .attr("r", (d) => d.radius ?? 3)
+          .attr("r", (d) => d.radius ?? defaultRadius)
           .style("fill", colors(index.toString()))
           .style("stroke", "black")
           .style("stroke-width", 20);
@@ -163,8 +167,12 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
           .style("fill", colors(index.toString()))
           .attr("alignment-baseline", "bottom")
           .attr("dx", (d) => x(d.x))
-          .attr("dy", (d) =>
-            y(typeof d.y === "number" ? d.y + 1 + (d.radius ?? 0) / 2 : d.y)
+          .attr(
+            "dy",
+            (d) =>
+              y(typeof d.y === "number" ? d.y : d.y) -
+              (d.radius ?? defaultRadius) -
+              5
           )
           .text((d) => d.label ?? "");
 
