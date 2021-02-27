@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { WithId } from "../common/types/types";
+import { updateObject } from "../common/updateObject";
 import { ContextProps } from "../context/generateContext";
 
 import { ItemModes } from "../utils/utils";
-import { WithId } from "./types/types";
-import { updateObject } from "./updateObject";
 import { useComplexState } from "./useComplexState";
 
 export function useEntityBaseUseQuery<I extends WithId>(

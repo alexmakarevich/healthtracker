@@ -7,10 +7,6 @@ import Removable from "../generic/Removable";
 import { ItemModes, splitArray } from "../../utils/utils";
 import { createUseStyles } from "react-jss";
 import Collapsible, { Animations } from "../generic/Collapsible";
-import {
-  EntityBaseContextUseQuery,
-  useEntityBaseUseQuery,
-} from "../../common/useEntityBase";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
@@ -24,6 +20,10 @@ import { ExerciseFields } from "../Exercises/ExerciseFields";
 import { SimpleRow } from "../generic/layout/SimpleRow";
 import { exerciseInstanceDefaults } from "../../logic/exerciseInstanceLogic";
 import { FlexRow } from "../generic/layout/FlexRow";
+import {
+  EntityBaseContextUseQuery,
+  useEntityBaseUseQuery,
+} from "../../hooks/useEntityBase";
 
 const styles = () => ({
   itemsWrapper: {

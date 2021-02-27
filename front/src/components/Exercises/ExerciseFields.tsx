@@ -3,7 +3,7 @@ import { createUseStyles } from "react-jss";
 import {
   EntityBaseContextUseQuery,
   useEntityBaseUseQuery,
-} from "../../common/useEntityBase";
+} from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseType } from "../../logic/exerciseTypeLogic";

@@ -14,7 +14,7 @@ import { Box } from "../generic/styling/Box";
 import {
   EntityBaseContextUseQuery,
   useEntityBaseUseQuery,
-} from "../../common/useEntityBase";
+} from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { ExerciseInstance } from "../../logic/exerciseInstanceLogic";

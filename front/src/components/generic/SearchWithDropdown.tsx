@@ -11,7 +11,7 @@ import { InputText } from "./inputs/InputText";
 import SelectList, { SelectChild } from "./SelectList";
 import Fuse from "fuse.js";
 import { createUseStyles } from "react-jss";
-import { useHover } from "../../common/useHover";
+import { useHover } from "../../hooks/useHover";
 
 const styles = () => ({
   wrapper: {
