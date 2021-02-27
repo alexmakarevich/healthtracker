@@ -21,6 +21,7 @@ let Event = new Schema({
   timeEnd: {
     type: String,
   },
+  // TODO: replace children by< references to eventId in children types
   children: {
     nutritionItemIds: Array,
     exerciseInstanceIds: Array
