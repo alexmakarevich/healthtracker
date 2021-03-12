@@ -35,8 +35,6 @@ const Wrapper = ({ item, initialMode, children }: ExerciseTypeFieldProps) => {
     initialMode
   );
 
-  const { handleUpdate, handleCreate, handleDelete } = contextProps;
-
   return <Provider value={contextProps}>{children}</Provider>;
 };
 
@@ -55,7 +53,7 @@ const Buttons = () => {
       onCreate={handleCreate}
       onReset={reset}
       onSave={handleSave}
-      onCancel={handleCancel}
+      onCancelEdit={handleCancel}
       onSetMode={setMode}
       valid
     />

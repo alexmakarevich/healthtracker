@@ -15,6 +15,11 @@ import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { SampleVisualizationTime } from "./components/Data/SampleVisualizationTime";
 import { SampleVisualizationUpdate } from "./components/Data/SampleVisualizationUpdate";
 import { ExerciseEventTable } from "./components/Events/ExerciseEventTable";
+import { ExerciseInstanceTableNew } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTableNew";
+import {
+  AlertContext,
+  useAlertContext,
+} from "./components/generic/actions/AlertContext";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -26,22 +31,26 @@ function App() {
 
   return (
     <div className="App">
-      <ExerciseInstanceProvider>
-        <ExerciseProvider>
-          <EventProvider>
-            <NutritionItemProvider>
-              <SampleVisualizationUpdate />
-              <SampleVisualizationTime />
-              <ExerciseVisualization />
-              {/* <NutritionItemTable /> */}
-              <ExerciseEventTable />
-              <EventTable />
-            </NutritionItemProvider>
-          </EventProvider>
-          <ExerciseTypeTable />
-          <ExerciseInstanceTable />
-        </ExerciseProvider>
-      </ExerciseInstanceProvider>
+      <AlertContext>
+        <AlertTester></AlertTester>
+        <ExerciseInstanceProvider>
+          <ExerciseProvider>
+            <EventProvider>
+              <NutritionItemProvider>
+                <SampleVisualizationUpdate />
+                <SampleVisualizationTime />
+                <ExerciseVisualization />
+                <NutritionItemTable />
+                <ExerciseEventTable />
+                <EventTable />
+              </NutritionItemProvider>
+              <ExerciseInstanceTable />
+              <ExerciseInstanceTableNew />
+            </EventProvider>
+            <ExerciseTypeTable />
+          </ExerciseProvider>
+        </ExerciseInstanceProvider>
+      </AlertContext>
 
       <InputDate />
       <InputTime
@@ -56,3 +65,22 @@ function App() {
 }
 
 export default App;
+
+App.displayName = "";
+
+const AlertTester = () => {
+  const alertCtx = useAlertContext();
+
+  return (
+    <button
+      onClick={() =>
+        alertCtx.addAlert({
+          content: "sas" + new Date().toTimeString(),
+          id: new Date().toUTCString(),
+        })
+      }
+    >
+      add alert
+    </button>
+  );
+};

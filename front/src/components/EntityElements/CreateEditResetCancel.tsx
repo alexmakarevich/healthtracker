@@ -6,7 +6,7 @@ interface Props {
   mode: ItemModes;
   onSetMode: (mode: ItemModes) => void;
   onSave: () => void;
-  onCancel: () => void;
+  onCancelEdit: () => void;
   onReset: () => void;
   onCreate: () => void;
   valid: boolean;
@@ -32,7 +32,7 @@ const useStyles = createUseStyles(
 
 const CreateEditResetCancel = ({
   mode,
-  onCancel,
+  onCancelEdit,
   onReset,
   onSave,
   onCreate,
@@ -51,7 +51,7 @@ const CreateEditResetCancel = ({
           <button disabled={!valid} onClick={() => onSave()}>
             save
           </button>
-          <button onClick={() => onCancel()}>cancel</button>
+          <button onClick={() => onCancelEdit()}>cancel</button>
         </div>
       )}
       {mode === ItemModes.New && (

@@ -1,8 +1,9 @@
+import { json } from "d3-fetch";
 import React from "react";
 import { createUseStyles } from "react-jss";
 import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import {
-  ExerciseInstance,
+  ExerciseInstanceDAO,
   exerciseInstanceDefaults,
 } from "../../../logic/exerciseInstanceLogic";
 import { ItemModes } from "../../../utils/utils";
@@ -11,7 +12,7 @@ import { SimpleRow } from "../../generic/layout/SimpleRow";
 import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
 
 interface ExerciseInstanceFieldProps {
-  item: ExerciseInstance;
+  item: ExerciseInstanceDAO;
   initialMode: ItemModes;
 }
 
@@ -42,7 +43,7 @@ const ExerciseInstanceTable = () => {
           </tr>
         </thead>
         <tbody className={classes.list}>
-          {exerciseReps.all?.map((exercise, index) => (
+          {(exerciseReps.all ?? []).map((exercise, index) => (
             <Row
               key={index}
               item={exercise}
@@ -63,8 +64,12 @@ const ExerciseInstanceTable = () => {
 const Row = (props: ExerciseInstanceFieldProps) => {
   return (
     <ExerciseInstanceFields.Wrapper {...props}>
+      {/* <tr>
+        <div>{JSON.stringify(props.item)}</div>
+      </tr> */}
       <SimpleRow>
         <ExerciseInstanceFields.Buttons />
+        <ExerciseInstanceFields.Event />
         <ExerciseInstanceFields.Exercise />
         <ExerciseInstanceFields.Repetitions />
         <ExerciseInstanceFields.Weight />

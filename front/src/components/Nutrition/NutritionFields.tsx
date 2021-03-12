@@ -17,7 +17,7 @@ import {
 } from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
-import { ExerciseInstance } from "../../logic/exerciseInstanceLogic";
+import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import Removable from "../generic/Removable";
@@ -86,7 +86,7 @@ const Buttons = () => {
       onCreate={handleCreate}
       onReset={reset}
       onSave={handleSave}
-      onCancel={handleCancel}
+      onCancelEdit={handleCancel}
       onSetMode={setMode}
       valid
     />

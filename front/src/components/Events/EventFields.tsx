@@ -25,6 +25,9 @@ import {
   useEntityBaseUseQuery,
 } from "../../hooks/useEntityBase";
 
+// TODO: deprecate or rewrite with parent/child logic between events and instances moved into instances,
+// i.e. instead of interating of "children" field of event, use "eventid" field in and exercise instance, or nutrition instance
+
 const styles = () => ({
   itemsWrapper: {
     display: "flex",
@@ -87,7 +90,7 @@ const Buttons = () => {
       onCreate={handleCreate}
       onReset={reset}
       onSave={handleSave}
-      onCancel={handleCancel}
+      onCancelEdit={handleCancel}
       onSetMode={setMode}
       valid
     />
@@ -254,15 +257,15 @@ const ExerciseItems = () => {
           <ExerciseInstanceFields.Wrapper
             item={exerciseInstanceDefaults}
             initialMode={ItemModes.New}
-            onCreate={(item) => {
-              console.log("onCreate", item);
-              if (mode === ItemModes.New) {
-                handleCreate(addExercise(item._id));
-                setShowAddExerciseInstance(false);
-              } else {
-                handleSetOrUpdate(addExercise(item._id));
-              }
-            }}
+            // onCreate={(item) => {
+            //   console.log("onCreate", item);
+            //   if (mode === ItemModes.New) {
+            //     handleCreate(addExercise(item._id));
+            //     setShowAddExerciseInstance(false);
+            //   } else {
+            //     handleSetOrUpdate(addExercise(item._id));
+            //   }
+            // }}
           >
             <FlexRow childClassName={classes.item}>
               <ExerciseInstanceFields.Buttons />

@@ -8,6 +8,9 @@ import { SimpleRow } from "../generic/layout/SimpleRow";
 export const EventTable = () => {
   const EventsFromContext = useEventContext();
 
+  // TODO: deprecate or rewrite with parent/child logic between events and instances moved into instances,
+  // i.e. instead of interating of "children" field of event, use "eventid" field in and exercise instance, or nutrition instance
+
   const newTestEvent = {
     ...eventDefaults,
   };

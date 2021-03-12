@@ -50,7 +50,6 @@ export function useEntityBaseUseQuery<I extends WithId>(
     context.update(newObject, {
       onSuccess: () => {
         context.refresh();
-        console.log("update", newObject);
       },
       onError: () => console.log("Cannot update", newObject),
     });
@@ -111,7 +110,9 @@ export interface EntityBaseContextUseQuery<Item> {
   setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
   handleCreate: (partialItem?: Partial<Item>) => void;
   handleCancel: () => void;
-  handleUpdate: (newProps: Partial<Item>) => void;
+  handleUpdate: (
+    newItem: Partial<Item>
+  ) => void /** replace partial with complete item */;
   handleSave: () => void;
   handleDelete: () => void;
   reset: () => void;

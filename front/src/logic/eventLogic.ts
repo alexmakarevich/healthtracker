@@ -38,6 +38,11 @@ export const eventDefaults: Event = {
   items: []
 };
 
+/** 
+ * @deprecated
+ * this logic moves to children (with possible link duplication built in the future)
+ * TODO: remove this entirely
+ */
 export const eventLogic = (event: Event) => {
   const updateEvent = updateObject(event)
   const updateChildren = updateObject(event.children)

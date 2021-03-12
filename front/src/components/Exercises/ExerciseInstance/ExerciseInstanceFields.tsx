@@ -8,8 +8,9 @@ import { createContextDefined } from "../../../context/ContextWrapper";
 import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import {
-  ExerciseInstance,
+  ExerciseInstanceDAO,
   exerciseInstanceDefaults,
+  useExerciseInstance,
 } from "../../../logic/exerciseInstanceLogic";
 import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../../utils/utils";
@@ -17,6 +18,9 @@ import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCance
 import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
+import { useEventContext } from "../../../context/EventContextProvider";
+import { eventDefaults } from "../../../logic/eventLogic";
+import { EventFields } from "../../Events/EventFields";
 
 const useStyles = createUseStyles(
   {
@@ -38,51 +42,101 @@ const useStyles = createUseStyles(
 );
 
 export interface ExerciseInstanceProps {
-  item: ExerciseInstance;
+  item: ExerciseInstanceDAO;
   initialMode: ItemModes;
   children: ReactNode;
-  onCreate?: (item: ExerciseInstance) => void;
 }
 
-const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<ExerciseInstance>
->();
+const [
+  useThisContext,
+  Provider,
+] = createContextDefined<ThisContextValue /** TODO: fix type any */>();
+
+type ThisContextValue = ReturnType<typeof useExerciseInstance> & {
+  // setOrUpdate: (input: ExerciseInstanceDAO) => void;
+};
 
 const Wrapper = ({
   item,
   initialMode,
   children,
-  onCreate,
-}: ExerciseInstanceProps) => {
-  const contextProps = useEntityBaseUseQuery(
-    item,
-    useExerciseInstanceContext(),
-    initialMode,
-    onCreate
-  );
+}: // onCreate,
+ExerciseInstanceProps) => {
+  // const EVENTS = useEventContext();
 
-  return <Provider value={contextProps}>{children}</Provider>;
+  // const genericActions = useEntityBaseUseQuery(
+  //   item,
+  //   useExerciseInstanceContext(),
+  //   initialMode,
+  //   onCreate
+  // );
+
+  // const { handleCreate, complexState } = genericActions;
+
+  // const contextProps = {
+  //   ...genericActions,
+  //   createWithNewEvent: () =>
+  //     EVENTS.create(
+  //       { ...eventDefaults },
+  //       {
+  //         onSuccess: (event) =>
+  //           handleCreate({ ...complexState, eventId: event._id }),
+  //         onError: (err) =>
+  //           console.log(
+  //             "Couldn't create event while creating exercise instance " + err
+  //           ),
+  //       }
+  //     ),
+  // };
+
+  if (item._id === "60478060db4b530f68a1e777") console.log({ item });
+
+  const EI = useExerciseInstance({
+    data: item,
+    initialMode,
+  });
+
+  if (item._id === "60478060db4b530f68a1e777") console.log({ EI });
+
+  // const newContextProps: EntityBaseContextUseQuery<ExerciseInstanceDAO> = {};
+
+  return <Provider value={EI}>{children}</Provider>;
 };
 
 const Buttons = () => {
   const {
     mode,
-    handleCreate,
+    create,
+    data,
     reset,
-    handleSave,
-    handleCancel,
+    update,
     setMode,
+    // createWithNewEvent,
   } = useThisContext();
+
+  const events = useEventContext();
+
   return (
     <CreateEditResetCancel
       mode={mode}
-      onCreate={() => {
-        const created = handleCreate();
-        console.log("onCreate", created);
-      }}
+      // TODO: separate event creation from exercise instance creation
+      onCreate={() =>
+        create &&
+        events.create(
+          { ...eventDefaults },
+          {
+            onSuccess: (event) => {
+              create(
+                { ...data, eventId: event._id },
+                { onSuccess: () => reset() }
+              );
+            },
+          }
+        )
+      }
       onReset={reset}
-      onSave={handleSave}
-      onCancel={handleCancel}
+      onSave={update}
+      onCancelEdit={() => setMode(ItemModes.Show)}
       onSetMode={setMode}
       valid
     />
@@ -92,9 +146,9 @@ const Buttons = () => {
 const Repetitions = () => {
   const classes = useStyles();
 
-  const { complexState, handleSetOrUpdate, mode } = useThisContext();
+  const { data, setOrUpdate, update, mode, reset } = useThisContext();
 
-  if (mode === ItemModes.Show && !complexState.repetitions) {
+  if (mode === ItemModes.Show && !data.repetitions) {
     return null;
   } else {
     return (
@@ -102,14 +156,17 @@ const Repetitions = () => {
         <input
           disabled={mode === ItemModes.Show}
           type={"number"}
-          value={complexState.repetitions ?? 0}
+          value={data.repetitions ?? 0}
           key={"check"}
           className={classes.repsInput}
           onChange={(e: React.ChangeEvent<any>) =>
-            handleSetOrUpdate({ repetitions: parseInt(e.target.value) })
+            setOrUpdate({
+              ...data,
+              repetitions: parseInt(e.target.value),
+            })
           }
         />
-        <div>reps</div>
+        {/* <div>reps</div> */}
       </div>
     );
   }
@@ -118,35 +175,35 @@ const Repetitions = () => {
 const Weight = () => {
   const classes = useStyles();
 
-  const { complexState, handleSetOrUpdate, mode } = useThisContext();
+  const { data, setOrUpdate, mode } = useThisContext();
 
-  if (mode === ItemModes.Show && !complexState.weightKg) {
-    return null;
-  } else {
-    return (
-      <div>
-        <input
-          disabled={mode === ItemModes.Show}
-          type={"number"}
-          value={complexState.weightKg}
-          key={"check"}
-          className={classes.weightInput}
-          onChange={(e: React.ChangeEvent<any>) =>
-            handleSetOrUpdate({ weightKg: parseInt(e.target.value) })
-          }
-        />
-        <div>kg</div>
-      </div>
-    );
-  }
+  // if (mode === ItemModes.Show && !data.weightKg) {
+  //   return null;
+  // } else {
+  return (
+    <div>
+      <input
+        disabled={mode === ItemModes.Show}
+        type={"number"}
+        value={data.weightKg ?? 0}
+        key={"check"}
+        className={classes.weightInput}
+        onChange={(e: React.ChangeEvent<any>) =>
+          setOrUpdate({ ...data, weightKg: parseInt(e.target.value) })
+        }
+      />
+      {/* <div>kg</div> */}
+    </div>
+  );
+  // }
 };
 
 const Duration = () => {
   const classes = useStyles();
 
-  const { complexState, handleSetOrUpdate, mode } = useThisContext();
+  const { data, setOrUpdate, update, mode, reset } = useThisContext();
 
-  if (mode === ItemModes.Show && !complexState.durationSeconds) {
+  if (mode === ItemModes.Show && !data.durationSeconds) {
     return null;
   } else {
     return (
@@ -154,29 +211,44 @@ const Duration = () => {
         <input
           disabled={mode === ItemModes.Show}
           type={"number"}
-          value={complexState.durationSeconds}
+          value={data.durationSeconds ?? 0}
           key={"check"}
           className={classes.durationInput}
-          onChange={(e: React.ChangeEvent<any>) =>
-            handleSetOrUpdate({ durationSeconds: parseInt(e.target.value) })
-          }
+          onChange={async (e: React.ChangeEvent<any>) => {
+            // setOrUpdate({ ...data, durationSeconds: parseInt(e.target.value) })
+            setOrUpdate({
+              ...data,
+              durationSeconds: parseInt(e.target.value),
+            });
+          }}
         />
-        <div>sec</div>
       </div>
     );
   }
 };
 
+const Event = () => {
+  const { data, event, setOrUpdate } = useThisContext();
+
+  return event ? (
+    <EventFields.Wrapper initialMode={ItemModes.QuickEdit} event={event}>
+      <EventFields.DateTime />
+    </EventFields.Wrapper>
+  ) : null;
+};
+
 const Exercise = () => {
-  const { complexState, handleSetOrUpdate } = useThisContext();
+  const { data, exercise, setOrUpdate, update, mode, reset } = useThisContext();
 
   const exCtx = useExerciseContext();
 
-  const exercise = exCtx.getOneFromContext(complexState.exerciseId);
-
   const [showSelect, setShowSelect] = useState(
-    complexState.exerciseId === exerciseInstanceDefaults.exerciseId
+    data.exerciseId === exerciseInstanceDefaults.exerciseId
   );
+
+  const exerciseId = data.exerciseId;
+
+  const areNoneSelected = useMemo(() => !exercise, [exerciseId]);
 
   const dropdownItems = exCtx.all?.map((exercise) => ({
     id: exercise._id,
@@ -188,19 +260,20 @@ const Exercise = () => {
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       <span> {exercise?.title}</span>
-      {showSelect && (
+      {/* TODO: check why the drowpdwon is selected the whole time - likely has to do with the exercise query not being ready */}
+      {(areNoneSelected || showSelect) && (
         <PickOrAdd
           dropdownItems={dropdownItems}
           onSelect={(id: string) => {
-            handleSetOrUpdate({ exerciseId: id });
-            setShowSelect(false);
+            update({ ...data, exerciseId: id });
+            reset();
           }}
           onCreateNew={(title) =>
             exCtx.create({ ...exerciseTypeDefaults, title: title })
           }
         />
       )}
-      {complexState.exerciseId !== exerciseInstanceDefaults.exerciseId && (
+      {data.exerciseId !== exerciseInstanceDefaults.exerciseId && (
         <button onClick={() => setShowSelect(!showSelect)}>
           {!showSelect ? "change" : "cancel"}
         </button>
@@ -210,13 +283,14 @@ const Exercise = () => {
 };
 
 const Delete = () => {
-  const { handleDelete, mode } = useThisContext();
+  const { delete: del, mode } = useThisContext();
 
-  return <DeleteButton onDelete={handleDelete} mode={mode} />;
+  return <DeleteButton onDelete={() => del?.()} mode={mode} />;
 };
 
 const ExerciseInstanceFields = {
   Wrapper,
+  Event,
   Buttons,
   Exercise,
   Repetitions,
