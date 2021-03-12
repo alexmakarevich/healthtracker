@@ -238,7 +238,7 @@ const Event = () => {
 };
 
 const Exercise = () => {
-  const { data, exercise, setOrUpdate, update, mode, reset } = useThisContext();
+  const { data, exercise, setOrUpdate, reset } = useThisContext();
 
   const exCtx = useExerciseContext();
 
@@ -265,8 +265,9 @@ const Exercise = () => {
         <PickOrAdd
           dropdownItems={dropdownItems}
           onSelect={(id: string) => {
-            update({ ...data, exerciseId: id });
-            reset();
+            console.log("onSelect", id);
+            setOrUpdate({ ...data, exerciseId: id });
+            setShowSelect(false);
           }}
           onCreateNew={(title) =>
             exCtx.create({ ...exerciseTypeDefaults, title: title })
