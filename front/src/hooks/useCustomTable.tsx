@@ -1,5 +1,5 @@
 "use strict";
-import React, { useMemo, useState } from "react";
+import React, { ReactNode } from "react";
 import { ValidateShapeAndReturn } from "../utils/utils";
 
 export interface Cell<T> {
@@ -26,21 +26,35 @@ export type Columns<T> = {
   };
 };
 
+export type Row<T, RowWrapperProps> = {
+  cellData: CellData<T>;
+  rowWrapper?: <PropsWithChildren extends { children: ReactNode }>(
+    props: PropsWithChildren
+  ) => ReactNode;
+  rowWrapperProps?: RowWrapperProps;
+};
+
 /** the shape validator ensures that the type of data and the provided array of columns are an exact match */
-export interface UseCustomTableProps<T, K extends keyof T> {
-  data: ValidateShapeAndReturn<T, Record<K, T[K]>, CellData<T>[]>;
+export interface UseCustomTableProps<T, K extends keyof T, RowWrapperProps> {
+  data: ValidateShapeAndReturn<T, Record<K, T[K]>, Row<T, RowWrapperProps>[]>;
   columns: ValidateShapeAndReturn<T, Record<K, T[K]>, Columns<T>>;
   columnKeys: K[];
+  rowWrapperFn?: (
+    props: RowWrapperProps
+  ) => <PropsWithChildren extends { children: ReactNode }>(
+    props: PropsWithChildren
+  ) => JSX.Element;
   sort?: { by: K; isAscending: boolean };
 }
 
-export const useCustomTable = <T, K extends keyof T>({
+export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
   data,
   columns,
   columnKeys,
+  rowWrapperFn,
   sort,
-}: UseCustomTableProps<T, K>) => {
-  console.log({ data });
+}: UseCustomTableProps<T, K, RowWrapperProps>) => {
+  // console.log({ data });
 
   const columnsToMerge = columnKeys.reduce<K[]>(
     (prevKeys, currKey) =>
@@ -49,7 +63,7 @@ export const useCustomTable = <T, K extends keyof T>({
   );
 
   const sortedData = sort
-    ? data.sort((a: CellData<T>, b: CellData<T>) => {
+    ? data.sort((a: Row<T, RowWrapperProps>, b: Row<T, RowWrapperProps>) => {
         const backupSortFn: (a: T[K], b: T[K]) => number = (a, b) => {
           if (
             (typeof a === "number" && typeof b === "number") ||
@@ -68,7 +82,10 @@ export const useCustomTable = <T, K extends keyof T>({
             a: T[K],
             b: T[K]
           ) => -1 | 0 | 1) ?? backupSortFn;
-        const comparison = sortFn(a[sort.by].data, b[sort.by].data);
+        const comparison = sortFn(
+          a.cellData[sort.by].data,
+          b.cellData[sort.by].data
+        );
 
         return sort.isAscending ? comparison : -comparison;
       })
@@ -82,27 +99,41 @@ export const useCustomTable = <T, K extends keyof T>({
   const headerCellProps = columnKeys.reduce<
     React.DOMAttributes<HTMLTableHeaderCellElement>[]
   >(
-    (accumulated, current) => [
+    (accumulated, current, index) => [
       ...accumulated,
-      { children: columns[current].title },
+      { children: columns[current].title, key: index },
     ],
     []
   );
 
   const rowAndCellProps = mergedData.reduce<
     {
-      rowProps: React.DOMAttributes<HTMLTableRowElement>;
+      rowWrapper:
+        | undefined
+        | (<PropsWithChildren extends { children: ReactNode }>(
+            props: PropsWithChildren
+          ) => JSX.Element);
+      rowProps: React.TableHTMLAttributes<HTMLTableRowElement>;
       cellProps: React.TdHTMLAttributes<HTMLTableCellElement>[];
     }[]
-  >((accumulated, currentRow, index) => {
+  >((accumulated, currentRow, rowIndex) => {
     return [
       ...accumulated,
       {
-        rowProps: {},
+        rowWrapper:
+          rowWrapperFn &&
+          currentRow.rowWrapperProps &&
+          rowWrapperFn(currentRow.rowWrapperProps),
+        rowProps: {
+          key: rowIndex,
+          className:
+            "" /** TODO: figure out why removing className breaks everything */,
+          // children: ["child"],
+        },
         cellProps: columnKeys.reduce<
           React.TdHTMLAttributes<HTMLTableCellElement>[]
-        >((acc, currentColKey) => {
-          const { data, rowSpan, colSpan, isHidden } = currentRow[
+        >((acc, currentColKey, cellIndex) => {
+          const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
             currentColKey
           ];
           const { renderFn } = columns[currentColKey] as Columns<T>[K];
@@ -115,7 +146,7 @@ export const useCustomTable = <T, K extends keyof T>({
                   children: renderFn?.(data) ?? data,
                   rowSpan,
                   colSpan,
-                  key: index,
+                  key: cellIndex,
                 },
               ];
         }, []),
@@ -131,23 +162,23 @@ export const useCustomTable = <T, K extends keyof T>({
   };
 };
 
-function mergeRepeatingRows<T, K extends keyof T>(
-  data: CellData<T>[],
+function mergeRepeatingRows<T, K extends keyof T, RowWrapperProps>(
+  data: Row<T, RowWrapperProps>[],
   columnsToMerge: K[]
 ) {
-  let newData: CellData<T>[] = data;
+  let newData: Row<T, RowWrapperProps>[] = data;
 
   /** the top row is covered in the second to last step */
   for (let i = data.length - 1; i >= 1; i--) {
     const thisRow = data[i];
     const aboveRow = data[i - 1];
 
-    let newThisRow: CellData<T> = { ...thisRow };
-    let newAboveRow: CellData<T> = { ...aboveRow };
+    let newThisRow: Row<T, RowWrapperProps> = { ...thisRow };
+    let newAboveRow: Row<T, RowWrapperProps> = { ...aboveRow };
 
     columnsToMerge.forEach((columnKey) => {
-      const thisCell = thisRow[columnKey];
-      const aboveCell = aboveRow[columnKey];
+      const thisCell = thisRow.cellData[columnKey];
+      const aboveCell = aboveRow.cellData[columnKey];
 
       let newThisCell: CellData<T>[K];
       let newAboveCell: CellData<T>[K];
@@ -167,8 +198,8 @@ function mergeRepeatingRows<T, K extends keyof T>(
         };
       }
 
-      newThisRow[columnKey] = newThisCell;
-      newAboveRow[columnKey] = newAboveCell;
+      newThisRow.cellData[columnKey] = newThisCell;
+      newAboveRow.cellData[columnKey] = newAboveCell;
     });
 
     newData[i] = { ...newThisRow };
