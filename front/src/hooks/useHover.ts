@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 
 // based on https://gist.github.com/mbelsky/72c1117a63489daf8e6067049d4532d0
 

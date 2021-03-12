@@ -6,9 +6,7 @@ export function createContextDefined<ContextType>() {
   function useContextDefined() {
     const c = useContext(firstContext);
     if (!c) {
-      throw new Error(
-        "useContextDefined must be inside a Provider with a value"
-      );
+      throw new Error("context must be inside a Provider with a value");
     }
     return c;
   }
