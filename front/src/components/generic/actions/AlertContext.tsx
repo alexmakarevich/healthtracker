@@ -115,20 +115,20 @@ export const AlertContext = ({ children }: AlertContextProps) => {
     <AlertContextProvider value={{ addAlert }}>
       {children}
       <div className={classes.container}>
-        {/* <AnimatePresence> */}
-        {alerts.map((alert, i) => (
-          <motion.li
-            key={alert.id}
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-          >
-            <Alert key={alert.id} onRemove={() => removeAlert(alert.id)}>
-              {alert.content}
-            </Alert>
-          </motion.li>
-        ))}
-        {/* </AnimatePresence> */}
+        <AnimatePresence>
+          {alerts.map((alert, i) => (
+            <motion.li
+              key={alert.id}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <Alert key={alert.id} onRemove={() => removeAlert(alert.id)}>
+                {alert.content}
+              </Alert>
+            </motion.li>
+          ))}
+        </AnimatePresence>
       </div>
     </AlertContextProvider>
   );
