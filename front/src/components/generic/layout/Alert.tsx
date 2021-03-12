@@ -1,32 +1,67 @@
 import React, { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { classConcat, Enummed } from "../../../utils/utils";
+import { Box } from "../styling/Box";
 
-enum AlertTypes {
-  POSITIVE = "POSITIVE",
-  NEGATIVE = "NEGATIVE",
+// const enum AlertTypes {
+//   POSITIVE = "POSITIVE",
+//   NEGATIVE = "NEGATIVE",
+//   NEUTRAL = "NEUTRAL",
+// }
+
+const AlertTypes = {
+  POSITIVE: {
+    name: "POSITIVE",
+    style: {
+      background: "lightgreen",
+    },
+  },
+  NEGATIVE: {
+    name: "NEGATIVE",
+    style: {
+      background: "red",
+    },
+  },
+  NEUTRAL: {
+    name: "NEUTRAL",
+    style: {
+      background: "lightgray",
+    },
+  },
+} as const;
+
+interface AlertProps {
+  type?: Enummed<typeof AlertTypes>;
+  children: ReactNode;
+  className?: string;
 }
 
-interface AleertProps {
-  type?: AlertTypes;
-  children: ReactNode;
+interface StyleProps {
+  type: AlertProps["type"];
 }
 
 const useStyles = createUseStyles(
-  {
-    wrapper: {
-      minHeight: "100px",
-      minWidth: "300px",
-      background: "green",
-      position: "fixed",
-      bottom: "20px",
-      right: "20pxx",
-    },
-  },
+  () => ({
+    wrapper: ({ type }: StyleProps) => ({
+      ...type?.style,
+      minHeight: "30px",
+      display: "inline-block",
+      wordBreak: "break-word",
+      width: "100%",
+      margin: "5px",
+    }),
+  }),
 
-  { name: "ExerciseFields" }
+  { name: "Alert" }
 );
 
-export const Alert = ({ children, type }: AleertProps) => {
-  const classes = useStyles();
-  return <div className={classes.wrapper}>{children}</div>;
+export const Alert = ({
+  children,
+  type = AlertTypes.NEUTRAL,
+  className,
+}: AlertProps) => {
+  const classes = useStyles({ type });
+  return (
+    <Box className={classConcat(classes.wrapper, className)}>{children}</Box>
+  );
 };
