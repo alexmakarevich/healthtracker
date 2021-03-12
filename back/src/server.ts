@@ -3,16 +3,16 @@
 // https://medium.com/swlh/how-to-create-your-first-mern-mongodb-express-js-react-js-and-node-js-stack-7e8b20463e66
 // https://dev.to/aurelkurtula/building-a-restful-api-with-express-and-mongodb--3mmh
 import { nutritionItemRoutes } from "./nutrition_item-router";
-import { eventRoutes } from "./event-router";
-import { exerciseTypeRoutes } from "./exercise_type_router";
+import * as Event from "./event_router";
+import { Exercise } from "./exercise_type_router";
 import { exerciseInstanceRoutes } from "./exercise_instance_router";
-
-const express = require("express");
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as cors from "cors";
+import * as mongoose from "mongoose";
 
 const app = express();
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const mongoose = require("mongoose");
+
 const PORT = 4000;
 
 app.use(cors());
@@ -30,8 +30,8 @@ connection.once("open", function () {
 
 // app.use("/todos", todoRoutes);
 app.use("/nutritionItems", nutritionItemRoutes);
-app.use("/events", eventRoutes);
-app.use("/exerciseTypes", exerciseTypeRoutes);
+app.use("/events", Event.router);
+app.use("/exerciseTypes", Exercise.router);
 app.use("/exerciseInstances", exerciseInstanceRoutes);
 
 app.listen(PORT, function () {

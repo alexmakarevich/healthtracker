@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
@@ -17,6 +17,9 @@ let NutririonItem = new Schema({
   },
 });
 
-const nutritionItemRoutes = generateRoutes("NutritionItem", NutririonItem);
+const { router: nutritionItemRoutes } = generateRoutes(
+  "NutritionItem",
+  NutririonItem
+);
 
 export { nutritionItemRoutes };

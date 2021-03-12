@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
@@ -24,12 +24,10 @@ let Event = new Schema({
   // TODO: replace children by< references to eventId in children types
   children: {
     nutritionItemIds: Array,
-    exerciseInstanceIds: Array
+    exerciseInstanceIds: Array,
   },
   // TODO: probably delete
-  items: [{type: String, id: String}]
+  items: [{ type: String, id: String }],
 });
 
-const eventRoutes = generateRoutes("Event", Event);
-
-export { eventRoutes };
+export const { router, Model } = generateRoutes("Event", Event);

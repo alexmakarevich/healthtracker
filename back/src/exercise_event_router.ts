@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import * as mongoose from "mongoose";
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
@@ -19,11 +19,13 @@ let ExerciseEvent = new Schema({
     type: Number,
   },
   durationSeconds: {
-    type: Number
-  }
-
+    type: Number,
+  },
 });
 
-const exerciseEventRoutes = generateRoutes("ExerciseEvent", ExerciseEvent);
+const { router: exerciseEventRoutes, Model } = generateRoutes(
+  "ExerciseEvent",
+  ExerciseEvent
+);
 
-export { exerciseEventRoutes };
+export { exerciseEventRoutes, Model };
