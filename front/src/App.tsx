@@ -20,6 +20,7 @@ import {
   AlertContext,
   useAlertContext,
 } from "./components/generic/actions/AlertContext";
+import { v4 as uuid } from "uuid";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -76,7 +77,6 @@ const AlertTester = () => {
       onClick={() =>
         alertCtx.addAlert({
           content: "sas" + new Date().toTimeString(),
-          id: new Date().toUTCString(),
         })
       }
     >

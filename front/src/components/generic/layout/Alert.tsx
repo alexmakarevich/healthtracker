@@ -34,6 +34,7 @@ interface AlertProps {
   type?: Enummed<typeof AlertTypes>;
   children: ReactNode;
   className?: string;
+  onRemove?: () => void;
 }
 
 interface StyleProps {
@@ -50,6 +51,10 @@ const useStyles = createUseStyles(
       width: "100%",
       margin: "5px",
     }),
+    flex: {
+      display: "inline-flex",
+      width: "100%",
+    },
   }),
 
   { name: "Alert" }
@@ -59,9 +64,15 @@ export const Alert = ({
   children,
   type = AlertTypes.NEUTRAL,
   className,
+  onRemove,
 }: AlertProps) => {
   const classes = useStyles({ type });
   return (
-    <Box className={classConcat(classes.wrapper, className)}>{children}</Box>
+    <Box className={classConcat(classes.wrapper, className)}>
+      <div className={classes.flex}>
+        {children}
+        <button onClick={onRemove}>X</button>
+      </div>
+    </Box>
   );
 };
