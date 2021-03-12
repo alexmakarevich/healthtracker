@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat, Enummed } from "../../../utils/utils";
 import { Box } from "../styling/Box";
@@ -50,10 +50,17 @@ const useStyles = createUseStyles(
       wordBreak: "break-word",
       width: "100%",
       margin: "5px",
+      fontSize: "0.75em",
     }),
     flex: {
       display: "inline-flex",
       width: "100%",
+      alignItems: "center",
+    },
+    button: {
+      marginLeft: "10px",
+      height: "25px",
+      width: "25px",
     },
   }),
 
@@ -71,7 +78,9 @@ export const Alert = ({
     <Box className={classConcat(classes.wrapper, className)}>
       <div className={classes.flex}>
         {children}
-        <button onClick={onRemove}>X</button>
+        <button className={classes.button} onClick={onRemove}>
+          X
+        </button>
       </div>
     </Box>
   );

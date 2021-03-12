@@ -1,5 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React, { ReactNode, useCallback, useEffect, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../../context/ContextWrapper";
 import { usePrevious } from "../../../hooks/usePrevious";
@@ -44,25 +50,40 @@ export const AlertContext = ({ children }: AlertContextProps) => {
   const classes = useStyles();
   const [alerts, setAlerts] = useState<AlertObject[]>([]);
   const prevAlerts = usePrevious(alerts);
+  const alertsRef = useRef(alerts);
 
   useEffect(() => {
-    if (alerts.length > (prevAlerts?.length ?? 0)) {
-      const timeout = setTimeout(() => {
-        console.log("delete");
-        console.log(alerts.length, prevAlerts?.length);
+    console.log({ alerts, prevAlerts });
 
-        setAlerts((alerts) => alerts.slice(1));
+    if (alerts.length >= (prevAlerts?.length ?? 1)) {
+      const newest = alerts[alerts.length - 1];
+      const timeout = setTimeout(() => {
+        const isFound = alerts.includes(newest);
+        console.log("deleteIfFound", {
+          isFound,
+          oldest: newest,
+          alerts,
+          prevAlerts,
+          ref: alertsRef.current,
+        });
+
+        // isFound && setAlerts((alerts) => alerts.slice(1));
+        // console.log(alerts.length, prevAlerts?.length);
+
+        // setAlerts((alerts) => alerts.slice(1));
+        removeAlert(newest.id);
+
         return () => {
           clearTimeout(timeout);
         };
-      }, 5000);
+      }, 3000);
     }
   }, [alerts]);
 
   const addAlert = useCallback(
     ({ content, id = uuid() }: PartialPartial<AlertObject, "id">) => {
       // max 5 items at once
-      setAlerts((alerts) => [...alerts.slice(-4), { content, id }]);
+      setAlerts((alerts) => [...alerts.slice(-6), { content, id }]);
       return id;
     },
     [setAlerts]
@@ -70,34 +91,44 @@ export const AlertContext = ({ children }: AlertContextProps) => {
 
   const removeAlert = useCallback(
     (id: string) => {
+      console.log("removeAlert");
+
       setAlerts((currAlerts) => {
         const index = currAlerts.findIndex((alert) => alert.id === id);
-        console.log({ currAlerts, index });
+        const alertsAfterRemoval = [
+          ...currAlerts.slice(0, index),
+          ...currAlerts.slice(index + 1),
+        ];
+        console.log({ currAlerts, idToRenove: id, index, alertsAfterRemoval });
 
-        return [...currAlerts.slice(0, index), ...currAlerts.slice(index + 1)];
+        return index !== -1
+          ? [...currAlerts.slice(0, index), ...currAlerts.slice(index + 1)]
+          : currAlerts;
       });
     },
     [setAlerts]
   );
 
+  // BUG: sometimes additional items randomly appear
+
   return (
     <AlertContextProvider value={{ addAlert }}>
       {children}
       <div className={classes.container}>
-        <AnimatePresence>
-          {alerts.map((alert, i) => (
-            <motion.li
-              key={i}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <Alert key={i} onRemove={() => removeAlert(alert.id)}>
-                {alert.content}
-              </Alert>
-            </motion.li>
-          ))}
-        </AnimatePresence>
+        {/* <AnimatePresence> */}
+        {alerts.map((alert, i) => (
+          <motion.li
+            key={alert.id}
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <Alert key={alert.id} onRemove={() => removeAlert(alert.id)}>
+              {alert.content}
+            </Alert>
+          </motion.li>
+        ))}
+        {/* </AnimatePresence> */}
       </div>
     </AlertContextProvider>
   );
