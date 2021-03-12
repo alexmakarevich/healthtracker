@@ -45,6 +45,8 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   minY: minYForce,
   maxY: maxYForce,
 }: LineAndDotChartProps<xType, yType>) => {
+  // if ((data.length = 0)) return null;
+
   type DefinedData = Data<xType, yType>;
 
   const sortByX = (data: DefinedData[]) =>
@@ -59,10 +61,10 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 
   const dataFlat = data.flat();
 
-  const minX = minXForce ?? sortByX(dataFlat)[0].x;
-  const maxX = maxXForce ?? sortByX(dataFlat)[dataFlat.length - 1].x;
-  const minY = minYForce ?? sortByY(dataFlat)[0].y;
-  const maxY = maxYForce ?? sortByY(dataFlat)[dataFlat.length - 1].y;
+  const minX = minXForce ?? sortByX(dataFlat)[0]?.x ?? 0;
+  const maxX = maxXForce ?? sortByX(dataFlat)[dataFlat.length - 1]?.x ?? 0;
+  const minY = minYForce ?? sortByY(dataFlat)[0]?.y ?? 0;
+  const maxY = maxYForce ?? sortByY(dataFlat)[dataFlat.length - 1]?.y ?? 0;
 
   const adjustedData =
     sort === Sort.x ? dataSortedByX : Sort.y ? dataSortedByY : data;

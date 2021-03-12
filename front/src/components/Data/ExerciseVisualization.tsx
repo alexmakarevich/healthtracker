@@ -17,6 +17,9 @@ export const ExerciseVisualization = () => {
   const exerciseInstances = useExerciseInstanceContext();
   const exercises = useExerciseContext();
 
+  if (!events.all || !exerciseInstances.all || !exercises.all) {
+    return null;
+  }
   const dummyChartData = [
     { x: new Date("2020-12-02"), y: 20, radius: 3 },
     { x: new Date(), y: 90, radius: 15 },
