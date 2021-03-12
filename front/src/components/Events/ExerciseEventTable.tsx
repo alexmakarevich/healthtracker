@@ -1,44 +1,23 @@
-import React, { ReactNode, useContext, useState } from "react";
+import React, { useState } from "react";
 import { useEventContext } from "../../context/EventContextProvider";
-import { Event, eventDefaults } from "../../logic/eventLogic";
+import { Event } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
-import { EventFields } from "./EventFields";
-import { SimpleRow } from "../generic/layout/SimpleRow";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import {
-  CellData,
   Columns,
   Row,
   useCustomTable,
   UseCustomTableProps,
 } from "../../hooks/useCustomTable";
-import { sort } from "d3";
-import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
-import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
+import {
+  ExerciseInstanceDAO,
+  exerciseInstanceDefaults,
+} from "../../logic/exerciseInstanceLogic";
 import { ExerciseInstanceFields } from "../Exercises/ExerciseInstance/ExerciseInstanceFields";
 
 const ExerciseEventTable = () => {
   const events = useEventContext();
   const exerciseInstances = useExerciseInstanceContext();
-  const exercises = useExerciseContext();
-
-  function writeEventIdsToExerciseInstances(
-    events: Event[],
-    ei: ExerciseInstanceDAO[]
-  ) {
-    for (const event of events) {
-      if (event.children.exerciseInstanceIds.length > 0) {
-        for (const eiId of event.children.exerciseInstanceIds) {
-          const exerciseInstance = exerciseInstances.getOneFromContext(eiId);
-          exerciseInstance &&
-            exerciseInstances.update({
-              ...exerciseInstance,
-              eventId: event._id,
-            });
-        }
-      }
-    }
-  }
 
   // writeEventIdsToExerciseInstances(
   //   eventsFromContext.all ?? [],
@@ -53,37 +32,54 @@ const ExerciseEventTable = () => {
     duration: number;
   }
 
+  const newItem = { ...exerciseInstanceDefaults };
+
+  const dataAndNew: {
+    item: ExerciseInstanceDAO;
+    initialMode: ItemModes;
+  }[] = [
+    ...(exerciseInstances.all ?? []).map((i) => ({
+      item: i,
+      initialMode: ItemModes.QuickEdit,
+    })),
+    { item: newItem, initialMode: ItemModes.New },
+  ];
+
+  console.log({ data: exerciseInstances.all, dataAndNew });
+
   // TODO: remove slice
   const tableData: Row<
     ExerciseEventTableData,
-    ExerciseInstanceDAO
-  >[] = !exerciseInstances.all
-    ? []
-    : exerciseInstances.all.map((e) => ({
-        cellData: {
-          event: { data: e._id },
-          exercise: { data: e.exerciseId[0] },
-          eventIdInExercise: {
-            data: e.eventId,
-          },
-          duration: { data: e.durationSeconds ?? 0 },
-          reps: { data: e.repetitions ?? 0 },
-          weight: { data: e.weightKg ?? 0 },
+    {
+      item: ExerciseInstanceDAO;
+      initialMode: ItemModes;
+    }
+  >[] = dataAndNew.map((datum) => {
+    const { item, initialMode } = datum;
+    return {
+      cellData: {
+        event: { data: item.eventId },
+        exercise: { data: item.exerciseId[0] },
+        eventIdInExercise: {
+          data: item.eventId,
         },
-        // rowWrapper: ({ children }: { children: ReactNode }) => (
-        //   <div>
-        //     posos {children} {e.time}
-        //     {" pisos"}
-        //   </div>
-        // ),
-        rowWrapperProps: e,
-        // data: e,
-      }));
+        duration: { data: item.durationSeconds ?? 0 },
+        reps: { data: item.repetitions ?? 0 },
+        weight: { data: item.weightKg ?? 0 },
+      },
+      rowWrapperProps: { item, initialMode },
+    };
+  });
 
   const columns: Columns<ExerciseEventTableData> = {
     event: {
       title: "event",
-      renderFn: () => <ExerciseInstanceFields.Event />,
+      renderFn: () => (
+        <>
+          <ExerciseInstanceFields.Buttons />
+          <ExerciseInstanceFields.Event />
+        </>
+      ),
     },
     exercise: {
       title: "exercise",
@@ -109,7 +105,7 @@ const ExerciseEventTable = () => {
       ExerciseEventTableData,
       keyof ExerciseEventTableData,
       // TODO: allow skipping the third param?
-      ExerciseInstanceDAO
+      any
     >["sort"]
   >({ by: "event", isAscending: true });
 
@@ -119,15 +115,11 @@ const ExerciseEventTable = () => {
       columns,
       columnKeys: ["event", "exercise", "reps", "weight", "duration"],
       sort: sortSettings,
-      rowWrapperFn: (props: ExerciseInstanceDAO) => ({
-        children,
-      }: {
-        children: React.ReactNode;
-      }) => (
-        <ExerciseInstanceFields.Wrapper
-          item={props}
-          initialMode={ItemModes.QuickEdit}
-        >
+      rowWrapperFn: (props: {
+        item: ExerciseInstanceDAO;
+        initialMode: ItemModes;
+      }) => ({ children }: { children: React.ReactNode }) => (
+        <ExerciseInstanceFields.Wrapper {...props}>
           {children}
         </ExerciseInstanceFields.Wrapper>
       ),
@@ -196,17 +188,6 @@ const ExerciseEventTable = () => {
           ))}
         </tbody>
       </table>
-
-      <button
-        onClick={() =>
-          writeEventIdsToExerciseInstances(
-            events.all ?? [],
-            exerciseInstances.all ?? []
-          )
-        }
-      >
-        add event ids to exercise instances
-      </button>
     </div>
   );
 };

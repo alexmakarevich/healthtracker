@@ -41,7 +41,7 @@ const useStyles = createUseStyles(
   { name: "ExerciseFields" }
 );
 
-export interface ExerciseInstanceProps {
+export interface ExerciseInstanceFieldsProps {
   item: ExerciseInstanceDAO;
   initialMode: ItemModes;
   children: ReactNode;
@@ -61,7 +61,7 @@ const Wrapper = ({
   initialMode,
   children,
 }: // onCreate,
-ExerciseInstanceProps) => {
+ExerciseInstanceFieldsProps) => {
   // const EVENTS = useEventContext();
 
   // const genericActions = useEntityBaseUseQuery(
