@@ -77,36 +77,37 @@ export function classConcat(...classes: (string | undefined)[]) {
   );
 }
 
-export const splitArray = <Something>(array?: Something[]) => (filterCallback: (something: Something) => boolean) => {
-  let trueArray : Something[] = []
-  let falseArray: Something[] = []
+export const splitArray = <Something>(array?: Something[]) => (
+  filterCallback: (something: Something) => boolean
+) => {
+  let trueArray: Something[] = [];
+  let falseArray: Something[] = [];
 
   array?.forEach((item) => {
-    filterCallback(item) ? trueArray.push(item) : falseArray.push(item)
-  })
+    filterCallback(item) ? trueArray.push(item) : falseArray.push(item);
+  });
 
-  return {trueArray, falseArray}
+  return { trueArray, falseArray };
+};
+
+export function groupBy<T extends Record<string, any>, K extends keyof T>(
+  array: T[],
+  key: K
+): Record<T[K], T[]> {
+  return array.reduce((objectsByKeyValue, obj) => {
+    const value = obj[key];
+    objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+    return objectsByKeyValue;
+  }, {} as Record<T[K], T[]>);
 }
 
-export function groupBy<T extends Record<string, any>, K extends keyof T>(array: T[], key: K): Record<T[K], T[]> {
-  return array.reduce(
-    (objectsByKeyValue, obj) => {
-      const value = obj[key]
-      objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj)
-      return objectsByKeyValue
-    },
-    {} as Record<T[K], T[]>
-  )
-}
-
-
-/** 
+/**
  * https://dev.to/svehla/typescript-object-fromentries-389c
- * bypass the typescript compiler for passing invalid types 
+ * bypass the typescript compiler for passing invalid types
  * */
 type Cast<X, Y> = X extends Y ? X : Y;
 
-/**  
+/**
  * Recursively remove all readonly notations from the data type
  * https://dev.to/svehla/typescript-object-fromentries-389c
  */
@@ -114,13 +115,27 @@ type RemoveReadonly<T> = { -readonly [P in keyof T]: RemoveReadonly<T[P]> };
 
 // shape validators inspired by: https://fettblog.eu/typescript-match-the-exact-object-shape/
 
-type TypeDoesNotExtendShape = never
-type ShapeDoesNotExtendType = never
+type TypeDoesNotExtendShape = never;
+type ShapeDoesNotExtendType = never;
 
-export type ValidateShape<T, Shape> = T extends Shape ?
-    Exclude<keyof T, keyof Shape> extends never ?
-    T : ShapeDoesNotExtendType : TypeDoesNotExtendShape
+export type ValidateShape<T, Shape> = T extends Shape
+  ? Exclude<keyof T, keyof Shape> extends never
+    ? T
+    : ShapeDoesNotExtendType
+  : TypeDoesNotExtendShape;
 
-export type ValidateShapeAndReturn<TypeToValidate, Shape, Return> =
-    TypeToValidate extends Shape ?
-    Exclude<keyof TypeToValidate, keyof Shape> extends never ? Return : ShapeDoesNotExtendType : TypeDoesNotExtendShape;
+export type ValidateShapeAndReturn<
+  TypeToValidate,
+  Shape,
+  Return
+> = TypeToValidate extends Shape
+  ? Exclude<keyof TypeToValidate, keyof Shape> extends never
+    ? Return
+    : ShapeDoesNotExtendType
+  : TypeDoesNotExtendShape;
+
+/** returns given type but with specified keys made optional */
+export type PartialPartial<T, Keys extends keyof T> = Omit<T, Keys> &
+  Partial<Pick<T, Keys>>;
+
+export type Enummed<T> = T[keyof T];
