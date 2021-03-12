@@ -28,9 +28,6 @@ export type Columns<T> = {
 
 export type Row<T, RowWrapperProps> = {
   cellData: CellData<T>;
-  rowWrapper?: <PropsWithChildren extends { children: ReactNode }>(
-    props: PropsWithChildren
-  ) => ReactNode;
   rowWrapperProps?: RowWrapperProps;
 };
 

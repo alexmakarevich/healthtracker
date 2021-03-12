@@ -87,7 +87,7 @@ export function generateContext<Item extends WithId>(
     ] = useMutation((item: Item) => CRUD.CREATE(item), {
       onSuccess: async (data) => {
         await refresh();
-        addAlert({ content: `created new ${itemName}`, id: "" });
+        addAlert({ content: `created new ${itemName}` });
 
         console.log(data);
       },
@@ -102,8 +102,7 @@ export function generateContext<Item extends WithId>(
         return CRUD.UPDATE_BY_ID(itemWithModifiedTimestamp);
       },
       {
-        onSuccess: (_data, vars) =>
-          addAlert({ content: JSON.stringify(vars), id: vars._id }),
+        onSuccess: (_data, vars) => addAlert({ content: JSON.stringify(vars) }),
       }
     );
 

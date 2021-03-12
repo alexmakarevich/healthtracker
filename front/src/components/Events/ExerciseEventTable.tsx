@@ -15,6 +15,7 @@ import {
 import { sort } from "d3";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
+import { ExerciseInstanceFields } from "../Exercises/ExerciseInstance/ExerciseInstanceFields";
 
 const ExerciseEventTable = () => {
   const events = useEventContext();
@@ -47,28 +48,27 @@ const ExerciseEventTable = () => {
   interface ExerciseEventTableData {
     event: string;
     exercise: string;
-    eventIdInExercise: string;
     reps: number;
     weight: number;
     duration: number;
   }
 
   // TODO: remove slice
-  const tableData: Row<ExerciseEventTableData, string>[] = !events.all
+  const tableData: Row<
+    ExerciseEventTableData,
+    ExerciseInstanceDAO
+  >[] = !exerciseInstances.all
     ? []
-    : [events.all[0] ?? []].map((e) => ({
+    : exerciseInstances.all.map((e) => ({
         cellData: {
           event: { data: e._id },
-          exercise: { data: e.children.exerciseInstanceIds[0] },
+          exercise: { data: e.exerciseId[0] },
           eventIdInExercise: {
-            data:
-              exerciseInstances.getOneFromContext(
-                e.children.exerciseInstanceIds[0]
-              )?.eventId ?? "none",
+            data: e.eventId,
           },
-          duration: { data: 3 },
-          reps: { data: 3 },
-          weight: { data: 3 },
+          duration: { data: e.durationSeconds ?? 0 },
+          reps: { data: e.repetitions ?? 0 },
+          weight: { data: e.weightKg ?? 0 },
         },
         // rowWrapper: ({ children }: { children: ReactNode }) => (
         //   <div>
@@ -76,32 +76,30 @@ const ExerciseEventTable = () => {
         //     {" pisos"}
         //   </div>
         // ),
-        rowWrapperProps: e.time,
+        rowWrapperProps: e,
         // data: e,
       }));
 
   const columns: Columns<ExerciseEventTableData> = {
     event: {
       title: "event",
+      renderFn: () => <ExerciseInstanceFields.Event />,
     },
     exercise: {
       title: "exercise",
-      renderFn: (exId) =>
-        exercises.getOneFromContext(
-          exerciseInstances.getOneFromContext(exId)?.exerciseId ?? ""
-        )?.title ?? "no exercise",
-    },
-    eventIdInExercise: {
-      title: "eventIdInExercise",
+      renderFn: () => <ExerciseInstanceFields.Exercise />,
     },
     reps: {
       title: "reps",
+      renderFn: () => <ExerciseInstanceFields.Repetitions />,
     },
     weight: {
       title: "weight",
+      renderFn: () => <ExerciseInstanceFields.Weight />,
     },
     duration: {
       title: "duration",
+      renderFn: () => <ExerciseInstanceFields.Duration />,
     },
   };
 
@@ -110,8 +108,8 @@ const ExerciseEventTable = () => {
     UseCustomTableProps<
       ExerciseEventTableData,
       keyof ExerciseEventTableData,
-      // TODO: skip the third param
-      any
+      // TODO: allow skipping the third param?
+      ExerciseInstanceDAO
     >["sort"]
   >({ by: "event", isAscending: true });
 
@@ -119,34 +117,20 @@ const ExerciseEventTable = () => {
     {
       data: tableData,
       columns,
-      columnKeys: [
-        "event",
-        "exercise",
-        "reps",
-        "weight",
-        "duration",
-        "eventIdInExercise",
-      ],
+      columnKeys: ["event", "exercise", "reps", "weight", "duration"],
       sort: sortSettings,
-      rowWrapperFn: (props: string) => ({
+      rowWrapperFn: (props: ExerciseInstanceDAO) => ({
         children,
       }: {
         children: React.ReactNode;
       }) => (
-        <div>
-          props:
-          {props}
-          children:
+        <ExerciseInstanceFields.Wrapper
+          item={props}
+          initialMode={ItemModes.QuickEdit}
+        >
           {children}
-          post-children
-        </div>
+        </ExerciseInstanceFields.Wrapper>
       ),
-      // rowWrapper: (data) => ({ children }: { children: React.ReactNode }) => (
-      //   <div>
-      //     {JSON.stringify(data)}
-      //     {children}f
-      //   </div>
-      // ),
     }
   );
 
@@ -163,16 +147,6 @@ const ExerciseEventTable = () => {
 
     setSortSettings(newSettings);
   };
-
-  // const newExercise = new ExerciseInstance({
-  //   _id: "",
-  //   createdOn: "",
-  //   eventId: "6017f039d1ed9021049c5940",
-  //   exerciseId: "5f9da81170fbbc1e602b620d",
-  //   lastModifiedOn: "",
-  // });
-
-  // newExercise.create;
 
   return (
     <div>
