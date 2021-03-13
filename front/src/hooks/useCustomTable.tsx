@@ -1,5 +1,5 @@
 "use strict";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useMemo } from "react";
 import { ValidateShapeAndReturn } from "../utils/utils";
 
 export interface Cell<T> {
@@ -28,6 +28,7 @@ export type Columns<T> = {
 
 export type Row<T, RowWrapperProps> = {
   cellData: CellData<T>;
+  key: string | number;
   rowWrapperProps?: RowWrapperProps;
 };
 
@@ -36,11 +37,7 @@ export interface UseCustomTableProps<T, K extends keyof T, RowWrapperProps> {
   data: ValidateShapeAndReturn<T, Record<K, T[K]>, Row<T, RowWrapperProps>[]>;
   columns: ValidateShapeAndReturn<T, Record<K, T[K]>, Columns<T>>;
   columnKeys: K[];
-  rowWrapperFn?: (
-    props: RowWrapperProps
-  ) => <PropsWithChildren extends { children: ReactNode }>(
-    props: PropsWithChildren
-  ) => JSX.Element;
+
   sort?: { by: K; isAscending: boolean };
 }
 
@@ -48,11 +45,8 @@ export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
   data,
   columns,
   columnKeys,
-  rowWrapperFn,
   sort,
 }: UseCustomTableProps<T, K, RowWrapperProps>) => {
-  // console.log({ data });
-
   const columnsToMerge = columnKeys.reduce<K[]>(
     (prevKeys, currKey) =>
       columns[currKey].mergeRepeating ? [...prevKeys, currKey] : prevKeys,
@@ -103,53 +97,53 @@ export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
     []
   );
 
-  const rowAndCellProps = mergedData.reduce<
-    {
-      rowWrapper:
-        | undefined
-        | (<PropsWithChildren extends { children: ReactNode }>(
-            props: PropsWithChildren
-          ) => JSX.Element);
-      rowProps: React.TableHTMLAttributes<HTMLTableRowElement>;
-      cellProps: React.TdHTMLAttributes<HTMLTableCellElement>[];
-    }[]
-  >((accumulated, currentRow, rowIndex) => {
-    return [
-      ...accumulated,
-      {
-        rowWrapper:
-          rowWrapperFn &&
-          currentRow.rowWrapperProps &&
-          rowWrapperFn(currentRow.rowWrapperProps),
-        rowProps: {
-          key: rowIndex,
-          className:
-            "" /** TODO: figure out why removing className breaks everything */,
-          // children: ["child"],
-        },
-        cellProps: columnKeys.reduce<
-          React.TdHTMLAttributes<HTMLTableCellElement>[]
-        >((acc, currentColKey, cellIndex) => {
-          const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
-            currentColKey
-          ];
-          const { renderFn } = columns[currentColKey] as Columns<T>[K];
+  const rowAndCellProps = useMemo(
+    () =>
+      mergedData.reduce<
+        {
+          rowWrapperProps: RowWrapperProps | undefined;
+          rowProps: React.TableHTMLAttributes<HTMLTableRowElement>;
+          key: string | number;
+          cellProps: React.TdHTMLAttributes<HTMLTableCellElement>[];
+        }[]
+      >((accumulated, currentRow, rowIndex) => {
+        return [
+          ...accumulated,
+          {
+            rowWrapperProps: currentRow.rowWrapperProps,
 
-          return isHidden
-            ? acc
-            : [
-                ...acc,
-                {
-                  children: renderFn?.(data) ?? data,
-                  rowSpan,
-                  colSpan,
-                  key: cellIndex,
-                },
+            rowProps: {
+              key: currentRow.key,
+              className:
+                "" /** TODO: figure out why removing className breaks everything */,
+              // children: ["child"],
+            },
+            key: currentRow.key,
+            cellProps: columnKeys.reduce<
+              React.TdHTMLAttributes<HTMLTableCellElement>[]
+            >((acc, currentColKey, cellIndex) => {
+              const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
+                currentColKey
               ];
-        }, []),
-      },
-    ];
-  }, []);
+              const { renderFn } = columns[currentColKey] as Columns<T>[K];
+
+              return isHidden
+                ? acc
+                : [
+                    ...acc,
+                    {
+                      children: renderFn?.(data) ?? data,
+                      rowSpan,
+                      colSpan,
+                      key: cellIndex,
+                    },
+                  ];
+            }, []),
+          },
+        ];
+      }, []),
+    [mergedData]
+  );
 
   return {
     headerCellProps,

@@ -52,6 +52,7 @@ const ExerciseInstanceTableNew = () => {
         weight: { data: ei.weightKg },
         repetitions: { data: ei.repetitions },
       },
+      key: ei._id,
     })) ?? [];
 
   const columns: Columns<EIColumns> = {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { Event } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
@@ -14,6 +14,9 @@ import {
   exerciseInstanceDefaults,
 } from "../../logic/exerciseInstanceLogic";
 import { ExerciseInstanceFields } from "../Exercises/ExerciseInstance/ExerciseInstanceFields";
+import { FlexRow } from "../generic/layout/FlexRow";
+import { v4 as uuid } from "uuid";
+import { ExerciseFields } from "../Exercises/ExerciseFields";
 
 const ExerciseEventTable = () => {
   const events = useEventContext();
@@ -68,36 +71,42 @@ const ExerciseEventTable = () => {
         weight: { data: item.weightKg ?? 0 },
       },
       rowWrapperProps: { item, initialMode },
+      key: item._id,
     };
   });
 
-  const columns: Columns<ExerciseEventTableData> = {
-    event: {
-      title: "event",
-      renderFn: () => (
-        <>
-          <ExerciseInstanceFields.Buttons />
-          <ExerciseInstanceFields.Event />
-        </>
-      ),
-    },
-    exercise: {
-      title: "exercise",
-      renderFn: () => <ExerciseInstanceFields.Exercise />,
-    },
-    reps: {
-      title: "reps",
-      renderFn: () => <ExerciseInstanceFields.Repetitions />,
-    },
-    weight: {
-      title: "weight",
-      renderFn: () => <ExerciseInstanceFields.Weight />,
-    },
-    duration: {
-      title: "duration",
-      renderFn: () => <ExerciseInstanceFields.Duration />,
-    },
-  };
+  // BUG: number inputs switch focus on every input (from up arrow to down arrow, if pressing arrows on keyboard, starts scrolling page, as happened before sometimes)
+
+  const columns: Columns<ExerciseEventTableData> = useMemo(
+    () => ({
+      event: {
+        title: "event",
+        renderFn: () => (
+          <FlexRow style={{ justifyContent: "center" }}>
+            <ExerciseInstanceFields.Buttons />
+            <ExerciseInstanceFields.Event />
+          </FlexRow>
+        ),
+      },
+      exercise: {
+        title: "exercise",
+        renderFn: () => <ExerciseInstanceFields.Exercise />,
+      },
+      reps: {
+        title: "reps",
+        renderFn: () => <ExerciseInstanceFields.Repetitions />,
+      },
+      weight: {
+        title: "weight",
+        renderFn: () => <ExerciseInstanceFields.Weight />,
+      },
+      duration: {
+        title: "duration",
+        renderFn: () => <ExerciseInstanceFields.Duration />,
+      },
+    }),
+    []
+  );
 
   // TODO: maybe return this from single generator, together with useTable - can save on boilerplate typing like that. and/or extract interface for sort settings
   const [sortSettings, setSortSettings] = useState<
@@ -115,14 +124,6 @@ const ExerciseEventTable = () => {
       columns,
       columnKeys: ["event", "exercise", "reps", "weight", "duration"],
       sort: sortSettings,
-      rowWrapperFn: (props: {
-        item: ExerciseInstanceDAO;
-        initialMode: ItemModes;
-      }) => ({ children }: { children: React.ReactNode }) => (
-        <ExerciseInstanceFields.Wrapper {...props}>
-          {children}
-        </ExerciseInstanceFields.Wrapper>
-      ),
     }
   );
 
@@ -135,7 +136,6 @@ const ExerciseEventTable = () => {
       isSorted && !isAscending
         ? undefined
         : { by: columnKey, isAscending: !isAscending };
-    // console.log({ newSettings });
 
     setSortSettings(newSettings);
   };
@@ -175,15 +175,13 @@ const ExerciseEventTable = () => {
         <tbody>
           {rowAndCellProps.map((row) => (
             <tr {...row.rowProps}>
-              {row.rowWrapper ? (
-                <row.rowWrapper>
+              {row.rowWrapperProps ? (
+                <ExerciseInstanceFields.Wrapper {...row.rowWrapperProps}>
                   {row.cellProps.map((cellProps) => (
                     <td {...cellProps} />
                   ))}
-                </row.rowWrapper>
-              ) : (
-                row.cellProps.map((cellProps) => <td {...cellProps} />)
-              )}
+                </ExerciseInstanceFields.Wrapper>
+              ) : null}
             </tr>
           ))}
         </tbody>
