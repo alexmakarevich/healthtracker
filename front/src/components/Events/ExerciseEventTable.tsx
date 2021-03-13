@@ -120,7 +120,8 @@ const ExerciseEventTable = () => {
 
   const { headerCellProps, rowAndCellProps, columnKeys, sort } = useCustomTable(
     {
-      data: tableData,
+      data: tableData.slice(0, -1),
+      lastRow: tableData.slice(-1)[0],
       columns,
       columnKeys: ["event", "exercise", "reps", "weight", "duration"],
       sort: sortSettings,

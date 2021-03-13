@@ -35,6 +35,12 @@ export type Row<T, RowWrapperProps> = {
 /** the shape validator ensures that the type of data and the provided array of columns are an exact match */
 export interface UseCustomTableProps<T, K extends keyof T, RowWrapperProps> {
   data: ValidateShapeAndReturn<T, Record<K, T[K]>, Row<T, RowWrapperProps>[]>;
+  firstRow?: ValidateShapeAndReturn<
+    T,
+    Record<K, T[K]>,
+    Row<T, RowWrapperProps>
+  >;
+  lastRow?: ValidateShapeAndReturn<T, Record<K, T[K]>, Row<T, RowWrapperProps>>;
   columns: ValidateShapeAndReturn<T, Record<K, T[K]>, Columns<T>>;
   columnKeys: K[];
 
@@ -43,6 +49,8 @@ export interface UseCustomTableProps<T, K extends keyof T, RowWrapperProps> {
 
 export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
   data,
+  firstRow,
+  lastRow,
   columns,
   columnKeys,
   sort,
@@ -97,53 +105,54 @@ export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
     []
   );
 
-  const rowAndCellProps = useMemo(
-    () =>
-      mergedData.reduce<
-        {
-          rowWrapperProps: RowWrapperProps | undefined;
-          rowProps: React.TableHTMLAttributes<HTMLTableRowElement>;
-          key: string | number;
-          cellProps: React.TdHTMLAttributes<HTMLTableCellElement>[];
-        }[]
-      >((accumulated, currentRow, rowIndex) => {
-        return [
-          ...accumulated,
-          {
-            rowWrapperProps: currentRow.rowWrapperProps,
+  const firstRows = firstRow ? [firstRow] : [];
+  const lastRows = lastRow ? [lastRow] : [];
 
-            rowProps: {
-              key: currentRow.key,
-              className:
-                "" /** TODO: figure out why removing className breaks everything */,
-              // children: ["child"],
-            },
-            key: currentRow.key,
-            cellProps: columnKeys.reduce<
-              React.TdHTMLAttributes<HTMLTableCellElement>[]
-            >((acc, currentColKey, cellIndex) => {
-              const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
-                currentColKey
+  const mergedDataPlusFixedRows = [...firstRows, ...mergedData, ...lastRows];
+
+  const rowAndCellProps = mergedDataPlusFixedRows.reduce<
+    {
+      rowWrapperProps: RowWrapperProps | undefined;
+      rowProps: React.TableHTMLAttributes<HTMLTableRowElement>;
+      key: string | number;
+      cellProps: React.TdHTMLAttributes<HTMLTableCellElement>[];
+    }[]
+  >((accumulated, currentRow, rowIndex) => {
+    return [
+      ...accumulated,
+      {
+        rowWrapperProps: currentRow.rowWrapperProps,
+
+        rowProps: {
+          key: currentRow.key,
+          className:
+            "" /** TODO: figure out why removing className breaks everything */,
+          // children: ["child"],
+        },
+        key: currentRow.key,
+        cellProps: columnKeys.reduce<
+          React.TdHTMLAttributes<HTMLTableCellElement>[]
+        >((acc, currentColKey, cellIndex) => {
+          const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
+            currentColKey
+          ];
+          const { renderFn } = columns[currentColKey] as Columns<T>[K];
+
+          return isHidden
+            ? acc
+            : [
+                ...acc,
+                {
+                  children: renderFn?.(data) ?? data,
+                  rowSpan,
+                  colSpan,
+                  key: cellIndex,
+                },
               ];
-              const { renderFn } = columns[currentColKey] as Columns<T>[K];
-
-              return isHidden
-                ? acc
-                : [
-                    ...acc,
-                    {
-                      children: renderFn?.(data) ?? data,
-                      rowSpan,
-                      colSpan,
-                      key: cellIndex,
-                    },
-                  ];
-            }, []),
-          },
-        ];
-      }, []),
-    [mergedData]
-  );
+        }, []),
+      },
+    ];
+  }, []);
 
   return {
     headerCellProps,
