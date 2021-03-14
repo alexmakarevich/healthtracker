@@ -1,9 +1,15 @@
-import React, { ComponentProps, ReactNodeArray } from "react";
+import React, {
+  ComponentProps,
+  ReactChildren,
+  ReactElement,
+  ReactNode,
+  ReactNodeArray,
+} from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat } from "../../../utils/utils";
 
 interface Props extends ComponentProps<"div"> {
-  children: ReactNodeArray;
+  children: (ReactElement | undefined)[] | ReactElement | undefined;
   childClassName?: string;
 }
 
@@ -22,16 +28,20 @@ const useStyles = createUseStyles(
 );
 
 export const FlexRow = ({ children, childClassName }: Props) => {
-  const cells = children.filter((child) => child !== undefined);
   const classes = useStyles();
+
+  if (!children) return null;
 
   return (
     <div className={classes.container}>
-      {cells.map((cell, index) => (
-        <div className={classConcat(classes.child, childClassName)} key={index}>
-          {cell}
-        </div>
-      ))}
+      {React.Children.map(children, (child, index) =>
+        !child
+          ? null
+          : React.cloneElement(child, {
+              className: classConcat(classes.child, childClassName),
+              key: index,
+            })
+      )}
     </div>
   );
 };

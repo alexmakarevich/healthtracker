@@ -1,6 +1,7 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
+import { Button } from "../generic/buttons/Button";
 
 interface Props {
   mode: ItemModes;
@@ -18,7 +19,7 @@ export const DeleteButton = ({ mode, onDelete }: Props) => {
   const classes = useStyles();
 
   return mode !== ItemModes.New ? (
-    <button onClick={onDelete}>delete</button>
+    <Button onClick={onDelete}>delete</Button>
   ) : (
     <></>
   );

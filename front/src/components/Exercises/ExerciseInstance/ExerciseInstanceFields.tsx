@@ -146,7 +146,7 @@ const Buttons = () => {
 const Repetitions = () => {
   const classes = useStyles();
 
-  const { data, setOrUpdate, update, mode, reset } = useThisContext();
+  const { data, setOrUpdate, mode } = useThisContext();
 
   if (mode === ItemModes.Show && !data.repetitions) {
     return null;

@@ -41,6 +41,8 @@ const CreateEditResetCancel = ({
 }: Props) => {
   const classes = useStyles();
 
+  if (mode === ItemModes.QuickEdit) return null;
+
   return (
     <div className={classes.buttons}>
       {mode === ItemModes.Show && (

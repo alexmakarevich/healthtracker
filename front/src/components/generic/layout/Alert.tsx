@@ -1,7 +1,9 @@
 import React, { ReactNode, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat, Enummed } from "../../../utils/utils";
+import { Button } from "../buttons/Button";
 import { Box } from "../styling/Box";
+import { Icon, IconSizes } from "../styling/Icon";
 
 // const enum AlertTypes {
 //   POSITIVE = "POSITIVE",
@@ -59,8 +61,6 @@ const useStyles = createUseStyles(
     },
     button: {
       marginLeft: "10px",
-      height: "25px",
-      width: "25px",
     },
   }),
 
@@ -78,9 +78,9 @@ export const Alert = ({
     <Box className={classConcat(classes.wrapper, className)}>
       <div className={classes.flex}>
         {children}
-        <button className={classes.button} onClick={onRemove}>
-          X
-        </button>
+        <Button className={classes.button} onClick={onRemove}>
+          <Icon icon={"cross"} size={IconSizes.S} />
+        </Button>
       </div>
     </Box>
   );

@@ -76,7 +76,7 @@ export const AlertContext = ({ children }: AlertContextProps) => {
         return () => {
           clearTimeout(timeout);
         };
-      }, 3000);
+      }, 400000);
     }
   }, [alerts]);
 
