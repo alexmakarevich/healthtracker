@@ -1,6 +1,8 @@
-import React from "react";
+import React, { HTMLProps } from "react";
 import { createUseStyles } from "react-jss";
-import { ItemModes } from "../../utils/utils";
+import { classConcat, ItemModes } from "../../utils/utils";
+import { Button } from "../generic/buttons/Button";
+import { Icon, IconSizes } from "../generic/styling/Icon";
 
 interface Props {
   mode: ItemModes;
@@ -15,15 +17,11 @@ interface Props {
 const useStyles = createUseStyles(
   {
     buttons: {
-      padding: "5px",
-
-      "& > div": {
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        "& > button": {
-          flexGrow: 1,
-        },
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-around",
+      "& > button": {
+        flexGrow: 1,
       },
     },
   },
@@ -38,31 +36,39 @@ const CreateEditResetCancel = ({
   onCreate,
   onSetMode,
   valid,
-}: Props) => {
+  className,
+  ...wrapperProps
+}: Props & HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
   if (mode === ItemModes.QuickEdit) return null;
 
   return (
-    <div className={classes.buttons}>
+    <div className={classConcat(classes.buttons, className)} {...wrapperProps}>
       {mode === ItemModes.Show && (
-        <button onClick={() => onSetMode(ItemModes.Edit)}>edit</button>
+        <Button onClick={() => onSetMode(ItemModes.Edit)}>
+          <Icon icon={"pen"} size={IconSizes.S} />
+        </Button>
       )}
       {mode === ItemModes.Edit && (
-        <div>
-          <button disabled={!valid} onClick={() => onSave()}>
-            save
-          </button>
-          <button onClick={() => onCancelEdit()}>cancel</button>
-        </div>
+        <>
+          <Button disabled={!valid} onClick={() => onSave()}>
+            <Icon icon={"checkRectangle"} size={IconSizes.S} />
+          </Button>
+          <Button onClick={() => onCancelEdit()}>
+            <Icon icon={"undo"} size={IconSizes.S} />
+          </Button>
+        </>
       )}
       {mode === ItemModes.New && (
-        <div>
-          <button disabled={!valid} onClick={() => onCreate()}>
-            create
-          </button>
-          <button onClick={() => onReset()}>reset</button>
-        </div>
+        <>
+          <Button disabled={!valid} onClick={() => onCreate()}>
+            <Icon icon={"plus"} size={IconSizes.S} />
+          </Button>
+          <Button onClick={() => onReset()}>
+            <Icon icon={"undo"} size={IconSizes.S} />
+          </Button>
+        </>
       )}
     </div>
   );

@@ -9,6 +9,7 @@ import {
 import { generateCRUD } from "../api/generateCRUD";
 import { WithId } from "../common/types/types";
 import { useAlertContext } from "../components/generic/actions/AlertContext";
+import { AlertTypes } from "../components/generic/layout/Alert";
 import { createContextDefined } from "./ContextWrapper";
 
 const timestamp = () => {
@@ -60,9 +61,16 @@ export function generateContext<Item extends WithId>(
 
     // TODO: check how tominimize number of updates
     const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {
-      onSuccess: () => addAlert({ content: `loaded all ${itemName}s` }),
+      onSuccess: () =>
+        addAlert({
+          children: `loaded all ${itemName}s`,
+          type: AlertTypes.POSITIVE,
+        }),
       onError: () =>
-        addAlert({ content: `ERROR: failed to load all ${itemName}s` }),
+        addAlert({
+          children: `ERROR: failed to load all ${itemName}s`,
+          type: AlertTypes.NEGATIVE,
+        }),
     });
 
     // const [all, setAll] = useState(allQuery.data?.data);
@@ -83,12 +91,15 @@ export function generateContext<Item extends WithId>(
     const [createOne] = useMutation((item: Item) => CRUD.CREATE(item), {
       onSuccess: async (data) => {
         await refresh();
-        addAlert({ content: `created new ${itemName}` });
+        addAlert({
+          children: `created new ${itemName}`,
+          type: AlertTypes.POSITIVE,
+        });
 
         console.log(data);
       },
       onError: () =>
-        addAlert({ content: `ERROR: could not create ${itemName}` }),
+        addAlert({ children: `ERROR: could not create ${itemName}` }),
     });
 
     const [updateOne, {}] = useMutation(
@@ -100,9 +111,10 @@ export function generateContext<Item extends WithId>(
         return CRUD.UPDATE_BY_ID(itemWithModifiedTimestamp);
       },
       {
-        onSuccess: (_data, vars) => addAlert({ content: JSON.stringify(vars) }),
+        onSuccess: (_data, vars) =>
+          addAlert({ children: JSON.stringify(vars) }),
         onError: () =>
-          addAlert({ content: `ERROR: failed to update ${itemName}` }),
+          addAlert({ children: `ERROR: failed to update ${itemName}` }),
       }
     );
 
@@ -112,12 +124,15 @@ export function generateContext<Item extends WithId>(
       },
       {
         onSuccess: () => {
-          addAlert({ content: `deleted ${itemName}` });
+          addAlert({
+            children: `deleted ${itemName}`,
+            type: AlertTypes.POSITIVE,
+          });
 
           refresh();
         },
         onError: () =>
-          addAlert({ content: `ERROR: failed to delete ${itemName}` }),
+          addAlert({ children: `ERROR: failed to delete ${itemName}` }),
       }
     );
 

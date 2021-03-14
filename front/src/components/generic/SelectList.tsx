@@ -17,6 +17,7 @@ const styles = () => ({
   },
   item: {
     margin: [4, 4],
+    cursor: "pointer",
   },
 });
 
@@ -56,8 +57,10 @@ const SelectList = forwardRef(
             child !== undefined && (
               <li
                 key={child.id}
+                role={"button"}
                 onClick={() => onChangeSelection(child.id)}
                 className={classes.item}
+                tabIndex={0}
                 {...childItemProps}
               >
                 {child.node}

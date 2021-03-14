@@ -1,4 +1,10 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import React, {
+  ButtonHTMLAttributes,
+  HTMLProps,
+  ReactNode,
+  useMemo,
+  useState,
+} from "react";
 import { createUseStyles } from "react-jss";
 import {
   EntityBaseContextUseQuery,
@@ -13,7 +19,7 @@ import {
   useExerciseInstance,
 } from "../../../logic/exerciseInstanceLogic";
 import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
-import { ItemModes } from "../../../utils/utils";
+import { classConcat, ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
@@ -21,9 +27,14 @@ import { Box } from "../../generic/styling/Box";
 import { useEventContext } from "../../../context/EventContextProvider";
 import { eventDefaults } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
+import { Icon, IconSizes } from "../../generic/styling/Icon";
+import { Button } from "../../generic/buttons/Button";
 
 const useStyles = createUseStyles(
   {
+    buttons: {
+      flexDirection: "row",
+    },
     input: {
       width: "40px",
     },
@@ -35,6 +46,14 @@ const useStyles = createUseStyles(
     },
     durationInput: {
       width: "48px",
+    },
+    exerciseWrapper: {
+      display: "flex",
+      justifyContent: "flex-start",
+      alignItems: "center",
+    },
+    exerciseButton: {
+      marginLeft: "0.5em",
     },
   },
 
@@ -115,6 +134,7 @@ const Buttons = () => {
   } = useThisContext();
 
   const events = useEventContext();
+  const classes = useStyles();
 
   return (
     <CreateEditResetCancel
@@ -139,11 +159,15 @@ const Buttons = () => {
       onCancelEdit={() => setMode(ItemModes.Show)}
       onSetMode={setMode}
       valid
+      className={classes.buttons}
     />
   );
 };
 
-const Repetitions = () => {
+const Repetitions = ({
+  className,
+  ...inputProps
+}: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
   const { data, setOrUpdate, mode } = useThisContext();
@@ -158,7 +182,7 @@ const Repetitions = () => {
           type={"number"}
           value={data.repetitions ?? 0}
           key={"check"}
-          className={classes.repsInput}
+          className={classConcat(classes.repsInput, className)}
           onChange={(e: React.ChangeEvent<any>) =>
             setOrUpdate({
               ...data,
@@ -172,7 +196,7 @@ const Repetitions = () => {
   }
 };
 
-const Weight = () => {
+const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
   const { data, setOrUpdate, mode } = useThisContext();
@@ -187,7 +211,7 @@ const Weight = () => {
         type={"number"}
         value={data.weightKg ?? 0}
         key={"check"}
-        className={classes.weightInput}
+        className={classConcat(classes.weightInput, className)}
         onChange={(e: React.ChangeEvent<any>) =>
           setOrUpdate({ ...data, weightKg: parseInt(e.target.value) })
         }
@@ -198,7 +222,7 @@ const Weight = () => {
   // }
 };
 
-const Duration = () => {
+const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
   const { data, setOrUpdate, update, mode, reset } = useThisContext();
@@ -207,22 +231,20 @@ const Duration = () => {
     return null;
   } else {
     return (
-      <div>
-        <input
-          disabled={mode === ItemModes.Show}
-          type={"number"}
-          value={data.durationSeconds ?? 0}
-          key={"check"}
-          className={classes.durationInput}
-          onChange={async (e: React.ChangeEvent<any>) => {
-            // setOrUpdate({ ...data, durationSeconds: parseInt(e.target.value) })
-            setOrUpdate({
-              ...data,
-              durationSeconds: parseInt(e.target.value),
-            });
-          }}
-        />
-      </div>
+      <input
+        disabled={mode === ItemModes.Show}
+        type={"number"}
+        value={data.durationSeconds ?? 0}
+        key={"check"}
+        className={classConcat(classes.durationInput, className)}
+        onChange={async (e: React.ChangeEvent<any>) => {
+          // setOrUpdate({ ...data, durationSeconds: parseInt(e.target.value) })
+          setOrUpdate({
+            ...data,
+            durationSeconds: parseInt(e.target.value),
+          });
+        }}
+      />
     );
   }
 };
@@ -237,10 +259,12 @@ const Event = () => {
   ) : null;
 };
 
-const Exercise = () => {
+const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
   const { data, exercise, setOrUpdate, reset } = useThisContext();
+  const { className, ...otherDivProps } = divProps;
 
   const exCtx = useExerciseContext();
+  const classes = useStyles();
 
   const [showSelect, setShowSelect] = useState(
     data.exerciseId === exerciseInstanceDefaults.exerciseId
@@ -258,9 +282,19 @@ const Exercise = () => {
   }));
 
   return (
-    <div style={{ display: "flex", justifyContent: "space-between" }}>
-      <span> {exercise?.title}</span>
-      {/* TODO: check why the drowpdwon is selected the whole time - likely has to do with the exercise query not being ready */}
+    <div className={className} {...otherDivProps}>
+      <div className={classes.exerciseWrapper}>
+        <span> {exercise?.title}</span>
+        {/* TODO: check why the drowpdwon is selected the whole time - likely has to do with the exercise query not being ready */}
+        {data.exerciseId !== exerciseInstanceDefaults.exerciseId && (
+          <Button
+            onClick={() => setShowSelect(!showSelect)}
+            className={classes.exerciseButton}
+          >
+            <Icon icon={showSelect ? "undo" : "pen"} size={IconSizes.S} />
+          </Button>
+        )}
+      </div>
       {(areNoneSelected || showSelect) && (
         <PickOrAdd
           dropdownItems={dropdownItems}
@@ -274,19 +308,14 @@ const Exercise = () => {
           }
         />
       )}
-      {data.exerciseId !== exerciseInstanceDefaults.exerciseId && (
-        <button onClick={() => setShowSelect(!showSelect)}>
-          {!showSelect ? "change" : "cancel"}
-        </button>
-      )}
     </div>
   );
 };
 
-const Delete = () => {
+const Delete = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
   const { delete: del, mode } = useThisContext();
 
-  return <DeleteButton onDelete={() => del?.()} mode={mode} />;
+  return <DeleteButton onDelete={() => del?.()} mode={mode} {...props} />;
 };
 
 const ExerciseInstanceFields = {

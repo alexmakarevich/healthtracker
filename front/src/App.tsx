@@ -21,6 +21,12 @@ import {
   useAlertContext,
 } from "./components/generic/actions/AlertContext";
 import { v4 as uuid } from "uuid";
+import { CheckHowHooksRerender } from "./components/Sandbox/CheckHowHooksRerender";
+import { TestNewTableHook } from "./hooks/useCustomTableNew.";
+import { CheckSoringRerender } from "./components/Sandbox/CheckSoringRerender";
+import { Icon, IconSizes } from "./components/generic/styling/Icon";
+import allSvg from "./icons/all.svg";
+import { Button } from "./components/generic/buttons/Button";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -38,29 +44,37 @@ function App() {
           <ExerciseProvider>
             <EventProvider>
               <NutritionItemProvider>
-                <SampleVisualizationUpdate />
+                {/* <SampleVisualizationUpdate />
                 <SampleVisualizationTime />
                 <ExerciseVisualization />
-                <NutritionItemTable />
+                <NutritionItemTable /> */}
+                {/* <CheckHowHooksRerender /> */}
                 <ExerciseEventTable />
-                <EventTable />
+                {/* <EventTable /> */}
+                <ExerciseInstanceTable />
+
+                {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
+                  <use xlinkHref={allSvg + "#" + "gg-folder"} />
+                </svg> */}
+
+                {/* <TestNewTableHook /> */}
+                {/* <CheckSoringRerender /> */}
+                {/* <ExerciseInstanceTableNew /> */}
+                <ExerciseTypeTable />
               </NutritionItemProvider>
-              <ExerciseInstanceTable />
-              <ExerciseInstanceTableNew />
             </EventProvider>
-            <ExerciseTypeTable />
           </ExerciseProvider>
         </ExerciseInstanceProvider>
       </AlertContext>
 
-      <InputDate />
+      {/* <InputDate />
       <InputTime
         hh={hours}
         mm={minutes}
         onHourChange={setHours}
         onMinuteChange={setMinutes}
       />
-      <input type={"number"} step={"any"} />
+      <input type={"number"} step={"any"} /> */}
     </div>
   );
 }
@@ -73,14 +87,14 @@ const AlertTester = () => {
   const alertCtx = useAlertContext();
 
   return (
-    <button
+    <Button
       onClick={() =>
         alertCtx.addAlert({
-          content: "sas" + new Date().toTimeString(),
+          children: "sas" + new Date().toTimeString(),
         })
       }
     >
       add alert
-    </button>
+    </Button>
   );
 };

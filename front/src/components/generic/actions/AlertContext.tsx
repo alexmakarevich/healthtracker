@@ -9,7 +9,7 @@ import React, {
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../../context/ContextWrapper";
 import { usePrevious } from "../../../hooks/usePrevious";
-import { Alert } from "../layout/Alert";
+import { Alert, AlertProps } from "../layout/Alert";
 import { v4 as uuid } from "uuid";
 import { PartialPartial } from "../../../utils/utils";
 
@@ -17,13 +17,12 @@ interface AlertContextProps {
   children: ReactNode;
 }
 
-interface AlertObject {
-  content: ReactNode;
+interface AlertObject extends AlertProps {
   id: string;
 }
 
 const [useAlertContext, AlertContextProvider] = createContextDefined<{
-  addAlert: ({ content, id }: PartialPartial<AlertObject, "id">) => void;
+  addAlert: (props: PartialPartial<AlertObject, "id">) => void;
 }>();
 
 const styles = () => {
@@ -57,33 +56,33 @@ export const AlertContext = ({ children }: AlertContextProps) => {
 
     if (alerts.length >= (prevAlerts?.length ?? 1)) {
       const newest = alerts[alerts.length - 1];
-      const timeout = setTimeout(() => {
-        const isFound = alerts.includes(newest);
-        console.log("deleteIfFound", {
-          isFound,
-          oldest: newest,
-          alerts,
-          prevAlerts,
-          ref: alertsRef.current,
-        });
+      const timeout = setTimeout(
+        () => {
+          const isFound = alerts.includes(newest);
+          console.log("deleteIfFound", {
+            isFound,
+            oldest: newest,
+            alerts,
+            prevAlerts,
+            ref: alertsRef.current,
+          });
 
-        // isFound && setAlerts((alerts) => alerts.slice(1));
-        // console.log(alerts.length, prevAlerts?.length);
+          removeAlert(newest.id);
 
-        // setAlerts((alerts) => alerts.slice(1));
-        removeAlert(newest.id);
-
-        return () => {
-          clearTimeout(timeout);
-        };
-      }, 400000);
+          return () => {
+            clearTimeout(timeout);
+          };
+        },
+        // TODO: set realistic value after done with testing
+        400000
+      );
     }
   }, [alerts]);
 
   const addAlert = useCallback(
-    ({ content, id = uuid() }: PartialPartial<AlertObject, "id">) => {
+    ({ id = uuid(), ...alertProps }: PartialPartial<AlertObject, "id">) => {
       // max 5 items at once
-      setAlerts((alerts) => [...alerts.slice(-6), { content, id }]);
+      setAlerts((alerts) => [...alerts.slice(-6), { ...alertProps, id }]);
       return id;
     },
     [setAlerts]
@@ -109,25 +108,32 @@ export const AlertContext = ({ children }: AlertContextProps) => {
     [setAlerts]
   );
 
-  // BUG: sometimes additional items randomly appear
-
   return (
     <AlertContextProvider value={{ addAlert }}>
       {children}
       <div className={classes.container}>
         <AnimatePresence>
-          {alerts.map((alert, i) => (
-            <motion.li
-              key={alert.id}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-            >
-              <Alert key={alert.id} onRemove={() => removeAlert(alert.id)}>
-                {alert.content}
-              </Alert>
-            </motion.li>
-          ))}
+          {alerts.map((alertObj, i) => {
+            const { id, ...alertProps } = alertObj;
+            const { onRemove, ...rest } = alertProps;
+            return (
+              <motion.li
+                key={alertObj.id}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <Alert
+                  key={alertObj.id}
+                  onRemove={() => {
+                    removeAlert(alertObj.id);
+                    onRemove?.();
+                  }}
+                  {...rest}
+                ></Alert>
+              </motion.li>
+            );
+          })}
         </AnimatePresence>
       </div>
     </AlertContextProvider>

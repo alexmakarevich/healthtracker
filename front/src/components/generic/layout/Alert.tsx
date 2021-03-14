@@ -11,7 +11,7 @@ import { Icon, IconSizes } from "../styling/Icon";
 //   NEUTRAL = "NEUTRAL",
 // }
 
-const AlertTypes = {
+export const AlertTypes = {
   POSITIVE: {
     name: "POSITIVE",
     style: {
@@ -32,7 +32,7 @@ const AlertTypes = {
   },
 } as const;
 
-interface AlertProps {
+export interface AlertProps {
   type?: Enummed<typeof AlertTypes>;
   children: ReactNode;
   className?: string;
@@ -53,11 +53,13 @@ const useStyles = createUseStyles(
       width: "100%",
       margin: "5px",
       fontSize: "0.75em",
+      boxShadow: "rgba(0, 0, 0, 0.5) 0 2px 10px 0px",
     }),
     flex: {
       display: "inline-flex",
       width: "100%",
       alignItems: "center",
+      justifyContent: "space-between",
     },
     button: {
       marginLeft: "10px",

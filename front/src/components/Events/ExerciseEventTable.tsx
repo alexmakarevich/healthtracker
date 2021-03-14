@@ -17,10 +17,47 @@ import { ExerciseInstanceFields } from "../Exercises/ExerciseInstance/ExerciseIn
 import { FlexRow } from "../generic/layout/FlexRow";
 import { v4 as uuid } from "uuid";
 import { ExerciseFields } from "../Exercises/ExerciseFields";
+import { createUseStyles } from "react-jss";
+import { Button } from "../generic/buttons/Button";
+import { Icon, IconSizes } from "../generic/styling/Icon";
+
+const useStyles = createUseStyles(
+  {
+    table: {
+      borderCollapse: "collapse",
+      borderSpacing: "unset",
+    },
+    exercise: {
+      padding: [0, 5],
+      // maxWidth: 150,
+    },
+    thButton: {
+      width: "100%",
+      justifyContent: "space-between",
+      "& > h3": {
+        margin: 0,
+        padding: 0,
+      },
+    },
+    td: {
+      position: "relative",
+    },
+    tableInput: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+    },
+  },
+
+  { name: "ExerciseEventTable" }
+);
 
 const ExerciseEventTable = () => {
   const events = useEventContext();
   const exerciseInstances = useExerciseInstanceContext();
+  const classes = useStyles();
 
   // writeEventIdsToExerciseInstances(
   //   eventsFromContext.all ?? [],
@@ -33,6 +70,7 @@ const ExerciseEventTable = () => {
     reps: number;
     weight: number;
     duration: number;
+    delete: undefined;
   }
 
   const newItem = { ...exerciseInstanceDefaults };
@@ -69,6 +107,7 @@ const ExerciseEventTable = () => {
         duration: { data: item.durationSeconds ?? 0 },
         reps: { data: item.repetitions ?? 0 },
         weight: { data: item.weightKg ?? 0 },
+        delete: { data: undefined },
       },
       rowWrapperProps: { item, initialMode },
       key: item._id,
@@ -90,19 +129,31 @@ const ExerciseEventTable = () => {
       },
       exercise: {
         title: "exercise",
-        renderFn: () => <ExerciseInstanceFields.Exercise />,
+        renderFn: () => (
+          <ExerciseInstanceFields.Exercise className={classes.exercise} />
+        ),
       },
       reps: {
         title: "reps",
-        renderFn: () => <ExerciseInstanceFields.Repetitions />,
+        renderFn: () => (
+          <ExerciseInstanceFields.Repetitions className={classes.tableInput} />
+        ),
       },
       weight: {
         title: "weight",
-        renderFn: () => <ExerciseInstanceFields.Weight />,
+        renderFn: () => (
+          <ExerciseInstanceFields.Weight className={classes.tableInput} />
+        ),
       },
       duration: {
-        title: "duration",
-        renderFn: () => <ExerciseInstanceFields.Duration />,
+        title: "length",
+        renderFn: () => (
+          <ExerciseInstanceFields.Duration className={classes.tableInput} />
+        ),
+      },
+      delete: {
+        title: "",
+        renderFn: () => <ExerciseInstanceFields.Delete />,
       },
     }),
     []
@@ -123,7 +174,7 @@ const ExerciseEventTable = () => {
       data: tableData.slice(0, -1),
       lastRow: tableData.slice(-1)[0],
       columns,
-      columnKeys: ["event", "exercise", "reps", "weight", "duration"],
+      columnKeys: ["event", "exercise", "reps", "weight", "duration", "delete"],
       sort: sortSettings,
     }
   );
@@ -143,7 +194,7 @@ const ExerciseEventTable = () => {
 
   return (
     <div>
-      <table>
+      <table className={classes.table}>
         <thead>
           <tr>
             {headerCellProps.map((props, index) => {
@@ -155,19 +206,29 @@ const ExerciseEventTable = () => {
 
               return (
                 <th {...otherProps}>
-                  <button
-                    onClick={() =>
-                      handleSortClick(
-                        columnKeys[index],
-                        isColumnSorted,
-                        isColumnSortedAscending
-                      )
-                    }
-                  >
-                    {children}
-                    {isColumnSorted &&
-                      " " + (isColumnSortedAscending ? "<" : ">")}
-                  </button>
+                  {children && (
+                    <Button
+                      onClick={() =>
+                        handleSortClick(
+                          columnKeys[index],
+                          isColumnSorted,
+                          isColumnSortedAscending
+                        )
+                      }
+                      className={classes.thButton}
+                    >
+                      <h3>{children}</h3>
+                      {isColumnSorted ? (
+                        isColumnSortedAscending ? (
+                          <Icon icon={"arrowDown"} size={IconSizes.S} />
+                        ) : (
+                          <Icon icon={"arrowUp"} size={IconSizes.S} />
+                        )
+                      ) : (
+                        <Icon icon={"empty"} size={IconSizes.S} />
+                      )}
+                    </Button>
+                  )}
                 </th>
               );
             })}
@@ -179,7 +240,7 @@ const ExerciseEventTable = () => {
               {row.rowWrapperProps ? (
                 <ExerciseInstanceFields.Wrapper {...row.rowWrapperProps}>
                   {row.cellProps.map((cellProps) => (
-                    <td {...cellProps} />
+                    <td {...cellProps} className={classes.td} />
                   ))}
                 </ExerciseInstanceFields.Wrapper>
               ) : null}

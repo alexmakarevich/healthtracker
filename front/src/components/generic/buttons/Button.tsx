@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat } from "../../../utils/utils";
 
@@ -9,17 +9,21 @@ const useStyles = createUseStyles(
       alignItems: "center",
       background: "#fff",
       borderRadius: "0.25em",
-      border: "0",
+      border: "2px solid #666",
       padding: "0.25em",
-      margin: "0.25em",
-      boxShadow: "rgba(0, 0, 0, 0.2) 0 0 1px 2px",
+      margin: "0",
+      color: "#333",
+
+      // boxShadow: "rgba(0, 0, 0, 0.2) 0 0 1px 2px",
       // transition: "box-shadow 50ms ease-out 50ms",
       "&:hover": {
-        boxShadow: "rgba(0, 0, 0, 0.4) 0 0 1px 1px",
-        // border: "1px solid #000",
+        // boxShadow: "rgba(0, 0, 0, 0.4) 0 0 1px 1px",
+        border: "2px solid #000",
+        color: "#000",
       },
       "&:active": {
         // boxShadow: "rgba(0, 0, 0, 0.66) 0px 1px 1px 0px",
+        border: "2px solid #fc2",
       },
     },
   }),
@@ -28,7 +32,7 @@ const useStyles = createUseStyles(
 
 export const Button = ({
   ...rest
-}: React.HTMLAttributes<HTMLButtonElement>) => {
+}: ButtonHTMLAttributes<HTMLButtonElement>) => {
   const classes = useStyles();
 
   const { className, ...restRest } = rest;

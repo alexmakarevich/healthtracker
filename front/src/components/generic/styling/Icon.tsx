@@ -5,6 +5,8 @@ import all from "../../../icons/all.svg";
 
 import { Enummed } from "../../../utils/utils";
 
+const allUrl = all + "#gg-";
+
 export const IconSizes = {
   S: "1em",
   M: "2em",
@@ -18,13 +20,22 @@ interface InputProps {
 }
 
 const ICON_MAP = {
+  // TODO: better empty implementation than broken link to sprite
+  empty: "",
   cross: all + "#gg-close",
+  plus: all + "#gg-math-plus",
+  pen: all + "#gg-pen",
+  undo: all + "#gg-undo",
+  arrowDown: allUrl + "arrow-down",
+  arrowUp: allUrl + "arrow-up",
+  trashcan: allUrl + "trash",
+  checkRectangle: allUrl + "check-r",
 } as const;
 
 const useStyles = createUseStyles(
   () => ({
     svg: {
-      fill: "black",
+      // fill: "black",
       height: ({ size }: InputProps) => size,
       width: ({ size }: InputProps) => size,
     },
