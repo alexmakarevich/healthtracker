@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import React, { useEffect, ReactNode, useState } from "react";
 import {
   MutateFunction,
@@ -18,7 +19,7 @@ const timestamp = () => {
 export interface ContextProps<Something extends WithId> {
   all: Something[] | undefined;
   create: MutateFunction<Something, unknown, Something, unknown>;
-  update: MutateFunction<void, unknown, Something, unknown>;
+  update: MutateFunction<Something, unknown, Something, unknown>;
   delete: MutateFunction<undefined, unknown, Something, unknown>;
   getOneFromContext: (idOfObjectToGet: string) => Something | undefined;
   refresh: () => void;
@@ -57,21 +58,19 @@ export function generateContext<Item extends WithId>(
 
     const queryClient = useQueryCache();
 
-    const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {});
+    // TODO: check how tominimize number of updates
+    const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {
+      onSuccess: () => addAlert({ content: `loaded all ${itemName}s` }),
+      onError: () =>
+        addAlert({ content: `ERROR: failed to load all ${itemName}s` }),
+    });
 
     // const [all, setAll] = useState(allQuery.data?.data);
     const all = allQuery.data?.data;
 
-    // TODO: fix no refresh on first mutation
-
     // TODO: check if better to just return the getter, and/or not return at all
     async function refresh() {
-      //TODO: roll this back to just refresh
-      // const newItems = await CRUD.READ_ALL();
-      // setAll(newItems?.data);
-      // console.log("refresh", { newItems });
       await queryClient.invalidateQueries(itemName + "-get-all");
-      // addAlert("refresh " + itemName);
     }
 
     // TODO: check if should be replaced with geter from query, and/or merged with it somehow
@@ -81,16 +80,15 @@ export function generateContext<Item extends WithId>(
     }
 
     // TODO: check if this needs to be returned
-    const [
-      createOne,
-      { status, data, error, isSuccess, isLoading },
-    ] = useMutation((item: Item) => CRUD.CREATE(item), {
+    const [createOne] = useMutation((item: Item) => CRUD.CREATE(item), {
       onSuccess: async (data) => {
         await refresh();
         addAlert({ content: `created new ${itemName}` });
 
         console.log(data);
       },
+      onError: () =>
+        addAlert({ content: `ERROR: could not create ${itemName}` }),
     });
 
     const [updateOne, {}] = useMutation(
@@ -103,6 +101,8 @@ export function generateContext<Item extends WithId>(
       },
       {
         onSuccess: (_data, vars) => addAlert({ content: JSON.stringify(vars) }),
+        onError: () =>
+          addAlert({ content: `ERROR: failed to update ${itemName}` }),
       }
     );
 
@@ -111,7 +111,13 @@ export function generateContext<Item extends WithId>(
         return CRUD.DELETE_BY_ID(item._id);
       },
       {
-        onSuccess: () => refresh(),
+        onSuccess: () => {
+          addAlert({ content: `deleted ${itemName}` });
+
+          refresh();
+        },
+        onError: () =>
+          addAlert({ content: `ERROR: failed to delete ${itemName}` }),
       }
     );
 
@@ -124,10 +130,7 @@ export function generateContext<Item extends WithId>(
       refresh: refresh,
     };
 
-    return (
-      //TODO: figure out why context updates are inconsistent, especially when it comes to a refresh, following a change
-      <Provider value={providerValues}>{children}</Provider>
-    );
+    return <Provider value={providerValues}>{children}</Provider>;
   }
 
   // unsure if to return declaration or result

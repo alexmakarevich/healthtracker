@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import { ItemModes } from "./../utils/utils";
 import { updateObject } from "./../common/updateObject";
 import { useEffect, useMemo, useState } from "react";
@@ -105,7 +106,12 @@ export const useExerciseInstance = ({
 
   const update = (
     data: ExerciseInstanceDAO = dataState,
-    config?: MutateConfig<void, unknown, ExerciseInstanceDAO, unknown>
+    config?: MutateConfig<
+      ExerciseInstanceDAO,
+      unknown,
+      ExerciseInstanceDAO,
+      unknown
+    >
   ) => {
     EIContext.update(data, {
       onSuccess: () => EIContext.refresh(),
@@ -115,7 +121,12 @@ export const useExerciseInstance = ({
 
   const setOrUpdate = (
     data: ExerciseInstanceDAO,
-    config?: MutateConfig<void, unknown, ExerciseInstanceDAO, unknown>
+    config?: MutateConfig<
+      ExerciseInstanceDAO,
+      unknown,
+      ExerciseInstanceDAO,
+      unknown
+    >
   ) => {
     if (mode === ItemModes.Edit || mode === ItemModes.New) {
       return setDataState(data);
