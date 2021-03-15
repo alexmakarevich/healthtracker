@@ -71,6 +71,7 @@ export function generateContext<Item extends WithId>(
           children: `ERROR: failed to load all ${itemName}s`,
           type: AlertTypes.NEGATIVE,
         }),
+      staleTime: Infinity,
     });
 
     // const [all, setAll] = useState(allQuery.data?.data);
@@ -98,8 +99,16 @@ export function generateContext<Item extends WithId>(
 
         console.log(data);
       },
-      onError: () =>
-        addAlert({ children: `ERROR: could not create ${itemName}` }),
+      onError: (err) =>
+        addAlert({
+          children: (
+            <>
+              <p>ERROR: could not create {itemName}</p>
+              <p>details: {err}</p>
+            </>
+          ),
+          type: AlertTypes.NEGATIVE,
+        }),
     });
 
     const [updateOne, {}] = useMutation(
@@ -111,8 +120,8 @@ export function generateContext<Item extends WithId>(
         return CRUD.UPDATE_BY_ID(itemWithModifiedTimestamp);
       },
       {
-        onSuccess: (_data, vars) =>
-          addAlert({ children: JSON.stringify(vars) }),
+        // onSuccess: (_data, vars) =>
+        //   addAlert({ children: JSON.stringify(vars) }),
         onError: () =>
           addAlert({ children: `ERROR: failed to update ${itemName}` }),
       }
