@@ -1,5 +1,11 @@
 "use strict";
-import React, { ReactNode, useMemo, useState } from "react";
+import React, {
+  DOMAttributes,
+  HTMLProps,
+  ReactNode,
+  useMemo,
+  useState,
+} from "react";
 import { ValidateShapeAndReturn } from "../utils/utils";
 import { v4 as uuid } from "uuid";
 import { useCustomTable } from "./useCustomTable";
@@ -25,6 +31,7 @@ export type Columns<T> = {
     renderFn?: (data: T[K]) => React.ReactNode;
     groupingFn?: (data: T[K]) => React.ReactNode;
     sortAscendingFn?: (a: T[K], b: T[K]) => -1 | 0 | 1;
+    tdProps?: React.TdHTMLAttributes<HTMLTableCellElement>;
   };
 };
 
@@ -134,7 +141,7 @@ export const useCustomTableNew = <T, K extends keyof T, RowWrapperProps>({
           const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
             currentColKey
           ];
-          const { renderFn } = columns[currentColKey] as Columns<T>[K];
+          const { renderFn, tdProps } = columns[currentColKey] as Columns<T>[K];
 
           // const renderedChildren = useMemo(() => renderFn?.(data) ?? data, [
           //   data,
@@ -150,6 +157,7 @@ export const useCustomTableNew = <T, K extends keyof T, RowWrapperProps>({
                   rowSpan,
                   colSpan,
                   key: cellIndex,
+                  ...tdProps,
                 },
               ];
         }, []),

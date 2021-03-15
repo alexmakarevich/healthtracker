@@ -23,6 +23,7 @@ export type Columns<T> = {
     renderFn?: (data: T[K]) => React.ReactNode;
     groupingFn?: (data: T[K]) => React.ReactNode;
     sortAscendingFn?: (a: T[K], b: T[K]) => -1 | 0 | 1;
+    tdProps?: React.TdHTMLAttributes<HTMLTableCellElement>;
   };
 };
 
@@ -136,7 +137,7 @@ export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
           const { data, rowSpan, colSpan, isHidden } = currentRow.cellData[
             currentColKey
           ];
-          const { renderFn } = columns[currentColKey] as Columns<T>[K];
+          const { renderFn, tdProps } = columns[currentColKey] as Columns<T>[K];
 
           return isHidden
             ? acc
@@ -147,6 +148,7 @@ export const useCustomTable = <T, K extends keyof T, RowWrapperProps>({
                   rowSpan,
                   colSpan,
                   key: cellIndex,
+                  ...tdProps,
                 },
               ];
         }, []),

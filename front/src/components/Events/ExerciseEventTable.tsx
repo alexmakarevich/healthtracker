@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { Event } from "../../logic/eventLogic";
-import { ItemModes } from "../../utils/utils";
+import { classConcat, ItemModes } from "../../utils/utils";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import {
   Columns,
@@ -20,6 +20,7 @@ import { ExerciseFields } from "../Exercises/ExerciseFields";
 import { createUseStyles } from "react-jss";
 import { Button } from "../generic/buttons/Button";
 import { Icon, IconSizes } from "../generic/styling/Icon";
+import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 
 const useStyles = createUseStyles(
   {
@@ -31,6 +32,10 @@ const useStyles = createUseStyles(
       padding: [0, 5],
       // maxWidth: 150,
     },
+    th: {
+      padding: 2,
+      margin: 0,
+    },
     thButton: {
       width: "100%",
       justifyContent: "space-between",
@@ -38,9 +43,28 @@ const useStyles = createUseStyles(
         margin: 0,
         padding: 0,
       },
+      background: "#333",
+      color: "#ddd",
+      "&:hover": {
+        color: "white",
+      },
     },
     td: {
       position: "relative",
+      "& > div": {
+        padding: [5, 0],
+      },
+    },
+    tr: {
+      background: "#f0f0f0",
+      minHeight: "4em",
+
+      "&:nth-child(odd)": {
+        background: "#ddd",
+      },
+      "&:nth-child(even)": {
+        background: "#f0f0f0",
+      },
     },
     tableInput: {
       position: "absolute",
@@ -48,6 +72,19 @@ const useStyles = createUseStyles(
       left: 0,
       width: "100%",
       height: "100%",
+      background: "transparent",
+      border: "none",
+      borderBottom: "2px transparent solid",
+      "&:hover": {
+        // boxShadow: "rgba(0, 0, 0, 0.4) 0 0 1px 1px",
+        borderBottom: "2px #444 solid",
+      },
+      "&:active": {
+        borderBottom: "2px #000 solid",
+      },
+    },
+    dateTh: {
+      width: 220,
     },
   },
 
@@ -57,12 +94,8 @@ const useStyles = createUseStyles(
 const ExerciseEventTable = () => {
   const events = useEventContext();
   const exerciseInstances = useExerciseInstanceContext();
+  const exercises = useExerciseContext();
   const classes = useStyles();
-
-  // writeEventIdsToExerciseInstances(
-  //   eventsFromContext.all ?? [],
-  //   exerciseInstanceContext.all ?? []
-  // );
 
   interface ExerciseEventTableData {
     event: string;
@@ -86,9 +119,6 @@ const ExerciseEventTable = () => {
     { item: newItem, initialMode: ItemModes.New },
   ];
 
-  console.log({ data: exerciseInstances.all, dataAndNew });
-
-  // TODO: remove slice
   const tableData: Row<
     ExerciseEventTableData,
     {
@@ -100,7 +130,9 @@ const ExerciseEventTable = () => {
     return {
       cellData: {
         event: { data: item.eventId },
-        exercise: { data: item.exerciseId[0] },
+        exercise: {
+          data: exercises.getOneFromContext(item.exerciseId)?.title ?? "",
+        },
         eventIdInExercise: {
           data: item.eventId,
         },
@@ -114,8 +146,6 @@ const ExerciseEventTable = () => {
     };
   });
 
-  // BUG: number inputs switch focus on every input (from up arrow to down arrow, if pressing arrows on keyboard, starts scrolling page, as happened before sometimes)
-
   const columns: Columns<ExerciseEventTableData> = useMemo(
     () => ({
       event: {
@@ -123,15 +153,17 @@ const ExerciseEventTable = () => {
         renderFn: () => (
           <FlexRow style={{ justifyContent: "center" }}>
             <ExerciseInstanceFields.Buttons />
-            <ExerciseInstanceFields.Event />
+            <ExerciseInstanceFields.Event className={classes.tableInput} />
           </FlexRow>
         ),
+        tdProps: { style: { minWidth: 200 } },
       },
       exercise: {
         title: "exercise",
         renderFn: () => (
           <ExerciseInstanceFields.Exercise className={classes.exercise} />
         ),
+        tdProps: { style: { maxWidth: 200 } },
       },
       reps: {
         title: "reps",
@@ -205,7 +237,7 @@ const ExerciseEventTable = () => {
               const isColumnSortedAscending = !!sort?.isAscending;
 
               return (
-                <th {...otherProps}>
+                <th {...otherProps} className={classes.th}>
                   {children && (
                     <Button
                       onClick={() =>
@@ -236,7 +268,7 @@ const ExerciseEventTable = () => {
         </thead>
         <tbody>
           {rowAndCellProps.map((row) => (
-            <tr {...row.rowProps}>
+            <tr {...row.rowProps} className={classes.tr}>
               {row.rowWrapperProps ? (
                 <ExerciseInstanceFields.Wrapper {...row.rowWrapperProps}>
                   {row.cellProps.map((cellProps) => (

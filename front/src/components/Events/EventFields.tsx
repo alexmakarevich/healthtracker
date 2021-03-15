@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useState } from "react";
+import React, { HTMLProps, ReactNode, useContext, useState } from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
@@ -97,7 +97,7 @@ const Buttons = () => {
   );
 };
 
-const DateTime = () => {
+const DateTime = (inputProps: HTMLProps<HTMLInputElement>) => {
   const { handleSetOrUpdate, complexState: event } = useThisContext();
 
   const time = new Date(event.time);
@@ -109,6 +109,7 @@ const DateTime = () => {
 
   return (
     <input
+      {...inputProps}
       type="datetime-local"
       value={time.toISOString().slice(0, 16)}
       onChange={(e) => changeDateTime(e.target.value)}

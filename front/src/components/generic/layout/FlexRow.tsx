@@ -21,7 +21,7 @@ const useStyles = createUseStyles(
       flexWrap: "wrap",
     },
     child: {
-      padding: "5px",
+      // padding: "5px",
     },
   },
   { name: "FlexRow" }
@@ -38,7 +38,11 @@ export const FlexRow = ({ children, childClassName }: Props) => {
         !child
           ? null
           : React.cloneElement(child, {
-              className: classConcat(classes.child, childClassName),
+              className: classConcat(
+                classes.child,
+                childClassName,
+                child.props.className
+              ),
               key: index,
             })
       )}

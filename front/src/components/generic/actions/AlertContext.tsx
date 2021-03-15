@@ -74,7 +74,7 @@ export const AlertContext = ({ children }: AlertContextProps) => {
           };
         },
         // TODO: set realistic value after done with testing
-        400000
+        3000
       );
     }
   }, [alerts]);

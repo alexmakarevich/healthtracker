@@ -79,6 +79,7 @@ export function generateContext<Item extends WithId>(
 
     // TODO: check if better to just return the getter, and/or not return at all
     async function refresh() {
+      // TODO: invalidate individual items
       await queryClient.invalidateQueries(itemName + "-get-all");
     }
 

@@ -176,22 +176,19 @@ const Repetitions = ({
     return null;
   } else {
     return (
-      <div>
-        <input
-          disabled={mode === ItemModes.Show}
-          type={"number"}
-          value={data.repetitions ?? 0}
-          key={"check"}
-          className={classConcat(classes.repsInput, className)}
-          onChange={(e: React.ChangeEvent<any>) =>
-            setOrUpdate({
-              ...data,
-              repetitions: parseInt(e.target.value),
-            })
-          }
-        />
-        {/* <div>reps</div> */}
-      </div>
+      <input
+        disabled={mode === ItemModes.Show}
+        type={"number"}
+        value={data.repetitions ?? 0}
+        key={"check"}
+        className={classConcat(classes.repsInput, className)}
+        onChange={(e: React.ChangeEvent<any>) =>
+          setOrUpdate({
+            ...data,
+            repetitions: parseInt(e.target.value),
+          })
+        }
+      />
     );
   }
 };
@@ -205,19 +202,16 @@ const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   //   return null;
   // } else {
   return (
-    <div>
-      <input
-        disabled={mode === ItemModes.Show}
-        type={"number"}
-        value={data.weightKg ?? 0}
-        key={"check"}
-        className={classConcat(classes.weightInput, className)}
-        onChange={(e: React.ChangeEvent<any>) =>
-          setOrUpdate({ ...data, weightKg: parseInt(e.target.value) })
-        }
-      />
-      {/* <div>kg</div> */}
-    </div>
+    <input
+      disabled={mode === ItemModes.Show}
+      type={"number"}
+      value={data.weightKg ?? 0}
+      key={"check"}
+      className={classConcat(classes.weightInput, className)}
+      onChange={(e: React.ChangeEvent<any>) =>
+        setOrUpdate({ ...data, weightKg: parseInt(e.target.value) })
+      }
+    />
   );
   // }
 };
@@ -249,12 +243,12 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   }
 };
 
-const Event = () => {
+const Event = (inputProps: HTMLProps<HTMLInputElement>) => {
   const { data, event, setOrUpdate } = useThisContext();
 
   return event ? (
     <EventFields.Wrapper initialMode={ItemModes.QuickEdit} event={event}>
-      <EventFields.DateTime />
+      <EventFields.DateTime {...inputProps} />
     </EventFields.Wrapper>
   ) : null;
 };

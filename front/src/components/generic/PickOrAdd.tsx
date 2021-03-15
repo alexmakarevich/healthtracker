@@ -5,6 +5,8 @@ import { createUseStyles } from "react-jss";
 import SearchWithDropdown from "./SearchWithDropdown";
 import Removable from "./Removable";
 import Collapsible, { Animations } from "./Collapsible";
+import { Button } from "./buttons/Button";
+import { Icon, IconSizes } from "./styling/Icon";
 
 const styles = () => ({
   wrapper: {
@@ -96,20 +98,24 @@ const PickOrAdd = ({
         animation={Animations.ExpandWidth}
         isExpanded={searchInput.length > 0}
       >
-        <button
+        <Button
           onClick={() => {
             onCreateNew(searchInput);
             setSearchInput("");
           }}
         >
+          <Icon icon={"plus"} size={IconSizes.S} />
           create new
-        </button>
+        </Button>
       </Collapsible>
       <Collapsible
         animation={Animations.ExpandWidth}
         isExpanded={!!allSelected && allSelected.length > 0}
       >
-        <button onClick={onCommitSelected}> add selected </button>
+        <Button onClick={onCommitSelected}>
+          <Icon icon={"plus"} size={IconSizes.S} />
+          add selected{" "}
+        </Button>
       </Collapsible>
     </div>
   );

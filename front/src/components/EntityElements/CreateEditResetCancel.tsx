@@ -64,9 +64,11 @@ const CreateEditResetCancel = ({
         <>
           <Button disabled={!valid} onClick={() => onCreate()}>
             <Icon icon={"plus"} size={IconSizes.S} />
+            create
           </Button>
           <Button onClick={() => onReset()}>
             <Icon icon={"undo"} size={IconSizes.S} />
+            reset
           </Button>
         </>
       )}

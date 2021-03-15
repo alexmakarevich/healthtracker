@@ -21,7 +21,7 @@ export const AlertTypes = {
   NEGATIVE: {
     name: "NEGATIVE",
     style: {
-      background: "red",
+      background: "lightcoral",
     },
   },
   NEUTRAL: {
