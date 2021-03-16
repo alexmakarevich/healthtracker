@@ -27,6 +27,7 @@ import { CheckSoringRerender } from "./components/Sandbox/CheckSoringRerender";
 import { Icon, IconSizes } from "./components/generic/styling/Icon";
 import allSvg from "./icons/all.svg";
 import { Button } from "./components/generic/buttons/Button";
+import { ExerciseEventTableNew } from "./components/Events/ExerciseEventTableNew";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -50,6 +51,8 @@ function App() {
                 <NutritionItemTable /> */}
                 {/* <CheckHowHooksRerender /> */}
                 <ExerciseEventTable />
+                <ExerciseEventTableNew />
+
                 {/* <EventTable /> */}
                 <ExerciseInstanceTable />
 
