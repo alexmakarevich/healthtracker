@@ -5,7 +5,7 @@ import { InputTxtNumFn } from "../InputTxtNumFn";
 const useStyles = createUseStyles(
   {
     input: {
-      width: "2.25em",
+      width: "3em",
     },
   },
   { name: "InputYear" }

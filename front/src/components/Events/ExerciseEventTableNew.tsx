@@ -26,48 +26,11 @@ import { Table } from "../generic/layout/Table";
 // TODO: cleanup style
 const useStyles = createUseStyles(
   {
-    table: {
-      borderCollapse: "collapse",
-      borderSpacing: "unset",
-    },
     exercise: {
       padding: [0, 5],
       // maxWidth: 150,
     },
-    th: {
-      padding: 2,
-      margin: 0,
-    },
-    thButton: {
-      width: "100%",
-      justifyContent: "space-between",
-      "& > h3": {
-        margin: 0,
-        padding: 0,
-      },
-      background: "#333",
-      color: "#ddd",
-      "&:hover": {
-        color: "white",
-      },
-    },
-    td: {
-      position: "relative",
-      "& > div": {
-        padding: [5, 0],
-      },
-    },
-    tr: {
-      background: "#f0f0f0",
-      minHeight: "4em",
 
-      "&:nth-child(odd)": {
-        background: "#ddd",
-      },
-      "&:nth-child(even)": {
-        background: "#f0f0f0",
-      },
-    },
     tableInput: {
       position: "absolute",
       top: 0,
@@ -84,9 +47,6 @@ const useStyles = createUseStyles(
       "&:active": {
         borderBottom: "2px #000 solid",
       },
-    },
-    dateTh: {
-      width: 220,
     },
   },
 
@@ -193,26 +153,6 @@ export const ExerciseEventTableNew = () => {
     []
   );
 
-  // TODO: maybe return this from single generator, together with useTable - can save on boilerplate typing like that. and/or extract interface for sort settings
-  const [sortSettings, setSortSettings] = useState<
-    UseCustomTableProps<
-      ExerciseEventTableData,
-      keyof ExerciseEventTableData,
-      // TODO: allow skipping the third param?
-      any
-    >["sort"]
-  >({ by: "event", isAscending: true });
-
-  const { headerCellProps, rowAndCellProps, columnKeys, sort } = useCustomTable(
-    {
-      data: tableData.slice(0, -1),
-      lastRow: tableData.slice(-1)[0],
-      columns,
-      columnKeys: ["event", "exercise", "reps", "weight", "duration", "delete"],
-      sort: sortSettings,
-    }
-  );
-
   const props = {
     data: tableData.slice(0, -1),
     lastRow: tableData.slice(-1)[0],
@@ -225,20 +165,6 @@ export const ExerciseEventTableNew = () => {
       "duration",
       "delete",
     ] as (keyof ExerciseEventTableData)[],
-    sort: sortSettings,
-  };
-
-  const handleSortClick = (
-    columnKey: keyof ExerciseEventTableData,
-    isSorted: boolean,
-    isAscending: boolean
-  ) => {
-    const newSettings =
-      isSorted && !isAscending
-        ? undefined
-        : { by: columnKey, isAscending: !isAscending };
-
-    setSortSettings(newSettings);
   };
 
   return (

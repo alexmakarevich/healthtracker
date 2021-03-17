@@ -5,7 +5,7 @@ import { InputTxtNumList } from "../InputTxtNumList";
 const useStyles = createUseStyles(
   {
     input: {
-      width: "1.25em",
+      width: "2em",
     },
   },
   { name: "InputDay" }

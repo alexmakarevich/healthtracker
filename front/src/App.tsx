@@ -70,14 +70,14 @@ function App() {
         </ExerciseInstanceProvider>
       </AlertContext>
 
-      {/* <InputDate />
+      <InputDate />
       <InputTime
         hh={hours}
         mm={minutes}
         onHourChange={setHours}
         onMinuteChange={setMinutes}
       />
-      <input type={"number"} step={"any"} /> */}
+      <input type={"number"} step={"any"} />
     </div>
   );
 }

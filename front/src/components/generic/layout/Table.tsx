@@ -26,10 +26,7 @@ const useStyles = createUseStyles(
       borderCollapse: "collapse",
       borderSpacing: "unset",
     },
-    exercise: {
-      padding: [0, 5],
-      // maxWidth: 150,
-    },
+
     th: {
       padding: 2,
       margin: 0,
@@ -64,23 +61,7 @@ const useStyles = createUseStyles(
         background: "#f0f0f0",
       },
     },
-    tableInput: {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      background: "transparent",
-      border: "none",
-      borderBottom: "2px transparent solid",
-      "&:hover": {
-        // boxShadow: "rgba(0, 0, 0, 0.4) 0 0 1px 1px",
-        borderBottom: "2px #444 solid",
-      },
-      "&:active": {
-        borderBottom: "2px #000 solid",
-      },
-    },
+
     dateTh: {
       width: 220,
     },
@@ -205,5 +186,3 @@ export const Table = <
     </div>
   );
 };
-
-export { Table as ExerciseEventTable };
