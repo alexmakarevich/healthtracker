@@ -27,7 +27,7 @@ import { Table } from "../generic/layout/Table";
 const useStyles = createUseStyles(
   {
     exercise: {
-      padding: [0, 5],
+      padding: [0, 2],
       // maxWidth: 150,
     },
 
@@ -118,7 +118,7 @@ export const ExerciseEventTableNew = () => {
             <ExerciseInstanceFields.Event className={classes.tableInput} />
           </FlexRow>
         ),
-        tdProps: { style: { minWidth: 200 } },
+        tdProps: { style: { minWidth: 130 } },
       },
       exercise: {
         title: "exercise",

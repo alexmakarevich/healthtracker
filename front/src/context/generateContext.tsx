@@ -61,11 +61,11 @@ export function generateContext<Item extends WithId>(
 
     // TODO: check how tominimize number of updates
     const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {
-      onSuccess: () =>
-        addAlert({
-          children: `loaded all ${itemName}s`,
-          type: AlertTypes.POSITIVE,
-        }),
+      // onSuccess: () =>
+      //   addAlert({
+      //     children: `loaded all ${itemName}s`,
+      //     type: AlertTypes.POSITIVE,
+      //   }),
       onError: () =>
         addAlert({
           children: `ERROR: failed to load all ${itemName}s`,

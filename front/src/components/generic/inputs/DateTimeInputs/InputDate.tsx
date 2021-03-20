@@ -1,6 +1,7 @@
 import React, { useState, useRef, RefObject } from "react";
 import { createUseStyles } from "react-jss";
 import { InputDay } from "./InputDay";
+import { InputHours } from "./InputHours";
 import { InputMonth } from "./InputMonth";
 import { InputYear } from "./InputYear";
 const useStyles = createUseStyles(
@@ -29,13 +30,11 @@ const InputDate = () => {
   const yearRef = useRef<HTMLInputElement>(null);
 
   function handleDayChange(n: number) {
-    console.log("handleDayChange", n);
     const newDay = new Date(year, month, n);
     setDate(newDay);
   }
 
   function handleMonthChange(n: number) {
-    console.log("handleMonthChange", n, " day: ", day, " year: ", year);
     const maxDay = daysInMonth(n - 1, year);
     if (day <= maxDay) {
       const newMonth = new Date(year, n - 1, day);
@@ -47,7 +46,6 @@ const InputDate = () => {
   }
 
   function handleYearChange(n: number) {
-    console.log("handleYearChange", n);
     const maxDay = daysInMonth(month, n);
     if (day <= maxDay) {
       setDate(new Date(n, month, day));
@@ -58,7 +56,6 @@ const InputDate = () => {
 
   function daysInMonth(month: number, year: number) {
     const days = new Date(year, month + 1, 0).getDate();
-    console.log(days, "days in month");
     return days;
   }
 
@@ -126,18 +123,16 @@ const InputDate = () => {
       <div>{date.toLocaleDateString(locale)}</div>
       <InputDay
         ref={dayRef}
-        onProperChange={handleDayChange}
+        onChange={handleDayChange}
         day={date.getDate()}
-        itemList={dayList}
-        maxDay={maxDays}
+        daysInMonth={maxDays}
         onRightArrow={() => focusOn(monthRef)}
       />
 
       <InputMonth
         ref={monthRef}
         month={date.getMonth() + 1}
-        monthList={monthList}
-        onProperChange={handleMonthChange}
+        onChange={handleMonthChange}
         onRightArrow={() => focusOn(yearRef)}
         onLeftArrow={() => focusOn(dayRef)}
       />
@@ -145,7 +140,7 @@ const InputDate = () => {
       <InputYear
         ref={yearRef}
         year={year}
-        onProperChange={handleYearChange}
+        onChange={handleYearChange}
         onLeftArrow={() => focusOn(monthRef)}
       />
     </div>

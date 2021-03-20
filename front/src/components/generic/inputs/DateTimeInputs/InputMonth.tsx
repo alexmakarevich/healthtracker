@@ -1,43 +1,59 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, Ref } from "react";
 import { createUseStyles } from "react-jss";
-import { InputTxtNumList } from "../InputTxtNumList";
+import { classConcat } from "../../../../utils/utils";
+import { InputScaled, InputScaledProps } from "../InputScaled";
 
 const useStyles = createUseStyles(
   {
-    input: {
-      width: "2em",
-    },
+    input: {},
   },
   { name: "InputMonth" }
 );
 
-interface Props {
+type Props = {
   month: number;
-  monthList: {
-    no: number;
-    string: string;
-  }[];
-  onProperChange: (monthNo: number) => void;
+  onChange: (newVal: number) => void;
   onRightArrow?: () => void;
   onLeftArrow?: () => void;
-}
+} & Omit<InputScaledProps, "onChange">;
 
-export const InputMonth = forwardRef((props: Props, ref) => {
-  const classes = useStyles();
+export const InputMonth = forwardRef(
+  (props: Props, ref: Ref<HTMLInputElement>) => {
+    const { month: day, onChange, className, ...rest } = props;
 
-  return (
-    <InputTxtNumList
-      hasButtons
-      ref={ref}
-      value={props.month}
-      inputClassName={classes.input}
-      itemList={props.monthList}
-      maxNo={12}
-      minNo={1}
-      minStringLengthToParse={1}
-      onProperChange={props.onProperChange}
-      onLeftArrow={props.onLeftArrow}
-      onRightArrow={props.onRightArrow}
-    />
-  );
-});
+    const classes = useStyles();
+    const [formatted, setFormatted] = useState(props.month.toString());
+
+    useEffect(() => {
+      setFormatted(
+        props.month > 9 ? props.month.toString() : "0" + props.month.toString()
+      );
+    }, [props]);
+
+    function handleChange(eventValue: string) {
+      const n = parseInt(eventValue);
+
+      //completely disallowing 3-digit numbers and negative numbers
+      if (n > 99 || n < 0) {
+      } else if (n >= 1 && n <= 12) {
+        props.onChange(n);
+      } else if (n < 1) {
+        props.onChange(12);
+      } else if (n > 12) {
+        props.onChange(1);
+      }
+    }
+
+    return (
+      <InputScaled
+        ref={ref}
+        hideButtons={true}
+        className={classConcat(classes.input, className)}
+        type={"number"}
+        value={formatted}
+        onChange={(e) => handleChange(e.target.value)}
+        {...rest}
+      />
+    );
+  }
+);

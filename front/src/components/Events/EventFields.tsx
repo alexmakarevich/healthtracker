@@ -24,6 +24,7 @@ import {
   EntityBaseContextUseQuery,
   useEntityBaseUseQuery,
 } from "../../hooks/useEntityBase";
+import { InputDateTime } from "../generic/inputs/DateTimeInputs/InputDateTime";
 
 // TODO: deprecate or rewrite with parent/child logic between events and instances moved into instances,
 // i.e. instead of interating of "children" field of event, use "eventid" field in and exercise instance, or nutrition instance
@@ -102,19 +103,11 @@ const DateTime = (inputProps: HTMLProps<HTMLInputElement>) => {
 
   const time = new Date(event.time);
 
-  function changeDateTime(newDateTime: string) {
-    const dateTime = new Date(newDateTime);
-    handleSetOrUpdate({ time: dateTime.toISOString() });
+  function changeDateTime(newDateTime: Date) {
+    handleSetOrUpdate({ time: newDateTime.toISOString() });
   }
 
-  return (
-    <input
-      {...inputProps}
-      type="datetime-local"
-      value={time.toISOString().slice(0, 16)}
-      onChange={(e) => changeDateTime(e.target.value)}
-    />
-  );
+  return <InputDateTime date={time} onChange={changeDateTime} />;
 };
 
 const NutritionItems = () => {

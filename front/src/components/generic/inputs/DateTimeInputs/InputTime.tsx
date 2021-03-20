@@ -12,21 +12,21 @@ const useStyles = createUseStyles(
   { name: "InputHour" }
 );
 
-interface Props {
+interface InputTimeProps {
   hh: number;
   mm: number;
   onHourChange: (hh: number) => void;
   onMinuteChange: (mm: number) => void;
 }
 
-export const InputTime = (props: Props) => {
+export const InputTime = (props: InputTimeProps) => {
   const classes = useStyles();
 
   return (
     <div>
       {props.hh} : {props.mm}
       <InputHours hours={props.hh} onChange={props.onHourChange} />
-      <InputMinutes hours={props.mm} onChange={props.onMinuteChange} />
+      <InputMinutes minutes={props.mm} onChange={props.onMinuteChange} />
     </div>
   );
 };

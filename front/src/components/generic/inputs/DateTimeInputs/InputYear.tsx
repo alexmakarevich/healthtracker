@@ -1,57 +1,61 @@
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, Ref } from "react";
 import { createUseStyles } from "react-jss";
+import { classConcat } from "../../../../utils/utils";
+import { InputScaled, InputScaledProps } from "../InputScaled";
 import { InputTxtNumFn } from "../InputTxtNumFn";
 
 const useStyles = createUseStyles(
   {
     input: {
-      width: "3em",
+      // minWidth: "2rem",
     },
   },
   { name: "InputYear" }
 );
 
-interface Props {
+type Props = {
   year: number;
-  onProperChange: (yearNo: number) => void;
+  onChange: (newVal: number) => void;
   onRightArrow?: () => void;
   onLeftArrow?: () => void;
-}
+} & Omit<InputScaledProps, "onChange">;
 
-function noFromString(yearString: string | undefined) {
-  if (yearString === undefined) {
-    return;
+export const InputYear = forwardRef(
+  (props: Props, ref: Ref<HTMLInputElement>) => {
+    const { year: day, onChange, className, ...rest } = props;
+
+    const classes = useStyles();
+    const [formatted, setFormatted] = useState(props.year.toString());
+    const [isValid, setIsValid] = useState(true);
+
+    useEffect(() => {
+      setFormatted(
+        props.year > 9 ? props.year.toString() : "0" + props.year.toString()
+      );
+    }, [props]);
+
+    function handleChange(eventValue: string) {
+      const n = parseInt(eventValue);
+      // a limitation of JS Date
+      if (n >= 1970) {
+        props.onChange(n);
+        setIsValid(true);
+      } else {
+        setFormatted(eventValue);
+        setIsValid(false);
+      }
+    }
+
+    return (
+      <InputScaled
+        hideButtons={true}
+        ref={ref}
+        className={classConcat(classes.input, className)}
+        type={"number"}
+        value={formatted}
+        onChange={(e) => handleChange(e.target.value)}
+        {...rest}
+      />
+    );
   }
-  if (yearString.length === 0) {
-    return 0;
-  }
-  const parsed: number = parseInt(yearString);
-  if (parsed > 0) {
-    return parsed;
-  }
-}
-
-function stringFromNo(yearNo: number) {
-  return yearNo.toString();
-}
-
-export const InputYear = forwardRef((props: Props, ref) => {
-  const classes = useStyles();
-
-  return (
-    <InputTxtNumFn
-      hasButtons
-      ref={ref}
-      value={props.year}
-      inputClassName={classes.input}
-      maxNo={9999}
-      minNo={1970}
-      minStringLengthToParse={1}
-      onProperChange={props.onProperChange}
-      onLeftArrow={props.onLeftArrow}
-      onRightArrow={props.onRightArrow}
-      noFromString={noFromString}
-      stringFromNo={stringFromNo}
-    />
-  );
-});
+);

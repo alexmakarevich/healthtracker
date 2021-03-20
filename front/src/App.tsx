@@ -28,6 +28,7 @@ import { Icon, IconSizes } from "./components/generic/styling/Icon";
 import allSvg from "./icons/all.svg";
 import { Button } from "./components/generic/buttons/Button";
 import { ExerciseEventTableNew } from "./components/Events/ExerciseEventTableNew";
+import { InputDateTime } from "./components/generic/inputs/DateTimeInputs/InputDateTime";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -36,6 +37,8 @@ function App() {
 
   const [hours, setHours] = useState(now.getHours());
   const [minutes, setMinutes] = useState(now.getMinutes());
+
+  const [date, setDate] = useState(now);
 
   return (
     <div className="App">
@@ -50,7 +53,7 @@ function App() {
                 <ExerciseVisualization />
                 <NutritionItemTable /> */}
                 {/* <CheckHowHooksRerender /> */}
-                <ExerciseEventTable />
+                {/* <ExerciseEventTable /> */}
                 <ExerciseEventTableNew />
 
                 {/* <EventTable /> */}
@@ -71,13 +74,14 @@ function App() {
       </AlertContext>
 
       <InputDate />
+      <InputDateTime date={date} onChange={(d) => setDate(d)} />
+
       <InputTime
         hh={hours}
         mm={minutes}
         onHourChange={setHours}
         onMinuteChange={setMinutes}
       />
-      <input type={"number"} step={"any"} />
     </div>
   );
 }
