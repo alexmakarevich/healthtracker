@@ -56,48 +56,40 @@ export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
   const year = date.getFullYear();
   const hours = date.getHours();
   const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  const milliseconds = date.getMilliseconds();
 
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
 
-  // TODO: optimize change handlers
+  // TODO: conversion between UTC & local
 
   function handleDayChange(n: number) {
-    const newDay = new Date(year, month, n);
-    onChange(newDay);
+    onChange(new Date(year, month, n, hours, minutes, seconds, milliseconds));
   }
 
   function handleMonthChange(n: number) {
-    const maxDay = daysInMonth(n - 1, year);
-    if (day <= maxDay) {
-      const newMonth = new Date(year, n - 1, day);
-      onChange(newMonth);
-    } else {
-      const newMonth = new Date(year, n - 1, maxDay);
-      onChange(newMonth);
-    }
+    onChange(new Date(year, n, day, hours, minutes, seconds, milliseconds));
   }
 
   function handleYearChange(n: number) {
     const maxDay = daysInMonth(month, n);
     if (day <= maxDay) {
-      onChange(new Date(n, month, day));
+      onChange(new Date(n, month, day, hours, minutes, seconds, milliseconds));
     } else {
-      onChange(new Date(n, month, maxDay));
+      onChange(
+        new Date(n, month, maxDay, hours, minutes, seconds, milliseconds)
+      );
     }
   }
 
   function handleHourChange(n: number) {
-    const hourDiff = n - hours;
-    const newMs = dateMs + 3600000 * hourDiff;
-    onChange(new Date(newMs));
+    onChange(new Date(year, month, day, n, minutes, seconds, milliseconds));
   }
 
   function handleMinuteChange(n: number) {
-    const minuteDiff = n - minutes;
-    const newMs = dateMs + 60000 * minuteDiff;
-    onChange(new Date(newMs));
+    onChange(new Date(year, month, day, hours, n, seconds, milliseconds));
   }
 
   function daysInMonth(month: number, year: number) {

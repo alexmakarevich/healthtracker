@@ -11,7 +11,7 @@ const useStyles = createUseStyles(
       padding: [1, 2],
     },
   },
-  { name: "InputMScaled" }
+  { name: "InputScaled" }
 );
 
 export type InputScaledProps = InputProps & {

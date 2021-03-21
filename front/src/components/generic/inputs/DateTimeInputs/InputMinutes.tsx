@@ -49,30 +49,17 @@ export const InputMinutes = forwardRef(
     }
 
     return (
-      <>
-        <div
-          className={classConcat(classes.input, className)}
-          style={{
-            position: "absolute",
-            zIndex: 1000,
-            opacity: "0",
-            whiteSpace: "pre",
-          }}
-        >
-          {formatted}
-        </div>
-        <InputScaled
-          ref={ref}
-          hideButtons={true}
-          className={classConcat(classes.input, className)}
-          type={"number"}
-          value={formatted}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange(e.target.value)
-          }
-          {...rest}
-        />
-      </>
+      <InputScaled
+        ref={ref}
+        hideButtons={true}
+        className={classConcat(classes.input, className)}
+        type={"number"}
+        value={formatted}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleChange(e.target.value)
+        }
+        {...rest}
+      />
     );
   }
 );
