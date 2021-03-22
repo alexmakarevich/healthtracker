@@ -33,13 +33,13 @@ const ICON_MAP = {
 } as const;
 
 const useStyles = createUseStyles(
-  () => ({
+  {
     svg: {
       // fill: "black",
-      height: ({ size }: InputProps) => size,
-      width: ({ size }: InputProps) => size,
+      height: ({ size }: { size: Enummed<typeof IconSizes> }) => size,
+      width: ({ size }: { size: Enummed<typeof IconSizes> }) => size,
     },
-  }),
+  },
   { name: "Icon" }
 );
 
