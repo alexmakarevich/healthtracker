@@ -170,7 +170,7 @@ const Repetitions = ({
 }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
-  const { data, setOrUpdate, mode } = useThisContext();
+  const { data, setOrUpdateDebounced, mode } = useThisContext();
 
   if (mode === ItemModes.Show && !data.repetitions) {
     return null;
@@ -183,7 +183,7 @@ const Repetitions = ({
         key={"check"}
         className={classConcat(classes.repsInput, className)}
         onChange={(e: React.ChangeEvent<any>) =>
-          setOrUpdate({
+          setOrUpdateDebounced({
             ...data,
             repetitions: parseInt(e.target.value),
           })
@@ -196,7 +196,7 @@ const Repetitions = ({
 const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
-  const { data, setOrUpdate, mode } = useThisContext();
+  const { data, setOrUpdateDebounced, mode } = useThisContext();
 
   // if (mode === ItemModes.Show && !data.weightKg) {
   //   return null;
@@ -209,7 +209,7 @@ const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
       key={"check"}
       className={classConcat(classes.weightInput, className)}
       onChange={(e: React.ChangeEvent<any>) =>
-        setOrUpdate({ ...data, weightKg: parseInt(e.target.value) })
+        setOrUpdateDebounced({ ...data, weightKg: parseInt(e.target.value) })
       }
     />
   );
@@ -219,7 +219,7 @@ const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
-  const { data, setOrUpdate, update, mode, reset } = useThisContext();
+  const { data, setOrUpdateDebounced, update, mode, reset } = useThisContext();
 
   if (mode === ItemModes.Show && !data.durationSeconds) {
     return null;
@@ -233,7 +233,7 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
         className={classConcat(classes.durationInput, className)}
         onChange={async (e: React.ChangeEvent<any>) => {
           // setOrUpdate({ ...data, durationSeconds: parseInt(e.target.value) })
-          setOrUpdate({
+          setOrUpdateDebounced({
             ...data,
             durationSeconds: parseInt(e.target.value),
           });
@@ -244,7 +244,7 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 };
 
 const Event = (inputProps: HTMLProps<HTMLInputElement>) => {
-  const { data, event, setOrUpdate } = useThisContext();
+  const { event } = useThisContext();
 
   return event ? (
     <EventFields.Wrapper initialMode={ItemModes.QuickEdit} event={event}>

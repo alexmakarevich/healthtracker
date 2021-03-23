@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 import "./App.css";
 import { NutritionItemTable } from "./components/Nutrition/NutritionItemTable";
 import { EventTable } from "./components/Events/EventTable";
@@ -29,6 +29,13 @@ import allSvg from "./icons/all.svg";
 import { Button } from "./components/generic/buttons/Button";
 import { ExerciseEventTableNew } from "./components/Events/ExerciseEventTableNew";
 import { InputDateTime } from "./components/generic/inputs/DateTimeInputs/InputDateTime";
+import { debounce, debouncePajeet, debounceVoid } from "./utils/utils";
+import {
+  useDebounce,
+  useDebounceCallbackFromValue,
+  useDebouncedCallbackVoid,
+} from "./hooks/useDebounce";
+import { Input } from "./components/generic/inputs/Input";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -55,6 +62,7 @@ function App() {
                 {/* <CheckHowHooksRerender /> */}
                 {/* <ExerciseEventTable /> */}
                 <ExerciseEventTableNew />
+                <DebounceTest />
 
                 {/* <EventTable /> */}
                 <ExerciseInstanceTable />
@@ -103,5 +111,38 @@ const AlertTester = () => {
     >
       add alert
     </Button>
+  );
+};
+
+const DebounceTest = () => {
+  // const [debounced, value, setValue] = useDebounceBad("", 2000);
+  const [value, setValue] = useState("");
+  const debounced = useDebounce(value, 2000);
+  useDebounceCallbackFromValue(value, (v) => console.log(v), 2000);
+  const debouncedCB = useDebouncedCallbackVoid(
+    (param: string) => console.log("DB", param),
+    2000
+  );
+
+  const debouncedAction = useCallback(() => {
+    // console.log("not debounced");
+    setTimeout(() => console.log("debouncederino"), 1000);
+    // debounce(() => console.log("debouncePajeet"), 1000);vbhuigfhg
+  }, []);
+
+  return (
+    <>
+      <Input
+        value={value}
+        onChange={(e) => {
+          debouncedCB(e.target.value);
+          setValue(e.target.value);
+        }}
+      />
+      <span>
+        {value}
+        {debounced}
+      </span>
+    </>
   );
 };

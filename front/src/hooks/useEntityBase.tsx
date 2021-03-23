@@ -5,6 +5,10 @@ import { ContextProps } from "../context/generateContext";
 
 import { ItemModes } from "../utils/utils";
 import { useComplexState } from "./useComplexState";
+import {
+  useDebounceCallbackFromValue,
+  useDebouncedCallbackVoid,
+} from "./useDebounce";
 
 export function useEntityBaseUseQuery<I extends WithId>(
   item: I,
@@ -55,14 +59,14 @@ export function useEntityBaseUseQuery<I extends WithId>(
     });
   }
 
-  async function handleSave() {
+  function handleSave() {
     handleUpdate(complexState);
     if (mode === ItemModes.Edit) {
       setMode(ItemModes.Show);
     }
   }
 
-  async function handleDelete() {
+  function handleDelete() {
     context.delete(
       { ...complexState },
 
@@ -79,12 +83,27 @@ export function useEntityBaseUseQuery<I extends WithId>(
     );
   }
 
-  async function handleSetOrUpdate(newProps: Partial<I>) {
+  function handleDebouncedSetOrUpdate(newProps: Partial<I>) {
     if (mode === ItemModes.QuickEdit) {
       handleUpdate(newProps);
     } else {
       setComplexState(newProps);
     }
+  }
+
+  function handleSetOrUpdate(newProps: Partial<I>) {
+    if (mode === ItemModes.QuickEdit) {
+      handleDebouncedUpdate(newProps);
+    } else {
+      setComplexState(newProps);
+    }
+  }
+
+  const debouncedUpdate = useDebouncedCallbackVoid(handleUpdate, 750);
+
+  function handleDebouncedUpdate(newProps: Partial<I>) {
+    setComplexState(newProps);
+    debouncedUpdate(newProps);
   }
 
   return {
@@ -100,6 +119,8 @@ export function useEntityBaseUseQuery<I extends WithId>(
     handleUpdate,
     handleDelete,
     handleSetOrUpdate,
+    handleDebouncedUpdate,
+    handleDebouncedSetOrUpdate,
   };
 }
 
@@ -110,11 +131,12 @@ export interface EntityBaseContextUseQuery<Item> {
   setMode: React.Dispatch<React.SetStateAction<ItemModes>>;
   handleCreate: (partialItem?: Partial<Item>) => void;
   handleCancel: () => void;
-  handleUpdate: (
-    newItem: Partial<Item>
-  ) => void /** replace partial with complete item */;
+  handleUpdate: (newItem: Partial<Item>) => void;
+  handleDebouncedUpdate: (newItem: Partial<Item>) => void;
+  /** TODO: replace partial with complete item */
   handleSave: () => void;
   handleDelete: () => void;
   reset: () => void;
-  handleSetOrUpdate: (newProps: Partial<Item>) => Promise<void>;
+  handleSetOrUpdate: (newProps: Partial<Item>) => void;
+  handleDebouncedSetOrUpdate: (newProps: Partial<Item>) => void;
 }

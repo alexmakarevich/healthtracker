@@ -9,6 +9,7 @@ import { Basic, BASIC_DEFAULTS, ExceptAutoSetBasics } from "./sharedLogic";
 import { MutateConfig } from "react-query";
 import { useEventContext } from "../context/EventContextProvider";
 import { useComplexState } from "../hooks/useComplexState";
+import { useDebouncedCallbackVoid } from "../hooks/useDebounce";
 
 export interface ExerciseInstanceDAO extends Basic {
   exerciseId: string;
@@ -119,6 +120,31 @@ export const useExerciseInstance = ({
     });
   };
 
+  const debouncedUpdateOnly = useDebouncedCallbackVoid(update, 750);
+
+  const debouncedUpdate = (
+    data: ExerciseInstanceDAO = dataState,
+    config?: MutateConfig<
+      ExerciseInstanceDAO,
+      unknown,
+      ExerciseInstanceDAO,
+      unknown
+    >
+  ) => {
+    setDataState(data);
+    debouncedUpdateOnly(data, config);
+  };
+
+  const setOrUpdateDebounced = (...props: Parameters<typeof setOrUpdate>) => {
+    const data = props[0] ?? dataState;
+    const config = props[1];
+    if (mode === ItemModes.Edit || mode === ItemModes.New) {
+      return setDataState(data);
+    } else {
+      return debouncedUpdate(data, config);
+    }
+  };
+
   const setOrUpdate = (
     data: ExerciseInstanceDAO,
     config?: MutateConfig<
@@ -149,6 +175,7 @@ export const useExerciseInstance = ({
     setMode,
     create,
     setOrUpdate,
+    setOrUpdateDebounced,
     update,
     delete: deleteFn,
     exercise: ExContext.getOneFromContext(dataState.exerciseId),

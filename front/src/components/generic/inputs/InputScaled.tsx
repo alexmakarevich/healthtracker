@@ -7,7 +7,6 @@ import { Input, InputProps } from "./Input";
 const useStyles = createUseStyles(
   {
     input: {
-      // width: "2.5rem",
       padding: [1, 2],
     },
   },
@@ -29,19 +28,9 @@ export const InputScaled = forwardRef(
 
     const plusWidtWithFallback = plusWidth ?? (hideButtons ? 2 : 20);
 
-    console.log({ plusWidth });
-    console.log({ plusWidtWithFallback });
-
     useEffect(() => {
-      console.log({ spanWidth });
-      console.log({
-        offsetWidth: fakeRef.current?.offsetWidth ?? 0,
-        clientWdith: fakeRef.current?.clientWidth ?? 0,
-        scrollWdith: fakeRef.current?.scrollWidth ?? 0,
-      });
-
       setWidth((fakeRef.current?.offsetWidth ?? 10) + plusWidtWithFallback);
-    }, [fakeRef, props, spanWidth, className]);
+    }, [fakeRef, props, spanWidth, className, plusWidtWithFallback]);
 
     return (
       <>
