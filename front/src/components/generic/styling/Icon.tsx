@@ -1,7 +1,6 @@
 import React from "react";
 import { createUseStyles } from "react-jss";
-import icons from "../../../icons/sprite.svg";
-import all from "../../../icons/all.svg";
+import all from "../../../media/icons/all.svg";
 
 import { Enummed } from "../../../utils/utils";
 
