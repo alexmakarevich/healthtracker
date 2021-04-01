@@ -30,9 +30,9 @@ const useStyles = createUseStyles(
   { name: "Button" }
 );
 
-export const Button = ({
-  ...rest
-}: ButtonHTMLAttributes<HTMLButtonElement>) => {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+
+export const Button = ({ ...rest }: ButtonProps) => {
   const classes = useStyles();
 
   const { className, ...restRest } = rest;

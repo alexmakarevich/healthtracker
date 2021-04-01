@@ -70,7 +70,7 @@ export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
   }
 
   function handleMonthChange(n: number) {
-    onChange(new Date(year, n, day, hours, minutes, seconds, milliseconds));
+    onChange(new Date(year, n - 1, day, hours, minutes, seconds, milliseconds));
   }
 
   function handleYearChange(n: number) {

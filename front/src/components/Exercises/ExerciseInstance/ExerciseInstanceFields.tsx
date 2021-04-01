@@ -55,6 +55,13 @@ const useStyles = createUseStyles(
     exerciseButton: {
       marginLeft: "0.5em",
     },
+    newExerciseButton: {
+      position: "absolute",
+      left: "100%",
+      top: 0,
+      background: "#50cc80",
+      zIndex: 50,
+    },
   },
 
   { name: "ExerciseFields" }
@@ -81,41 +88,10 @@ const Wrapper = ({
   children,
 }: // onCreate,
 ExerciseInstanceFieldsProps) => {
-  // const EVENTS = useEventContext();
-
-  // const genericActions = useEntityBaseUseQuery(
-  //   item,
-  //   useExerciseInstanceContext(),
-  //   initialMode,
-  //   onCreate
-  // );
-
-  // const { handleCreate, complexState } = genericActions;
-
-  // const contextProps = {
-  //   ...genericActions,
-  //   createWithNewEvent: () =>
-  //     EVENTS.create(
-  //       { ...eventDefaults },
-  //       {
-  //         onSuccess: (event) =>
-  //           handleCreate({ ...complexState, eventId: event._id }),
-  //         onError: (err) =>
-  //           console.log(
-  //             "Couldn't create event while creating exercise instance " + err
-  //           ),
-  //       }
-  //     ),
-  // };
-
-  if (item._id === "60478060db4b530f68a1e777") console.log({ item });
-
   const EI = useExerciseInstance({
     data: item,
     initialMode,
   });
-
-  if (item._id === "60478060db4b530f68a1e777") console.log({ EI });
 
   // const newContextProps: EntityBaseContextUseQuery<ExerciseInstanceDAO> = {};
 
@@ -264,9 +240,7 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
     data.exerciseId === exerciseInstanceDefaults.exerciseId
   );
 
-  const exerciseId = data.exerciseId;
-
-  const areNoneSelected = useMemo(() => !exercise, [exerciseId]);
+  const areNoneSelected = useMemo(() => !exercise, [exercise]);
 
   const dropdownItems = exCtx.all?.map((exercise) => ({
     id: exercise._id,
@@ -293,13 +267,17 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
         <PickOrAdd
           dropdownItems={dropdownItems}
           onSelect={(id: string) => {
-            console.log("onSelect", id);
             setOrUpdate({ ...data, exerciseId: id });
             setShowSelect(false);
           }}
           onCreateNew={(title) =>
             exCtx.create({ ...exerciseTypeDefaults, title: title })
           }
+          inputProps={{
+            placeholder: "enter exercise name...",
+            style: { width: "150px" },
+          }}
+          buttonProps={{ className: classes.newExerciseButton }}
         />
       )}
     </div>

@@ -25,15 +25,14 @@ export interface ExerciseTypeFieldProps {
 
 const useStyles = createUseStyles(styles, { name: "NutritionList" });
 
-const ExerciseTypeTable = () => {
+const ExerciseTypeTable = ({ className }: { className?: string }) => {
   const ETContext = useExerciseContext();
 
   const classes = useStyles();
 
   return (
     <>
-      <h2>Exercise Type Table</h2>
-      <table>
+      <table className={className}>
         <thead>
           <tr>
             <th></th>

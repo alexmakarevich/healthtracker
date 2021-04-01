@@ -70,9 +70,9 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
     sort === Sort.x ? dataSortedByX : Sort.y ? dataSortedByY : data;
 
   // set the dimensions and margins of the graph
-  const margin = { top: 40, right: 40, bottom: 30, left: 30 },
-    width = 450 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
+  const margin = { top: 60, right: 60, bottom: 60, left: 60 },
+    width = 600 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
   const ref = useRef(null);
 
@@ -182,12 +182,13 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
         textLabels.exit().remove();
       }
     });
-  }, [data]);
+  }, [adjustedData, colors, data, hasDots, hasLine, height, x, y]);
 
   return (
     <svg
       width={width + margin.left + margin.right}
       height={height + margin.top + margin.bottom}
+      overflow={"visible"}
     >
       <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}>
         <g className={"x-axis"} />

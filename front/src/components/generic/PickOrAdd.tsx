@@ -2,10 +2,12 @@ import { useState } from "react";
 import React from "react";
 import { SelectChild } from "./SelectList";
 import { createUseStyles } from "react-jss";
-import SearchWithDropdown from "./SearchWithDropdown";
+import SearchWithDropdown, {
+  SearchWithDropdownProps,
+} from "./SearchWithDropdown";
 import Removable from "./Removable";
 import Collapsible, { Animations } from "./Collapsible";
-import { Button } from "./buttons/Button";
+import { Button, ButtonProps } from "./buttons/Button";
 import { Icon, IconSizes } from "./styling/Icon";
 
 const styles = () => ({
@@ -34,6 +36,8 @@ interface Props {
   onSelect: (value: string) => void;
   onUnselect?: (value: string) => void;
   onCreateNew: (title: string) => void;
+  buttonProps?: Omit<ButtonProps, "onChange">;
+  inputProps?: SearchWithDropdownProps["otherInputProps"];
   // only used if items aren't added immediately on each select
   onCommitSelected?: () => void;
 }
@@ -52,13 +56,11 @@ const PickOrAdd = ({
   onUnselect,
   onCreateNew,
   onCommitSelected,
+  buttonProps,
+  inputProps,
   ...rest
 }: Props) => {
   const classes = useStyles();
-
-  const fuseOptions = {
-    keys: ["searchableText"],
-  };
 
   const [searchInput, setSearchInput] = useState("");
 
@@ -82,6 +84,7 @@ const PickOrAdd = ({
   return (
     <div {...rest} className={classes.wrapper}>
       <SearchWithDropdown
+        {...inputProps}
         searchTextValue={searchInput}
         dropdownItems={allUnselected}
         // in case each selection is not immediately executed, but kept in local state, waiting for a confirmation for all selections.
@@ -103,6 +106,7 @@ const PickOrAdd = ({
             onCreateNew(searchInput);
             setSearchInput("");
           }}
+          {...buttonProps}
         >
           <Icon icon={"plus"} size={IconSizes.S} />
           create new

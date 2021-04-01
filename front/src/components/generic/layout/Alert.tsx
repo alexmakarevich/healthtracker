@@ -44,7 +44,7 @@ interface StyleProps {
 }
 
 const useStyles = createUseStyles(
-  () => ({
+  {
     wrapper: ({ type }: StyleProps) => ({
       ...type?.style,
       minHeight: "30px",
@@ -64,7 +64,7 @@ const useStyles = createUseStyles(
     button: {
       marginLeft: "10px",
     },
-  }),
+  },
 
   { name: "Alert" }
 );

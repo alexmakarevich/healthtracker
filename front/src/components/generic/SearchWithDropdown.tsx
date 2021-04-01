@@ -33,7 +33,7 @@ interface SearchableSelectChild extends SelectChild {
   searchableText: string;
 }
 
-interface Props {
+export interface SearchWithDropdownProps {
   // search text state not managed here so it could be used for other things in the parent
   searchTextValue: string;
   dropdownItems?: SearchableSelectChild[] | undefined;
@@ -52,7 +52,7 @@ const SearchWithDropdown = ({
   onSelectChange,
   otherInputProps,
   ...rest
-}: Props) => {
+}: SearchWithDropdownProps) => {
   const classes = useStyles();
 
   const fuseOptions = {
@@ -90,7 +90,6 @@ const SearchWithDropdown = ({
 
   return (
     <div
-      {...rest}
       className={classes.wrapper}
       onFocus={() => setIsDropdwonVisible(true)}
       onBlur={() => !isDropdownHovered && setIsDropdwonVisible(false)}
@@ -99,6 +98,7 @@ const SearchWithDropdown = ({
         value={searchTextValue}
         onTextChange={onSearchChange}
         {...restInput}
+        {...rest}
       >
         {inputChildren}
       </InputText>

@@ -8,14 +8,10 @@ import { InputDate } from "./components/generic/inputs/DateTimeInputs/InputDate"
 import { InputTime } from "./components/generic/inputs/DateTimeInputs/InputTime";
 import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
-import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
 import { SampleVisualization } from "./components/Data/SampleVisualization";
-import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { SampleVisualizationTime } from "./components/Data/SampleVisualizationTime";
 import { SampleVisualizationUpdate } from "./components/Data/SampleVisualizationUpdate";
-import { ExerciseEventTable } from "./components/Events/ExerciseEventTable";
-import { ExerciseInstanceTableNew } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTableNew";
 import {
   AlertContext,
   useAlertContext,
@@ -27,30 +23,35 @@ import { CheckSoringRerender } from "./components/Sandbox/CheckSoringRerender";
 import { Icon, IconSizes } from "./components/generic/styling/Icon";
 import allSvg from "./icons/all.svg";
 import { Button } from "./components/generic/buttons/Button";
-import { ExerciseEventTableNew } from "./components/Events/ExerciseEventTableNew";
 import { InputDateTime } from "./components/generic/inputs/DateTimeInputs/InputDateTime";
-import { debounce, debouncePajeet, debounceVoid } from "./utils/utils";
 import {
   useDebounce,
   useDebounceCallbackFromValue,
   useDebouncedCallbackVoid,
 } from "./hooks/useDebounce";
 import { Input } from "./components/generic/inputs/Input";
+import { createUseStyles } from "react-jss";
+import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
+import { ExerciseVisualizationNew } from "./components/Data/ExerciseVisualizationNew";
 
 export const TestContext = createContext<any>("test context value");
 
+const useStyles = createUseStyles(
+  {
+    table: {
+      display: "inline-block",
+    },
+  },
+
+  { name: "Alert" }
+);
+
 function App() {
-  const now = new Date();
-
-  const [hours, setHours] = useState(now.getHours());
-  const [minutes, setMinutes] = useState(now.getMinutes());
-
-  const [date, setDate] = useState(now);
-
+  const classes = useStyles();
   return (
     <div className="App">
       <AlertContext>
-        <AlertTester></AlertTester>
+        {/* <AlertTester></AlertTester> */}
         <ExerciseInstanceProvider>
           <ExerciseProvider>
             <EventProvider>
@@ -61,11 +62,16 @@ function App() {
                 <NutritionItemTable /> */}
                 {/* <CheckHowHooksRerender /> */}
                 {/* <ExerciseEventTable /> */}
-                <ExerciseEventTableNew />
-                <DebounceTest />
+                <h2>Exercises</h2>
+                <ExerciseInstanceTable className={classes.table} />
+                <h2>Exercise Graph</h2>
+
+                <ExerciseVisualizationNew />
+
+                {/* <DebounceTest /> */}
 
                 {/* <EventTable /> */}
-                <ExerciseInstanceTable />
+                {/* <ExerciseInstanceTable /> */}
 
                 {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
                   <use xlinkHref={allSvg + "#" + "gg-folder"} />
@@ -74,13 +80,15 @@ function App() {
                 {/* <TestNewTableHook /> */}
                 {/* <CheckSoringRerender /> */}
                 {/* <ExerciseInstanceTableNew /> */}
-                <ExerciseTypeTable />
+                <h2>Exercise Types</h2>
+
+                <ExerciseTypeTable className={classes.table} />
               </NutritionItemProvider>
             </EventProvider>
           </ExerciseProvider>
         </ExerciseInstanceProvider>
       </AlertContext>
-
+      {/* 
       <InputDate />
       <InputDateTime date={date} onChange={(d) => setDate(d)} />
 
@@ -89,7 +97,7 @@ function App() {
         mm={minutes}
         onHourChange={setHours}
         onMinuteChange={setMinutes}
-      />
+      /> */}
     </div>
   );
 }
@@ -111,38 +119,5 @@ const AlertTester = () => {
     >
       add alert
     </Button>
-  );
-};
-
-const DebounceTest = () => {
-  // const [debounced, value, setValue] = useDebounceBad("", 2000);
-  const [value, setValue] = useState("");
-  const debounced = useDebounce(value, 2000);
-  useDebounceCallbackFromValue(value, (v) => console.log(v), 2000);
-  const debouncedCB = useDebouncedCallbackVoid(
-    (param: string) => console.log("DB", param),
-    2000
-  );
-
-  const debouncedAction = useCallback(() => {
-    // console.log("not debounced");
-    setTimeout(() => console.log("debouncederino"), 1000);
-    // debounce(() => console.log("debouncePajeet"), 1000);vbhuigfhg
-  }, []);
-
-  return (
-    <>
-      <Input
-        value={value}
-        onChange={(e) => {
-          debouncedCB(e.target.value);
-          setValue(e.target.value);
-        }}
-      />
-      <span>
-        {value}
-        {debounced}
-      </span>
-    </>
   );
 };

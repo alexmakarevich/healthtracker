@@ -7,7 +7,7 @@ const useStyles = createUseStyles(
     wrapper: {
       padding: "3px",
       display: "flex",
-      alignItem: "center",
+      alignItems: "center",
       width: "100%",
       flexWrap: "wrap",
       borderBottom: "2px solid black",
@@ -41,20 +41,23 @@ const InputText = forwardRef(
   }: Props) => {
     const classes = useStyles();
 
+    const { placeholder } = rest;
+
     const handleEnterPress = generateKeyPressActions([
       { code: 13, actiion: () => onEnter && onEnter() },
     ]);
 
     return (
-      <div className={`${classes.wrapper} ${className}`} {...rest}>
+      <div className={`${classes.wrapper} ${className}`}>
         {children}
         <input
           ref={inputRef}
-          {...rest}
           className={classes.input}
           value={value}
           onChange={(event) => onTextChange(event.target.value)}
           onKeyPressCapture={handleEnterPress}
+          placeholder={placeholder}
+          {...rest}
         />
       </div>
     );

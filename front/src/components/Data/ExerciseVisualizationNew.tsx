@@ -1,5 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import * as d3 from "d3";
+import React from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
@@ -12,7 +11,7 @@ interface ChartData {
   radius?: number;
 }
 
-export const ExerciseVisualization = () => {
+export const ExerciseVisualizationNew = () => {
   const events = useEventContext();
   const exerciseInstances = useExerciseInstanceContext();
   const exercises = useExerciseContext();
@@ -20,24 +19,13 @@ export const ExerciseVisualization = () => {
   if (!events.all || !exerciseInstances.all || !exercises.all) {
     return null;
   }
-  const dummyChartData = [
-    { x: new Date("2020-12-02"), y: 20, radius: 3 },
-    { x: new Date(), y: 90, radius: 15 },
-    { x: new Date("2020-12-11"), y: 50, radius: 7 },
-    { x: new Date("2020-12-18"), y: 35, radius: 7 },
-  ];
-
-  let chartData: ChartData[][] = [dummyChartData];
+  let chartData: ChartData[][] = [];
 
   if (!!events.all && !!exerciseInstances.all && !!exercises.all) {
-    const allEvents = events.all;
-
     let groupedChartData: Record<string, ChartData[]> = {};
 
     exerciseInstances.all.forEach((ei) => {
-      const thisEvent = allEvents.find((e) =>
-        e.children.exerciseInstanceIds.find((id) => id === ei._id)
-      );
+      const thisEvent = events.getOneFromContext(ei.eventId);
       if (thisEvent) {
         if (!groupedChartData[ei.exerciseId]) {
           groupedChartData[ei.exerciseId] = [];
@@ -56,7 +44,6 @@ export const ExerciseVisualization = () => {
 
   return (
     <>
-      <h1>ExerciseVisualization</h1>
       <LineAndDotChart
         xScale={Scales.Time}
         yScale={Scales.Linear}
