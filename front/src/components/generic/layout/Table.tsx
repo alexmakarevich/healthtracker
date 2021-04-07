@@ -19,8 +19,7 @@ const useStyles = createUseStyles(
     },
 
     th: {
-      padding: 2,
-      margin: 0,
+      padding: ["0.5em", "0.125em"],
     },
     thButton: {
       width: "100%",
@@ -29,8 +28,8 @@ const useStyles = createUseStyles(
         margin: 0,
         padding: 0,
       },
-      // background: theme.colorMain,
-      // color: "#ddd",
+      background: theme.textMain,
+      color: theme.canvas,
       "&:hover": {
         // color: "white",
       },
@@ -45,11 +44,25 @@ const useStyles = createUseStyles(
       minHeight: "4em",
       borderRadius: "0.5em",
 
+      "& td:first-child": {
+        borderRadius: "0.25em 0 0 0.25em",
+        paddingLeft: "0.5em",
+      },
+
+      "& td:last-child": {
+        borderRadius: "0 0.25em 0.25em 0",
+        paddingRight: "0.5em",
+      },
+
       "&:nth-child(odd)": {
-        background: theme.canvasSub,
+        "& td": {
+          background: theme.canvasSub,
+        },
       },
       "&:nth-child(even)": {
-        background: theme.canvas,
+        "& td": {
+          background: theme.canvas,
+        },
       },
     },
 
