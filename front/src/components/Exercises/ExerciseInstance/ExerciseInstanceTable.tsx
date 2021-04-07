@@ -41,7 +41,6 @@ const useStyles = createUseStyles(
       border: "none",
       borderBottom: "2px transparent solid",
       "&:hover": {
-        // boxShadow: "rgba(0, 0, 0, 0.4) 0 0 1px 1px",
         borderBottom: "2px #444 solid",
       },
       "&:active": {
@@ -123,15 +122,6 @@ export const ExerciseInstanceTable = ({
           </FlexRow>
         ),
         tdProps: { style: { minWidth: 130 } },
-        // sortAscendingFn: (a, b) => {
-        //   console.log({ a, b });
-
-        //   return new Date(a).valueOf() === new Date(b).valueOf()
-        //     ? 0
-        //     : new Date(a).valueOf() < new Date(b).valueOf()
-        //     ? -1
-        //     : 1;
-        // },
       },
       exercise: {
         title: "exercise",

@@ -6,7 +6,7 @@ import {
 } from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
-import { ExerciseType } from "../../logic/exerciseTypeLogic";
+import { ExerciseTypeDAO } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
@@ -19,11 +19,11 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<ExerciseType>
+  EntityBaseContextUseQuery<ExerciseTypeDAO>
 >();
 
 export interface ExerciseTypeFieldProps {
-  item: ExerciseType;
+  item: ExerciseTypeDAO;
   initialMode: ItemModes;
   children: ReactNode;
 }

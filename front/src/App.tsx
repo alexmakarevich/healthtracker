@@ -49,6 +49,7 @@ const useStyles = createUseStyles(
       "& input": {
         color: theme.textMain,
       },
+      padding: "2em 1em",
     },
     table: {
       display: "inline-block",
@@ -119,20 +120,18 @@ function App() {
 
 export default App;
 
-App.displayName = "";
+// const AlertTester = () => {
+//   const alertCtx = useAlertContext();
 
-const AlertTester = () => {
-  const alertCtx = useAlertContext();
-
-  return (
-    <Button
-      onClick={() =>
-        alertCtx.addAlert({
-          children: "sas" + new Date().toTimeString(),
-        })
-      }
-    >
-      add alert
-    </Button>
-  );
-};
+//   return (
+//     <Button
+//       onClick={() =>
+//         alertCtx.addAlert({
+//           children: "sas" + new Date().toTimeString(),
+//         })
+//       }
+//     >
+//       add alert
+//     </Button>
+//   );
+// };

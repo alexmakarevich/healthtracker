@@ -1,6 +1,5 @@
-import React, { useState, useRef, RefObject } from "react";
+import React, { useRef, RefObject } from "react";
 import { createUseStyles } from "react-jss";
-import { InputScaledProps } from "../InputScaled";
 import { InputDay } from "./InputDay";
 import { InputHours } from "./InputHours";
 import { InputMinutes } from "./InputMinutes";

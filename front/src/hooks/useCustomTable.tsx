@@ -1,5 +1,5 @@
 "use strict";
-import React, { ReactNode, useMemo } from "react";
+import React from "react";
 import { ValidateShapeAndReturn } from "../utils/utils";
 
 export interface Cell<T> {
@@ -12,6 +12,8 @@ export interface Cell<T> {
 export type CellData<T extends Object> = {
   [c in keyof T]: Cell<T[c]>;
 };
+
+// TODO: handle dataless columns (e.g. buttons) more elegantly
 
 /**
  * renderFn -  fn, in case you want to have "raw" data and render it in some way in the cell, defaults to just outputting the data.

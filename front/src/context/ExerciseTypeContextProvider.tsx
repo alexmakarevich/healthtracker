@@ -1,10 +1,10 @@
-import { ExerciseType } from "../logic/exerciseTypeLogic";
+import { ExerciseTypeDAO } from "../logic/exerciseTypeLogic";
 import { generateContext } from "./generateContext";
 
 export const {
   ContextProvider: ExerciseProvider,
   useContextDefined: useExerciseContext,
-} = generateContext<ExerciseType>(
+} = generateContext<ExerciseTypeDAO>(
   "http://localhost:4000/exerciseTypes",
   "Exercise"
 );

@@ -7,9 +7,8 @@ import {
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
-import { NutritionFields, NutritionProps } from "./NutritionFields";
+import { NutritionFields } from "./NutritionFields";
 import { SimpleRow } from "../generic/layout/SimpleRow";
-import { ExerciseType } from "../../logic/exerciseTypeLogic";
 
 const styles = () => ({
   list: {
