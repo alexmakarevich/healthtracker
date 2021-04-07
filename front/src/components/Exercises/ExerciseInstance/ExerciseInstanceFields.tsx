@@ -29,9 +29,10 @@ import { eventDefaults } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
+import { Theme } from "../../../styling/theme";
 
 const useStyles = createUseStyles(
-  {
+  (theme: Theme) => ({
     buttons: {
       flexDirection: "row",
     },
@@ -59,10 +60,10 @@ const useStyles = createUseStyles(
       position: "absolute",
       left: "100%",
       top: 0,
-      background: "#50cc80",
+      background: theme.good,
       zIndex: 50,
     },
-  },
+  }),
 
   { name: "ExerciseFields" }
 );
@@ -195,7 +196,7 @@ const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   const classes = useStyles();
 
-  const { data, setOrUpdateDebounced, update, mode, reset } = useThisContext();
+  const { data, setOrUpdateDebounced, mode } = useThisContext();
 
   if (mode === ItemModes.Show && !data.durationSeconds) {
     return null;
@@ -277,7 +278,6 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
             placeholder: "enter exercise name...",
             style: { width: "150px" },
           }}
-          buttonProps={{ className: classes.newExerciseButton }}
         />
       )}
     </div>

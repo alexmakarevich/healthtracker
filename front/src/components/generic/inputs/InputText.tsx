@@ -1,22 +1,23 @@
 import React, { ReactNode, forwardRef, Ref, HTMLProps } from "react";
 import { createUseStyles } from "react-jss";
+import { Theme } from "../../../styling/theme";
 import { generateKeyPressActions } from "../../../utils/utils";
 
 const useStyles = createUseStyles(
-  {
+  (theme: Theme) => ({
     wrapper: {
       padding: "3px",
       display: "flex",
       alignItems: "center",
       width: "100%",
       flexWrap: "wrap",
-      borderBottom: "2px solid black",
+      borderBottom: "2px solid " + theme.textMain,
     },
     input: {
       border: "none",
       background: "transparent",
     },
-  },
+  }),
   { name: "InputText" }
 );
 

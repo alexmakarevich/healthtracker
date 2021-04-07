@@ -32,15 +32,11 @@ const useStyles = createUseStyles(
     separator: {
       borderBottom: "2px #444 solid",
       borderTop: "2px transparent solid",
-      marginTop: -4,
+      marginTop: 0,
     },
   },
   { name: "InputDate" }
 );
-
-const locale = "ru-RU";
-
-const currentDate = new Date();
 
 interface InputDateTimeProps {
   date: Date;
@@ -50,7 +46,6 @@ interface InputDateTimeProps {
 export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
   const classes = useStyles();
   // const [date, onChange] = useState(currentDate);
-  const dateMs = date.valueOf();
   const day = date.getDate();
   const month = date.getMonth();
   const year = date.getFullYear();

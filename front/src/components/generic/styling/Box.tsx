@@ -1,10 +1,11 @@
 import React, { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { Theme } from "../../../styling/theme";
 import { classConcat } from "../../../utils/utils";
 
-const styles = () => ({
+const styles = (theme: Theme) => ({
   box: {
-    background: "#84d9b0",
+    background: theme.colorPallete[2],
     borderRadius: "5px",
     padding: "10px",
   },

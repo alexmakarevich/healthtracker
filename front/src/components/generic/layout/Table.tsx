@@ -1,27 +1,18 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { createUseStyles } from "react-jss";
-import { useEventContext } from "../../../context/EventContextProvider";
-import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
-import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import {
-  Row,
-  Columns,
   UseCustomTableProps,
   useCustomTable,
 } from "../../../hooks/useCustomTable";
-import {
-  exerciseInstanceDefaults,
-  ExerciseInstanceDAO,
-} from "../../../logic/exerciseInstanceLogic";
-import { classConcat, ItemModes } from "../../../utils/utils";
-import { ExerciseInstanceFields } from "../../Exercises/ExerciseInstance/ExerciseInstanceFields";
+
+import { Theme } from "../../../styling/theme";
+import { classConcat } from "../../../utils/utils";
 import { Button } from "../buttons/Button";
 import { Icon, IconSizes } from "../styling/Icon";
-import { FlexRow } from "./FlexRow";
 
 // TODO: cleanup style
 const useStyles = createUseStyles(
-  {
+  (theme: Theme) => ({
     table: {
       borderCollapse: "collapse",
       borderSpacing: "unset",
@@ -38,10 +29,10 @@ const useStyles = createUseStyles(
         margin: 0,
         padding: 0,
       },
-      background: "#333",
-      color: "#ddd",
+      // background: theme.colorMain,
+      // color: "#ddd",
       "&:hover": {
-        color: "white",
+        // color: "white",
       },
     },
     td: {
@@ -51,23 +42,23 @@ const useStyles = createUseStyles(
       },
     },
     tr: {
-      background: "#f0f0f0",
       minHeight: "4em",
+      borderRadius: "0.5em",
 
       "&:nth-child(odd)": {
-        background: "#ddd",
+        background: theme.canvasSub,
       },
       "&:nth-child(even)": {
-        background: "#f0f0f0",
+        background: theme.canvas,
       },
     },
 
     dateTh: {
       width: 220,
     },
-  },
+  }),
 
-  { name: "ExerciseEventTable" }
+  { name: "Table" }
 );
 
 interface TableProps<

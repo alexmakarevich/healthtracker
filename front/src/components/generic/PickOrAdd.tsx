@@ -9,8 +9,10 @@ import Removable from "./Removable";
 import Collapsible, { Animations } from "./Collapsible";
 import { Button, ButtonProps } from "./buttons/Button";
 import { Icon, IconSizes } from "./styling/Icon";
+import { Theme } from "../../styling/theme";
+import { classConcat } from "../../utils/utils";
 
-const styles = () => ({
+const styles = (theme: Theme) => ({
   wrapper: {
     display: "flex",
     position: "relative",
@@ -21,6 +23,9 @@ const styles = () => ({
     background: "white",
     top: "100%",
     zIndex: "100",
+  },
+  createNewButton: {
+    background: theme.good,
   },
 });
 
@@ -61,6 +66,8 @@ const PickOrAdd = ({
   ...rest
 }: Props) => {
   const classes = useStyles();
+  const buttonClass = buttonProps?.className ?? "";
+  const buttonClasses = classConcat(classes.createNewButton, buttonClass);
 
   const [searchInput, setSearchInput] = useState("");
 
@@ -107,6 +114,7 @@ const PickOrAdd = ({
             setSearchInput("");
           }}
           {...buttonProps}
+          className={buttonClasses}
         >
           <Icon icon={"plus"} size={IconSizes.S} />
           create new

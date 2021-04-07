@@ -30,64 +30,79 @@ import {
   useDebouncedCallbackVoid,
 } from "./hooks/useDebounce";
 import { Input } from "./components/generic/inputs/Input";
-import { createUseStyles } from "react-jss";
+import { createUseStyles, ThemeProvider } from "react-jss";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 import { ExerciseVisualizationNew } from "./components/Data/ExerciseVisualizationNew";
+import { theme } from "./styling/theme";
+import { classConcat } from "./utils/utils";
 
 export const TestContext = createContext<any>("test context value");
 
 const useStyles = createUseStyles(
   {
+    app: {
+      background: theme.canvas,
+      display: "inline-block",
+      width: "100%",
+      minHeight: "100%",
+      color: theme.textMain,
+      "& input": {
+        color: theme.textMain,
+      },
+    },
     table: {
       display: "inline-block",
     },
   },
 
-  { name: "Alert" }
+  { name: "App" }
 );
 
 function App() {
   const classes = useStyles();
   return (
-    <div className="App">
-      <AlertContext>
-        {/* <AlertTester></AlertTester> */}
-        <ExerciseInstanceProvider>
-          <ExerciseProvider>
-            <EventProvider>
-              <NutritionItemProvider>
-                {/* <SampleVisualizationUpdate />
+    <div className={classConcat("App", classes.app)}>
+      <ThemeProvider theme={theme}>
+        <AlertContext>
+          {/* <AlertTester></AlertTester> */}
+          <ExerciseInstanceProvider>
+            <ExerciseProvider>
+              <EventProvider>
+                <NutritionItemProvider>
+                  {/* <SampleVisualizationUpdate />
                 <SampleVisualizationTime />
                 <ExerciseVisualization />
                 <NutritionItemTable /> */}
-                {/* <CheckHowHooksRerender /> */}
-                {/* <ExerciseEventTable /> */}
-                <h2>Exercises</h2>
-                <ExerciseInstanceTable className={classes.table} />
-                <h2>Exercise Graph</h2>
+                  {/* <CheckHowHooksRerender /> */}
+                  {/* <ExerciseEventTable /> */}
+                  <h2>Exercise History</h2>
+                  <ExerciseInstanceTable className={classes.table} />
+                  <h2>Exercise Graph</h2>
 
-                <ExerciseVisualizationNew />
+                  <ExerciseVisualizationNew />
 
-                {/* <DebounceTest /> */}
+                  {/* <DebounceTest /> */}
 
-                {/* <EventTable /> */}
-                {/* <ExerciseInstanceTable /> */}
+                  {/* <EventTable /> */}
+                  {/* <ExerciseInstanceTable /> */}
 
-                {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
+                  {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
                   <use xlinkHref={allSvg + "#" + "gg-folder"} />
                 </svg> */}
 
-                {/* <TestNewTableHook /> */}
-                {/* <CheckSoringRerender /> */}
-                {/* <ExerciseInstanceTableNew /> */}
-                <h2>Exercise Types</h2>
+                  {/* <TestNewTableHook /> */}
+                  {/* <CheckSoringRerender /> */}
+                  {/* <ExerciseInstanceTableNew /> */}
+                  <h2>Exercise Types</h2>
 
-                <ExerciseTypeTable className={classes.table} />
-              </NutritionItemProvider>
-            </EventProvider>
-          </ExerciseProvider>
-        </ExerciseInstanceProvider>
-      </AlertContext>
+                  <ExerciseTypeTable className={classes.table} />
+                </NutritionItemProvider>
+              </EventProvider>
+            </ExerciseProvider>
+          </ExerciseInstanceProvider>
+        </AlertContext>
+      </ThemeProvider>
+
       {/* 
       <InputDate />
       <InputDateTime date={date} onChange={(d) => setDate(d)} />
