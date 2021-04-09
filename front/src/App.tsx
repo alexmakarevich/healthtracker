@@ -35,6 +35,7 @@ import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/E
 import { ExerciseVisualizationNew } from "./components/Data/ExerciseVisualizationNew";
 import { theme } from "./styling/theme";
 import { classConcat } from "./utils/utils";
+import { AlertTypes } from "./components/generic/layout/Alert";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -83,14 +84,11 @@ function App() {
                   <ExerciseVisualizationNew />
 
                   {/* <DebounceTest /> */}
-
                   {/* <EventTable /> */}
                   {/* <ExerciseInstanceTable /> */}
-
                   {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
                   <use xlinkHref={allSvg + "#" + "gg-folder"} />
                 </svg> */}
-
                   {/* <TestNewTableHook /> */}
                   {/* <CheckSoringRerender /> */}
                   {/* <ExerciseInstanceTableNew /> */}
@@ -120,18 +118,19 @@ function App() {
 
 export default App;
 
-// const AlertTester = () => {
-//   const alertCtx = useAlertContext();
+const AlertTester = () => {
+  const alertCtx = useAlertContext();
 
-//   return (
-//     <Button
-//       onClick={() =>
-//         alertCtx.addAlert({
-//           children: "sas" + new Date().toTimeString(),
-//         })
-//       }
-//     >
-//       add alert
-//     </Button>
-//   );
-// };
+  return (
+    <Button
+      onClick={() =>
+        alertCtx.addAlert({
+          children: "sas" + new Date().toTimeString(),
+          type: AlertTypes.NEGATIVE,
+        })
+      }
+    >
+      add alert
+    </Button>
+  );
+};

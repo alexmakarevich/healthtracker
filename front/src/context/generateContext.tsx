@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import React, { useEffect, ReactNode, useState } from "react";
+import React, { useEffect, ReactNode, useState, useCallback } from "react";
 import {
   MutateFunction,
   useMutation,
@@ -51,13 +51,19 @@ export function generateContext<Item extends WithId>(
   function ContextProvider({ children }: Props) {
     const CRUD = generateCRUD<Item>(apiBaseUrl);
 
+    const queryClient = useQueryCache();
+
+    // TODO: check if better to just return the getter, and/or not return at all
+    const refresh = useCallback(async () => {
+      // TODO: invalidate individual items
+      await queryClient.invalidateQueries(itemName + "-get-all");
+    }, [queryClient]);
+
     useEffect(() => {
       refresh();
-    }, []);
+    }, [refresh]);
 
     const { addAlert } = useAlertContext();
-
-    const queryClient = useQueryCache();
 
     // TODO: check how tominimize number of updates
     const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {
@@ -76,12 +82,6 @@ export function generateContext<Item extends WithId>(
 
     // const [all, setAll] = useState(allQuery.data?.data);
     const all = allQuery.data?.data;
-
-    // TODO: check if better to just return the getter, and/or not return at all
-    async function refresh() {
-      // TODO: invalidate individual items
-      await queryClient.invalidateQueries(itemName + "-get-all");
-    }
 
     // TODO: check if should be replaced with geter from query, and/or merged with it somehow
     function getOneFromContext(id: string) {
@@ -105,7 +105,7 @@ export function generateContext<Item extends WithId>(
           children: (
             <>
               <p>ERROR: could not create {itemName}</p>
-              <p>details: {err}</p>
+              <p>details: {JSON.stringify(err)}</p>
             </>
           ),
           type: AlertTypes.NEGATIVE,
@@ -142,7 +142,10 @@ export function generateContext<Item extends WithId>(
           refresh();
         },
         onError: () =>
-          addAlert({ children: `ERROR: failed to delete ${itemName}` }),
+          addAlert({
+            children: `ERROR: failed to delete ${itemName}`,
+            type: AlertTypes.NEGATIVE,
+          }),
       }
     );
 

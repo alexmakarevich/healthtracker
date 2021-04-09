@@ -1,7 +1,5 @@
-import { AxiosResponse } from "axios";
 import { ItemModes } from "./../utils/utils";
-import { updateObject } from "./../common/updateObject";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useExerciseInstanceContext } from "../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../context/ExerciseTypeContextProvider";
@@ -26,24 +24,6 @@ export const exerciseInstanceDefaults: ExerciseInstanceDAO = {
   exerciseId: "no id yet",
   eventId: "no id yet",
 };
-
-// const EXERCISE_INSTANCE_MAKER = (instance: ExerciseInstance, update: ) => {
-//   return {
-//     ...instance,
-//     update:
-//   }
-// }
-
-// export class ExerciseInstance {
-//   data: ExerciseInstanceDAO;
-//   constructor({ ...data }: ExerciseInstanceDAO) {
-//     this.data = data;
-//   }
-
-//   create = useExerciseInstanceContext().create;
-// }
-
-// const useExercise
 
 type New = {
   data: ExerciseInstanceDAONew;
@@ -90,7 +70,8 @@ export const useExerciseInstance = ({
     if (mode !== ItemModes.New) {
       reset();
     }
-  }, [data]);
+  }, [data, mode]); // reset not included as it constantly updates
+  // TODO: fix weird reset behavior above
 
   const create =
     mode === ItemModes.New

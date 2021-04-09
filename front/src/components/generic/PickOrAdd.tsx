@@ -26,6 +26,10 @@ const styles = (theme: Theme) => ({
   },
   createNewButton: {
     background: theme.good,
+    position: "absolute",
+    top: 0,
+    left: "100%",
+    zIndex: 10,
   },
 });
 
@@ -42,6 +46,7 @@ interface Props {
   onUnselect?: (value: string) => void;
   onCreateNew: (title: string) => void;
   buttonProps?: Omit<ButtonProps, "onChange">;
+  createButtonContent?: React.ReactNode;
   inputProps?: SearchWithDropdownProps["otherInputProps"];
   // only used if items aren't added immediately on each select
   onCommitSelected?: () => void;
@@ -60,6 +65,7 @@ const PickOrAdd = ({
   onSelect,
   onUnselect,
   onCreateNew,
+  createButtonContent,
   onCommitSelected,
   buttonProps,
   inputProps,
@@ -117,7 +123,7 @@ const PickOrAdd = ({
           className={buttonClasses}
         >
           <Icon icon={"plus"} size={IconSizes.S} />
-          create new
+          {createButtonContent ?? "create new"}
         </Button>
       </Collapsible>
       <Collapsible

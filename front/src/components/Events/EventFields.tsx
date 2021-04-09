@@ -1,6 +1,12 @@
-import React, { HTMLProps, ReactNode, useContext, useState } from "react";
+import React, {
+  HTMLProps,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useEventContext } from "../../context/EventContextProvider";
-import { Event, eventDefaults, eventLogic } from "../../logic/eventLogic";
+import { EventDAO, eventDefaults, eventLogic } from "../../logic/eventLogic";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import AddNutritionItem from "../Nutrition/AddNutritionItem";
 import Removable from "../generic/Removable";
@@ -57,23 +63,33 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "EventTableRow" });
 
 interface EventFieldProps {
-  event: Event;
+  event: EventDAO;
   initialMode: ItemModes;
   children: ReactNode;
+  onChange?: (event: EventDAO) => any;
 }
 
 const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<Event>
+  EntityBaseContextUseQuery<EventDAO> & { onChange?: (event: EventDAO) => any }
 >();
 
-const Wrapper = ({ event, initialMode, children }: EventFieldProps) => {
+const Wrapper = ({
+  event,
+  initialMode,
+  children,
+  onChange,
+}: EventFieldProps) => {
   const contextProps = useEntityBaseUseQuery(
     event,
     useEventContext(),
     initialMode
   );
 
-  return <Provider value={contextProps}>{children}</Provider>;
+  useEffect(() => {
+    contextProps.setComplexState(event);
+  }, [event]);
+
+  return <Provider value={{ ...contextProps, onChange }}>{children}</Provider>;
 };
 
 const Buttons = () => {
@@ -98,12 +114,17 @@ const Buttons = () => {
   );
 };
 
-const DateTime = (inputProps: HTMLProps<HTMLInputElement>) => {
-  const { handleSetOrUpdate, complexState: event } = useThisContext();
+const DateTime = (
+  props: HTMLProps<HTMLInputElement> & {
+    onCreateSuccess?: (event: EventDAO) => any;
+  }
+) => {
+  const { handleSetOrUpdate, complexState: event, onChange } = useThisContext();
 
   const time = new Date(event.time);
 
   function changeDateTime(newDateTime: Date) {
+    onChange?.({ ...event, time: newDateTime.toISOString() });
     handleSetOrUpdate({ time: newDateTime.toISOString() });
   }
 

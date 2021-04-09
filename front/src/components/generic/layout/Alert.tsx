@@ -1,34 +1,20 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { Theme } from "../../../styling/theme";
 import { classConcat, Enummed } from "../../../utils/utils";
 import { Button } from "../buttons/Button";
 import { Box } from "../styling/Box";
 import { Icon, IconSizes } from "../styling/Icon";
 
-// const enum AlertTypes {
-//   POSITIVE = "POSITIVE",
-//   NEGATIVE = "NEGATIVE",
-//   NEUTRAL = "NEUTRAL",
-// }
-
 export const AlertTypes = {
   POSITIVE: {
     name: "POSITIVE",
-    style: {
-      background: "lightgreen",
-    },
   },
   NEGATIVE: {
     name: "NEGATIVE",
-    style: {
-      background: "lightcoral",
-    },
   },
   NEUTRAL: {
     name: "NEUTRAL",
-    style: {
-      background: "lightgray",
-    },
   },
 } as const;
 
@@ -39,14 +25,9 @@ export interface AlertProps {
   onRemove?: () => void;
 }
 
-interface StyleProps {
-  type: AlertProps["type"];
-}
-
 const useStyles = createUseStyles(
-  {
-    wrapper: ({ type }: StyleProps) => ({
-      ...type?.style,
+  (theme: Theme) => ({
+    wrapper: {
       minHeight: "30px",
       display: "inline-block",
       wordBreak: "break-word",
@@ -54,7 +35,10 @@ const useStyles = createUseStyles(
       margin: "5px",
       fontSize: "0.75em",
       boxShadow: "rgba(0, 0, 0, 0.5) 0 2px 10px 0px",
-    }),
+    },
+    POSITIVE: { background: theme.good },
+    NEGATIVE: { background: theme.bad },
+    NEUTRAL: { background: theme.neutral },
     flex: {
       display: "inline-flex",
       width: "100%",
@@ -64,7 +48,7 @@ const useStyles = createUseStyles(
     button: {
       marginLeft: "10px",
     },
-  },
+  }),
 
   { name: "Alert" }
 );
@@ -75,9 +59,11 @@ export const Alert = ({
   className,
   onRemove,
 }: AlertProps) => {
-  const classes = useStyles({ type });
+  const classes = useStyles();
   return (
-    <Box className={classConcat(classes.wrapper, className)}>
+    <Box
+      className={classConcat(classes.wrapper, classes[type.name], className)}
+    >
       <div className={classes.flex}>
         {children}
         <Button className={classes.button} onClick={onRemove}>

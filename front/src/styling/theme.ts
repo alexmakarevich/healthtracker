@@ -10,6 +10,7 @@ export const theme = {
   },
   good: "#205630",
   bad: "#562525",
+  neutral: "#404060",
 } as const;
 
 export type Theme = typeof theme;

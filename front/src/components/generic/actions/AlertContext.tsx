@@ -49,43 +49,6 @@ export const AlertContext = ({ children }: AlertContextProps) => {
   const prevAlerts = usePrevious(alerts);
   const alertsRef = useRef(alerts);
 
-  useEffect(() => {
-    console.log({ alerts, prevAlerts });
-
-    if (alerts.length >= (prevAlerts?.length ?? 1)) {
-      const newest = alerts[alerts.length - 1];
-      const timeout = setTimeout(
-        () => {
-          const isFound = alerts.includes(newest);
-          console.log("deleteIfFound", {
-            isFound,
-            oldest: newest,
-            alerts,
-            prevAlerts,
-            ref: alertsRef.current,
-          });
-
-          removeAlert(newest.id);
-
-          return () => {
-            clearTimeout(timeout);
-          };
-        },
-        // TODO: set realistic value after done with testing
-        3000
-      );
-    }
-  }, [alerts]);
-
-  const addAlert = useCallback(
-    ({ id = uuid(), ...alertProps }: PartialPartial<AlertObject, "id">) => {
-      // max 5 items at once
-      setAlerts((alerts) => [...alerts.slice(-6), { ...alertProps, id }]);
-      return id;
-    },
-    [setAlerts]
-  );
-
   const removeAlert = useCallback(
     (id: string) => {
       console.log("removeAlert");
@@ -105,6 +68,39 @@ export const AlertContext = ({ children }: AlertContextProps) => {
     },
     [setAlerts]
   );
+
+  const addAlert = useCallback(
+    ({ id = uuid(), ...alertProps }: PartialPartial<AlertObject, "id">) => {
+      // max 5 items at once
+      setAlerts((alerts) => [...alerts.slice(-6), { ...alertProps, id }]);
+      return id;
+    },
+    [setAlerts]
+  );
+
+  useEffect(() => {
+    console.log({ alerts, prevAlerts });
+
+    if (alerts.length >= (prevAlerts?.length ?? 1)) {
+      const newest = alerts[alerts.length - 1];
+      const timeout = setTimeout(() => {
+        const isFound = alerts.includes(newest);
+        console.log("deleteIfFound", {
+          isFound,
+          oldest: newest,
+          alerts,
+          prevAlerts,
+          ref: alertsRef.current,
+        });
+
+        removeAlert(newest.id);
+
+        return () => {
+          clearTimeout(timeout);
+        };
+      }, 5000);
+    }
+  }, [alerts, prevAlerts, removeAlert]);
 
   return (
     <AlertContextProvider value={{ addAlert }}>

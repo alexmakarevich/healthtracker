@@ -1,27 +1,16 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useEventContext } from "../../../context/EventContextProvider";
-import { Event } from "../../../logic/eventLogic";
-import { classConcat, ItemModes } from "../../../utils/utils";
+import { ItemModes } from "../../../utils/utils";
 import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
-import {
-  Columns,
-  Row,
-  useCustomTable,
-  UseCustomTableProps,
-} from "../../../hooks/useCustomTable";
+import { Columns, Row } from "../../../hooks/useCustomTable";
 import {
   ExerciseInstanceDAO,
   exerciseInstanceDefaults,
 } from "../../../logic/exerciseInstanceLogic";
 import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
-import { FlexRow } from "../../generic/layout/FlexRow";
-import { v4 as uuid } from "uuid";
-import { ExerciseFields } from "../ExerciseFields";
-import { createUseStyles } from "react-jss";
-import { Button } from "../../generic/buttons/Button";
-import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import { Table } from "../../generic/layout/Table";
+import { createUseStyles } from "react-jss";
 
 // TODO: cleanup style
 const useStyles = createUseStyles(
@@ -81,7 +70,6 @@ export const ExerciseInstanceTable = ({
       item: i,
       initialMode: ItemModes.QuickEdit,
     })),
-    { item: newItem, initialMode: ItemModes.New },
   ];
 
   const tableData: Row<
@@ -98,9 +86,6 @@ export const ExerciseInstanceTable = ({
         exercise: {
           data: exercises.getOneFromContext(item.exerciseId)?.title ?? "",
         },
-        eventIdInExercise: {
-          data: item.eventId,
-        },
         duration: { data: item.durationSeconds ?? 0 },
         reps: { data: item.repetitions ?? 0 },
         weight: { data: item.weightKg ?? 0 },
@@ -111,17 +96,38 @@ export const ExerciseInstanceTable = ({
     };
   });
 
+  const newRow: Row<
+    ExerciseEventTableData,
+    {
+      item: ExerciseInstanceDAO;
+      initialMode: ItemModes;
+    }
+  > = {
+    cellData: {
+      event: { data: events.getOneFromContext(newItem.eventId)?.time ?? "" },
+      exercise: {
+        data: exercises.getOneFromContext(newItem.exerciseId)?.title ?? "",
+      },
+      duration: { data: newItem.durationSeconds ?? 0 },
+      reps: { data: newItem.repetitions ?? 0 },
+      weight: { data: newItem.weightKg ?? 0 },
+      delete: { data: undefined },
+    },
+    rowWrapperProps: { item: newItem, initialMode: ItemModes.New },
+    key: newItem._id,
+  };
+
   const columns: Columns<ExerciseEventTableData> = useMemo(
     () => ({
       event: {
         title: "time",
         renderFn: () => (
-          <FlexRow style={{ justifyContent: "center" }}>
-            <ExerciseInstanceFields.Buttons />
+          <>
             <ExerciseInstanceFields.Event className={classes.tableInput} />
-          </FlexRow>
+            <ExerciseInstanceFields.Buttons />
+          </>
         ),
-        tdProps: { style: { minWidth: 130 } },
+        tdProps: { style: { paddingRight: "0.5em" } },
       },
       exercise: {
         title: "exercise",
@@ -157,8 +163,8 @@ export const ExerciseInstanceTable = ({
   );
 
   const props = {
-    data: tableData.slice(0, -1),
-    lastRow: tableData.slice(-1)[0],
+    data: tableData,
+    lastRow: newRow,
     columns,
     columnKeys: [
       "event",

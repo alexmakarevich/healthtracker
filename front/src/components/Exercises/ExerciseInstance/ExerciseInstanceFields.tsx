@@ -6,12 +6,7 @@ import React, {
   useState,
 } from "react";
 import { createUseStyles } from "react-jss";
-import {
-  EntityBaseContextUseQuery,
-  useEntityBaseUseQuery,
-} from "../../../hooks/useEntityBase";
 import { createContextDefined } from "../../../context/ContextWrapper";
-import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import {
   ExerciseInstanceDAO,
@@ -25,7 +20,7 @@ import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
 import { useEventContext } from "../../../context/EventContextProvider";
-import { eventDefaults } from "../../../logic/eventLogic";
+import { EventDAO, eventDefaults } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
@@ -72,31 +67,31 @@ export interface ExerciseInstanceFieldsProps {
   item: ExerciseInstanceDAO;
   initialMode: ItemModes;
   children: ReactNode;
+  newEvent?: EventDAO;
 }
 
-const [
-  useThisContext,
-  Provider,
-] = createContextDefined<ThisContextValue /** TODO: fix type any */>();
+const [useThisContext, Provider] = createContextDefined<ThisContextValue>();
 
 type ThisContextValue = ReturnType<typeof useExerciseInstance> & {
-  // setOrUpdate: (input: ExerciseInstanceDAO) => void;
+  newEvent?: EventDAO;
+  setNewEvent: React.Dispatch<React.SetStateAction<EventDAO>>;
 };
 
 const Wrapper = ({
   item,
   initialMode,
   children,
-}: // onCreate,
-ExerciseInstanceFieldsProps) => {
+}: ExerciseInstanceFieldsProps) => {
   const EI = useExerciseInstance({
     data: item,
     initialMode,
   });
 
-  // const newContextProps: EntityBaseContextUseQuery<ExerciseInstanceDAO> = {};
+  const [newEvent, setNewEvent] = useState({ ...eventDefaults });
 
-  return <Provider value={EI}>{children}</Provider>;
+  return (
+    <Provider value={{ ...EI, newEvent, setNewEvent }}>{children}</Provider>
+  );
 };
 
 const Buttons = () => {
@@ -105,9 +100,10 @@ const Buttons = () => {
     create,
     data,
     reset,
+    newEvent,
+    setNewEvent,
     update,
     setMode,
-    // createWithNewEvent,
   } = useThisContext();
 
   const events = useEventContext();
@@ -116,22 +112,32 @@ const Buttons = () => {
   return (
     <CreateEditResetCancel
       mode={mode}
-      // TODO: separate event creation from exercise instance creation
       onCreate={() =>
         create &&
-        events.create(
-          { ...eventDefaults },
-          {
-            onSuccess: (event) => {
-              create(
-                { ...data, eventId: event._id },
-                { onSuccess: () => reset() }
-              );
-            },
-          }
-        )
+        events.create(newEvent, {
+          onSuccess: (event) => {
+            create(
+              { ...data, eventId: event._id },
+              {
+                onSuccess: () => {
+                  reset();
+                  setNewEvent({
+                    ...eventDefaults,
+                    time: new Date().toISOString(),
+                  });
+                },
+              }
+            );
+          },
+        })
       }
-      onReset={reset}
+      onReset={() => {
+        reset();
+        setNewEvent({
+          ...eventDefaults,
+          time: new Date().toISOString(),
+        });
+      }}
       onSave={update}
       onCancelEdit={() => setMode(ItemModes.Show)}
       onSetMode={setMode}
@@ -175,9 +181,6 @@ const Weight = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 
   const { data, setOrUpdateDebounced, mode } = useThisContext();
 
-  // if (mode === ItemModes.Show && !data.weightKg) {
-  //   return null;
-  // } else {
   return (
     <input
       disabled={mode === ItemModes.Show}
@@ -221,17 +224,21 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 };
 
 const Event = (inputProps: HTMLProps<HTMLInputElement>) => {
-  const { event } = useThisContext();
+  const { event, newEvent, mode, setNewEvent } = useThisContext();
 
-  return event ? (
-    <EventFields.Wrapper initialMode={ItemModes.QuickEdit} event={event}>
+  return (
+    <EventFields.Wrapper
+      initialMode={mode}
+      event={event ?? newEvent ?? eventDefaults}
+      onChange={(event) => mode === ItemModes.New && setNewEvent(event)}
+    >
       <EventFields.DateTime {...inputProps} />
     </EventFields.Wrapper>
-  ) : null;
+  );
 };
 
 const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
-  const { data, exercise, setOrUpdate, reset } = useThisContext();
+  const { data, exercise, setOrUpdate } = useThisContext();
   const { className, ...otherDivProps } = divProps;
 
   const exCtx = useExerciseContext();
@@ -274,9 +281,9 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
           onCreateNew={(title) =>
             exCtx.create({ ...exerciseTypeDefaults, title: title })
           }
+          createButtonContent={"new exercise"}
           inputProps={{
             placeholder: "enter exercise name...",
-            style: { width: "150px" },
           }}
         />
       )}

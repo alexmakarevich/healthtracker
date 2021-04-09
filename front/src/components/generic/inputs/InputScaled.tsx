@@ -1,4 +1,3 @@
-import classes from "*.module.css";
 import React, { forwardRef, Ref, useEffect, useRef, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat } from "../../../utils/utils";

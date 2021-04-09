@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useEventContext } from "../../context/EventContextProvider";
-import { Event, eventDefaults } from "../../logic/eventLogic";
+import { eventDefaults } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
 import { EventFields } from "./EventFields";
 import { SimpleRow } from "../generic/layout/SimpleRow";
