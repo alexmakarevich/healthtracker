@@ -126,6 +126,10 @@ const Buttons = () => {
                     time: new Date().toISOString(),
                   });
                 },
+                // cleaning up auto-created event, if exercise instance creation fails
+                onError: () => {
+                  events.delete(event);
+                },
               }
             );
           },
