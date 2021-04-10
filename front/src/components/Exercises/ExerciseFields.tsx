@@ -8,7 +8,10 @@ import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseTypeDAO } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
-import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
+import {
+  CreateEditResetCancel,
+  CreateEditResetCancelProps,
+} from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import TextWithEdit from "../generic/TextWithEdit";
 
@@ -38,7 +41,7 @@ const Wrapper = ({ item, initialMode, children }: ExerciseTypeFieldProps) => {
   return <Provider value={contextProps}>{children}</Provider>;
 };
 
-const Buttons = () => {
+const Buttons = ({ className }: { className?: string }) => {
   const {
     mode,
     handleCreate,
@@ -55,12 +58,13 @@ const Buttons = () => {
       onSave={handleSave}
       onCancelEdit={handleCancel}
       onSetMode={setMode}
+      className={className}
       valid
     />
   );
 };
 
-const Title = () => {
+const Title = ({ className }: { className?: string }) => {
   const { mode, complexState, handleSetOrUpdate } = useThisContext();
 
   return (
@@ -68,6 +72,7 @@ const Title = () => {
       text={complexState.title}
       onTextChange={(txt) => handleSetOrUpdate({ title: txt })}
       isEdit={mode !== ItemModes.Show}
+      className={className}
     />
   );
 };

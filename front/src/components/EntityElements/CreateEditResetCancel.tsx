@@ -4,7 +4,7 @@ import { classConcat, ItemModes } from "../../utils/utils";
 import { Button } from "../generic/buttons/Button";
 import { Icon, IconSizes } from "../generic/styling/Icon";
 
-interface Props {
+export type CreateEditResetCancelProps = {
   mode: ItemModes;
   onSetMode: (mode: ItemModes) => void;
   onSave: () => void;
@@ -12,7 +12,7 @@ interface Props {
   onReset: () => void;
   onCreate: () => void;
   valid: boolean;
-}
+} & HTMLProps<HTMLDivElement>;
 
 const useStyles = createUseStyles(
   {
@@ -38,7 +38,7 @@ const CreateEditResetCancel = ({
   valid,
   className,
   ...wrapperProps
-}: Props & HTMLProps<HTMLDivElement>) => {
+}: CreateEditResetCancelProps) => {
   const classes = useStyles();
 
   if (mode === ItemModes.QuickEdit) return null;

@@ -5,11 +5,9 @@ import {
   exerciseTypeDefaults,
 } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
-import { SimpleRow } from "../generic/layout/SimpleRow";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseFields } from "./ExerciseFields";
 import { Row } from "../../hooks/useCustomTable";
-import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
 import { Columns } from "../../hooks/useCustomTableNew.";
 import { Table } from "../generic/layout/Table";
 
@@ -29,12 +27,19 @@ const useStyles = createUseStyles(
       background: "transparent",
       border: "none",
       borderBottom: "2px transparent solid",
+      padding: "0.5em",
       "&:hover": {
         borderBottom: "2px #444 solid",
       },
       "&:active": {
         borderBottom: "2px #000 solid",
       },
+    },
+    title: {
+      // margin: "0.25em",
+    },
+    buttons: {
+      paddingTop: "0.25em",
     },
   }),
   { name: "NutritionList" }
@@ -54,8 +59,6 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
   const ETContext = useExerciseContext();
   const classes = useStyles();
 
-  const newItem = { ...exerciseTypeDefaults };
-
   const dataAndNew: {
     item: ExerciseTypeDAO;
     initialMode: ItemModes;
@@ -64,7 +67,6 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
       item: i,
       initialMode: ItemModes.QuickEdit,
     })),
-    { item: newItem, initialMode: ItemModes.New },
   ];
 
   const tableData: Row<
@@ -85,16 +87,32 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
     };
   });
 
+  const newRow: Row<
+    ExerciseTypeTableData,
+    {
+      item: ExerciseTypeDAO;
+      initialMode: ItemModes;
+    }
+  > = {
+    cellData: {
+      title: { data: exerciseTypeDefaults.title },
+      delete: { data: undefined },
+    },
+    rowWrapperProps: { item: exerciseTypeDefaults, initialMode: ItemModes.New },
+    key: exerciseTypeDefaults._id,
+  };
+
   const columns: Columns<ExerciseTypeTableData> = useMemo(
     () => ({
       title: {
         title: "title",
         renderFn: () => (
-          <>
-            <ExerciseFields.Buttons /> <ExerciseFields.Title />
-          </>
+          <div>
+            <ExerciseFields.Title className={classes.title} />
+            <ExerciseFields.Buttons className={classes.buttons} />
+          </div>
         ),
-        tdProps: { style: { maxWidth: 500 } },
+        tdProps: { style: { maxWidth: 500, paddingRight: "0.5em" } },
       },
       delete: {
         title: "",
@@ -105,8 +123,8 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
   );
 
   const props = {
-    data: tableData.slice(0, -1),
-    lastRow: tableData.slice(-1)[0],
+    data: tableData,
+    lastRow: newRow,
     columns,
     columnKeys: ["title", "delete"] as (keyof ExerciseTypeTableData)[],
   };
@@ -117,40 +135,6 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
       RowWrapper={ExerciseFields.Wrapper}
       className={className}
     />
-    // <>
-    //   <table className={className}>
-    //     <thead>
-    //       <tr>
-    //         <th></th>
-    //         <th>Title</th>
-    //         <th></th>
-    //       </tr>
-    //     </thead>
-    //     <tbody className={classes.list}>
-    //       {ETContext.all &&
-    //         ETContext.all.map((exercise: ExerciseTypeDAO, index: number) => (
-    //           <Rowerino
-    //             item={exercise}
-    //             initialMode={ItemModes.QuickEdit}
-    //             key={index}
-    //           />
-    //         ))}
-    //       <Rowerino item={exerciseTypeDefaults} initialMode={ItemModes.New} />
-    //     </tbody>
-    //   </table>
-    // </>
-  );
-};
-
-const Rowerino = (props: ExerciseTypeFieldProps) => {
-  return (
-    <ExerciseFields.Wrapper item={props.item} initialMode={props.initialMode}>
-      <SimpleRow>
-        <ExerciseFields.Buttons />
-        <ExerciseFields.Title />
-        <ExerciseFields.Delete />
-      </SimpleRow>
-    </ExerciseFields.Wrapper>
   );
 };
 
