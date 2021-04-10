@@ -4,6 +4,8 @@ import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContex
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { LineAndDotChart, Scales } from "./LineAndDotChart";
 
+// TODO: import types from LineAndDotChart
+
 interface ChartData {
   x: Date;
   y: number;
@@ -19,18 +21,24 @@ export const ExerciseVisualizationNew = () => {
   if (!events.all || !exerciseInstances.all || !exercises.all) {
     return null;
   }
-  let chartData: ChartData[][] = [];
+  let chartData: { data: ChartData[] }[] = [];
 
   if (!!events.all && !!exerciseInstances.all && !!exercises.all) {
-    let groupedChartData: Record<string, ChartData[]> = {};
+    let groupedChartData: Record<
+      string,
+      { data: ChartData[]; legend?: string }
+    > = {};
 
     exerciseInstances.all.forEach((ei) => {
       const thisEvent = events.getOneFromContext(ei.eventId);
       if (thisEvent) {
         if (!groupedChartData[ei.exerciseId]) {
-          groupedChartData[ei.exerciseId] = [];
+          groupedChartData[ei.exerciseId] = {
+            data: [],
+            legend: exercises.getOneFromContext(ei.exerciseId)?.title,
+          };
         }
-        groupedChartData[ei.exerciseId].push({
+        groupedChartData[ei.exerciseId].data.push({
           y: ei.repetitions ?? 0,
           x: new Date(thisEvent.time),
           radius: ei.weightKg,
@@ -47,7 +55,7 @@ export const ExerciseVisualizationNew = () => {
       <LineAndDotChart
         xScale={Scales.Time}
         yScale={Scales.Linear}
-        data={chartData}
+        series={chartData}
       />
     </>
   );

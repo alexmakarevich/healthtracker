@@ -23,7 +23,7 @@ enum Sort {
 interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
   xScale: XScale;
   yScale: YScale;
-  data: Data<XScale, YScale>[][];
+  series: { data: Data<XScale, YScale>[]; legend?: string }[];
   hasLine?: boolean;
   hasDots?: boolean;
   sort?: Sort;
@@ -34,7 +34,7 @@ interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
 }
 
 export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
-  data,
+  series,
   xScale,
   yScale,
   hasLine = true,
@@ -45,29 +45,39 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   minY: minYForce,
   maxY: maxYForce,
 }: LineAndDotChartProps<xType, yType>) => {
-  // if ((data.length = 0)) return null;
-
   type DefinedData = Data<xType, yType>;
+  type DefinedSeries = { data: DefinedData[]; legend?: string };
 
-  const sortByX = (data: DefinedData[]) =>
-    data.slice().sort((a, b) => (a.x < b.x ? -1 : 0));
-  const sortByY = (data: DefinedData[]) =>
-    data.slice().sort((a, b) => (a.y < b.y ? -1 : 0));
+  const sortByX = ({ data, ...rest }: DefinedSeries): DefinedSeries => ({
+    data: data.slice().sort((a, b) => (a.x < b.x ? -1 : 0)),
+    ...rest,
+  });
+
+  const sortByY = ({ data, ...rest }: DefinedSeries): DefinedSeries => ({
+    data: data.slice().sort((a, b) => (a.y < b.y ? -1 : 0)),
+    ...rest,
+  });
 
   const colors = d3.scaleOrdinal(d3.schemeTableau10);
 
-  const dataSortedByX = data.map((datum) => sortByX(datum));
-  const dataSortedByY = data.map((datum) => sortByY(datum));
+  console.log({ 1: colors("1") });
 
-  const dataFlat = data.flat();
+  const dataSortedByX = series.map((datum) => sortByX(datum));
+  const dataSortedByY = series.map((datum) => sortByY(datum));
 
-  const minX = minXForce ?? sortByX(dataFlat)[0]?.x ?? 0;
-  const maxX = maxXForce ?? sortByX(dataFlat)[dataFlat.length - 1]?.x ?? 0;
-  const minY = minYForce ?? sortByY(dataFlat)[0]?.y ?? 0;
-  const maxY = maxYForce ?? sortByY(dataFlat)[dataFlat.length - 1]?.y ?? 0;
+  const seriesFlat = series.reduce((prev, curr) => ({
+    data: [...prev.data, ...curr.data],
+  }));
+
+  const minX = minXForce ?? sortByX(seriesFlat).data[0].x ?? 0;
+  const maxX =
+    maxXForce ?? sortByX(seriesFlat).data[seriesFlat.data.length - 1]?.x ?? 0;
+  const minY = minYForce ?? sortByY(seriesFlat).data[0]?.y ?? 0;
+  const maxY =
+    maxYForce ?? sortByY(seriesFlat).data[seriesFlat.data.length - 1]?.y ?? 0;
 
   const adjustedData =
-    sort === Sort.x ? dataSortedByX : Sort.y ? dataSortedByY : data;
+    sort === Sort.x ? dataSortedByX : Sort.y ? dataSortedByY : series;
 
   // set the dimensions and margins of the graph
   const margin = { top: 60, right: 60, bottom: 60, left: 60 },
@@ -91,8 +101,6 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   const x = axis("x")(xScale);
   const y = axis("y")(yScale);
 
-  console.log(x.range());
-
   useEffect(() => {
     // get svg base
     const svg = d3.select(ref.current);
@@ -113,7 +121,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
       if (hasLine) {
         svg
           .selectAll("path.line-" + index)
-          .data([datum])
+          .data([datum.data])
           .join("path")
           .transition()
           .duration(150)
@@ -129,13 +137,28 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
           .attr("fill", "none")
           .attr("stroke", colors(index.toString()))
           .attr("stroke-width", 1.5);
+
+        svg
+          .selectAll("mydots-" + index)
+          .data(["sas"])
+          .enter()
+          .append("circle")
+          .attr("class", "line-" + index)
+          .attr("cx", 100)
+          .attr("cy", function (d, i) {
+            return 100 + i * 25;
+          }) // 100 is where the first dot appears. 25 is the distance between dots
+          .attr("r", 7)
+          .style("fill", function (d) {
+            return colors(index.toString());
+          });
       }
 
       if (hasDots) {
         // add/update dots
         const circles = svg
           .selectAll<SVGCircleElement, DefinedData>("circle.series-" + index)
-          .data(datum);
+          .data(datum.data);
 
         circles
           .enter()
@@ -155,7 +178,7 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
 
         const textLabels = svg
           .selectAll<SVGTextElement, DefinedData>("text.series-" + index)
-          .data(datum);
+          .data(datum.data);
 
         textLabels
           .enter()
@@ -182,18 +205,27 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
         textLabels.exit().remove();
       }
     });
-  }, [adjustedData, colors, data, hasDots, hasLine, height, x, y]);
+  }, [adjustedData, colors, series, hasDots, hasLine, height, x, y]);
 
   return (
-    <svg
-      width={width + margin.left + margin.right}
-      height={height + margin.top + margin.bottom}
-      overflow={"visible"}
-    >
-      <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}>
-        <g className={"x-axis"} />
-        <g className={"y-axis"} />
-      </g>
-    </svg>
+    <>
+      <svg
+        width={width + margin.left + margin.right}
+        height={height + margin.top + margin.bottom}
+        overflow={"visible"}
+      >
+        <g ref={ref} transform={`translate(${margin.left}, ${margin.top})`}>
+          <g className={"x-axis"} />
+          <g className={"y-axis"} />
+        </g>
+      </svg>
+      <div>
+        {adjustedData.map((datum, index) => (
+          <span style={{ padding: 10, color: colors(index.toString()) }}>
+            {datum.legend}
+          </span>
+        ))}
+      </div>
+    </>
   );
 };

@@ -21,14 +21,14 @@ export const SampleVisualizationUpdate = () => {
   return (
     <div>
       <h1>{SampleVisualizationUpdate.name}</h1>
-
+      {/* 
       <LineAndDotChart
-        data={[data.slice(0, 4), data.slice(4)]}
+        series={[data.slice(0, 4), data.slice(4)]}
         xScale={Scales.Time}
         yScale={Scales.Linear}
         hasLine={false}
         minY={0}
-      />
+      /> */}
 
       <ul>
         {data.map((d, index) => (
