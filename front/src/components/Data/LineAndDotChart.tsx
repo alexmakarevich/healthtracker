@@ -137,21 +137,6 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
           .attr("fill", "none")
           .attr("stroke", colors(index.toString()))
           .attr("stroke-width", 1.5);
-
-        svg
-          .selectAll("mydots-" + index)
-          .data(["sas"])
-          .enter()
-          .append("circle")
-          .attr("class", "line-" + index)
-          .attr("cx", 100)
-          .attr("cy", function (d, i) {
-            return 100 + i * 25;
-          }) // 100 is where the first dot appears. 25 is the distance between dots
-          .attr("r", 7)
-          .style("fill", function (d) {
-            return colors(index.toString());
-          });
       }
 
       if (hasDots) {
