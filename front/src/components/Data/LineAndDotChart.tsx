@@ -33,6 +33,8 @@ interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
   maxY?: Data<XScale, YScale>["y"];
 }
 
+// TODO: make empty data handling simpler
+
 export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   series,
   xScale,
@@ -65,11 +67,11 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   const dataSortedByX = series.map((datum) => sortByX(datum));
   const dataSortedByY = series.map((datum) => sortByY(datum));
 
-  const seriesFlat = series.reduce((prev, curr) => ({
+  const seriesFlat: {data: Data<xType, yType>[]} = series.reduce((prev, curr) => ({
     data: [...prev.data, ...curr.data],
-  }));
+  }), {data: []});
 
-  const minX = minXForce ?? sortByX(seriesFlat).data[0].x ?? 0;
+  const minX = minXForce ?? sortByX(seriesFlat).data[0]?.x ?? 0;
   const maxX =
     maxXForce ?? sortByX(seriesFlat).data[seriesFlat.data.length - 1]?.x ?? 0;
   const minY = minYForce ?? sortByY(seriesFlat).data[0]?.y ?? 0;
@@ -104,7 +106,6 @@ export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   useEffect(() => {
     // get svg base
     const svg = d3.select(ref.current);
-    const format = d3.format(".2f");
 
     // add/update axes
     svg
