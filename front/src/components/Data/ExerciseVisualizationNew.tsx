@@ -56,6 +56,7 @@ export const ExerciseVisualizationNew = () => {
         xScale={Scales.Time}
         yScale={Scales.Linear}
         series={chartData}
+        minY={0}
       />
     </>
   );
