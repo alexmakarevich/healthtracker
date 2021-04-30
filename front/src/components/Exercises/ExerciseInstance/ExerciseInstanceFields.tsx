@@ -25,6 +25,7 @@ import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
 import { Theme } from "../../../styling/theme";
+import Collapsible, { Animations } from "../../generic/Collapsible";
 
 const useStyles = createUseStyles(
   (theme: Theme) => ({
@@ -275,22 +276,34 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
           </Button>
         )}
       </div>
-      {(areNoneSelected || showSelect) && (
+      <Collapsible
+        isExpanded={areNoneSelected || showSelect}
+        animation={Animations.ExpandHeight}
+      >
         <PickOrAdd
           dropdownItems={dropdownItems}
-          onSelect={(id: string) => {
+          onSelect={(id) => {
             setOrUpdate({ ...data, exerciseId: id });
             setShowSelect(false);
           }}
           onCreateNew={(title) =>
-            exCtx.create({ ...exerciseTypeDefaults, title: title })
+            exCtx.create(
+              { ...exerciseTypeDefaults, title: title },
+              {
+                onSuccess: (newExercise) => {
+                  console.log({ newExercise });
+                  setOrUpdate({ ...data, exerciseId: newExercise._id });
+                  setShowSelect(false);
+                },
+              }
+            )
           }
           createButtonContent={"new exercise"}
           inputProps={{
             placeholder: "enter exercise name...",
           }}
         />
-      )}
+      </Collapsible>
     </div>
   );
 };

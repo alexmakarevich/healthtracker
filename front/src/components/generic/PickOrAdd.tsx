@@ -52,12 +52,11 @@ interface Props {
   onCommitSelected?: () => void;
 }
 
-/*
- mostly stateless (except the search input) search + create component
-two type of usage at the moment: 
+/** 
+mostly stateless (except the search input) search + create component
+two types of usage at the moment: 
 1. pass only unselected dropdown items, and commit changes on each onSelectChange
 2. pass list of unselected AND selected dropdown items, commit all changes at once via onCommitSelected
-
 */
 
 const PickOrAdd = ({
@@ -132,7 +131,7 @@ const PickOrAdd = ({
       >
         <Button onClick={onCommitSelected}>
           <Icon icon={"plus"} size={IconSizes.S} />
-          add selected{" "}
+          add selected
         </Button>
       </Collapsible>
     </div>

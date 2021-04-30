@@ -12,7 +12,7 @@ const useStyles = createUseStyles(
       borderRadius: "0.25em",
       border: "2px solid #666",
       padding: "0.25em",
-      margin: "0",
+      margin: 0,
       color: theme.textMain,
 
       // boxShadow: "rgba(0, 0, 0, 0.2) 0 0 1px 2px",
@@ -41,7 +41,7 @@ export const Button = ({ ...rest }: ButtonProps) => {
   return (
     <button
       {...restRest}
-      className={classConcat(classes.button, className)}
+      className={classConcat(className, classes.button)}
     ></button>
   );
 };
