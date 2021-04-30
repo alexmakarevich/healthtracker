@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  NutritionItem,
+  NutritionItemDAO,
   nutritionItemDefaults,
 } from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
@@ -33,7 +33,7 @@ const useStyles = createUseStyles(
 
 interface Props {
   idsToExclude?: string[];
-  onAdd: (id: NutritionItem["_id"]) => void;
+  onAdd: (id: NutritionItemDAO["_id"]) => void;
 }
 
 const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
@@ -41,7 +41,7 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
   const classes = useStyles();
 
   function handleCreateAndAdd(title: string) {
-    const newNI: NutritionItem = { ...nutritionItemDefaults, title: title };
+    const newNI: NutritionItemDAO = { ...nutritionItemDefaults, title: title };
     NIContext.create(newNI, {
       onSuccess: (data) => {
         onAdd(data._id);
@@ -64,7 +64,7 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
             node: (
               <Box>
                 <NutritionFields.Wrapper
-                  item={item}
+                  data={item}
                   initialMode={ItemModes.Show}
                 >
                   <NutritionFields.Title />

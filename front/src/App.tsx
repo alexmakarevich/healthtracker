@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useState } from "react";
 import "./App.css";
-import { NutritionItemTable } from "./components/Nutrition/NutritionItemTable";
+import { NutritiionTable } from "./components/Nutrition/NutritionItemTable";
 import { EventTable } from "./components/Events/EventTable";
 import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
 import { EventProvider } from "./context/EventContextProvider";
@@ -51,9 +51,9 @@ const useStyles = createUseStyles(
         color: theme.textMain,
       },
       padding: "2em 1em",
-    },
-    table: {
-      display: "inline-block",
+      "& table": {
+        display: "inline-block",
+      },
     },
   },
 
@@ -73,13 +73,14 @@ function App() {
                 <NutritionItemProvider>
                   {/* <SampleVisualizationUpdate />
                 <SampleVisualizationTime />
-                <ExerciseVisualization />
-                <NutritionItemTable /> */}
+                <ExerciseVisualization /> */}
+                  <h2>Nutrition</h2>
+                  <NutritiionTable />
                   {/* <CheckHowHooksRerender /> */}
                   {/* <ExerciseEventTable /> */}
                   <h2>Exercise History</h2>
-                  <ExerciseInstanceTable className={classes.table} />
-                  <h2>Exercise Graph</h2>
+                  <ExerciseInstanceTable />
+                  <h2>Exercise Chart</h2>
 
                   <ExerciseVisualizationNew />
 
@@ -94,7 +95,7 @@ function App() {
                   {/* <ExerciseInstanceTableNew /> */}
                   <h2>Exercise Types</h2>
 
-                  <ExerciseTypeTable className={classes.table} />
+                  <ExerciseTypeTable />
                 </NutritionItemProvider>
               </EventProvider>
             </ExerciseProvider>

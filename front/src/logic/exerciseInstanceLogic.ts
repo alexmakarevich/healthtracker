@@ -61,8 +61,6 @@ export const useExerciseInstance = ({
   const ExContext = useExerciseContext();
   const EvContext = useEventContext();
 
-  //TODO: fix continuous extra fetches
-
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {
     /* maintain state, even if global context changes. This allows to create and refeence sub-items in new item */

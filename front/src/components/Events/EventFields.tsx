@@ -154,7 +154,7 @@ const NutritionItems = () => {
               onRemove={() => handleSetOrUpdate(removeNI(ni._id))}
               key={ni._id}
             >
-              <NutritionFields.Wrapper item={ni} initialMode={ItemModes.Show}>
+              <NutritionFields.Wrapper data={ni} initialMode={ItemModes.Show}>
                 <Box>
                   <NutritionFields.Title />
                 </Box>

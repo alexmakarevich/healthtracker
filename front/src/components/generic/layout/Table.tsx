@@ -74,7 +74,7 @@ const useStyles = createUseStyles(
   { name: "Table" }
 );
 
-interface TableProps<
+export interface TableProps<
   DataType,
   KeyofDataType extends keyof DataType,
   RowWrapperProps

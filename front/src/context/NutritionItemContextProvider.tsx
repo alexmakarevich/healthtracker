@@ -1,10 +1,10 @@
-import { NutritionItem } from "./../logic/nutritionItemLogic";
+import { NutritionItemDAO } from "./../logic/nutritionItemLogic";
 import { generateContext } from "./generateContext";
 
 export const {
   ContextProvider: NutritionItemProvider,
   useContextDefined: useNutritionItemContext,
-} = generateContext<NutritionItem>(
+} = generateContext<NutritionItemDAO>(
   "http://localhost:4000/nutritionItems",
   "Nutrition"
 );

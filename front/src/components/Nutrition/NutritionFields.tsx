@@ -1,9 +1,10 @@
 import React, { ReactNode, useEffect } from "react";
 import { useState } from "react";
 import {
-  NutritionItem,
+  NutritionItemDAO,
   NILogic,
   nutritionItemDefaults,
+  useNutrition,
 } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
@@ -11,10 +12,6 @@ import { useNutritionItemContext } from "../../context/NutritionItemContextProvi
 import TextWithEditAndState from "../generic/TextWithEditAndState";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
-import {
-  EntityBaseContextUseQuery,
-  useEntityBaseUseQuery,
-} from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
@@ -24,6 +21,8 @@ import Removable from "../generic/Removable";
 import { SimpleRow } from "../generic/layout/SimpleRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
+import { Button } from "../generic/buttons/Button";
+import { Icon, IconSizes } from "../generic/styling/Icon";
 
 const useStyles = createUseStyles(
   {
@@ -52,21 +51,20 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<NutritionItem>
+  ReturnType<typeof useNutrition>
 >();
 
-export interface NutritionProps {
-  item: NutritionItem;
+export interface NutritionFieldsProps {
+  data: NutritionItemDAO;
   initialMode: ItemModes;
   children: ReactNode;
 }
 
-const Wrapper = ({ item, initialMode, children }: NutritionProps) => {
-  const contextProps = useEntityBaseUseQuery(
-    item,
-    useNutritionItemContext(),
-    initialMode
-  );
+const Wrapper = ({ data, initialMode, children }: NutritionFieldsProps) => {
+  const contextProps = useNutrition({
+    data,
+    initialMode,
+  });
 
   return <Provider value={contextProps}>{children}</Provider>;
 };
@@ -74,44 +72,43 @@ const Wrapper = ({ item, initialMode, children }: NutritionProps) => {
 const Buttons = () => {
   const {
     mode,
-    handleCreate,
+    data,
+    create,
     reset,
-    handleSave,
-    handleCancel,
+    setData,
+    update,
     setMode,
   } = useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
-      onCreate={handleCreate}
+      onCreate={() => create && create(data)}
       onReset={reset}
-      onSave={handleSave}
-      onCancelEdit={handleCancel}
+      onSave={update}
+      onCancelEdit={() => setMode(ItemModes.Show)}
       onSetMode={setMode}
+      isFlexRow
       valid
     />
   );
 };
 
 const Title = () => {
-  const { mode, complexState, handleSetOrUpdate } = useThisContext();
+  const { mode, data, setOrUpdateDebounced } = useThisContext();
 
   return (
-    // TODO: only update when clicking away / onEnter
     <TextWithEdit
-      text={complexState.title}
-      onTextChange={(txt) => handleSetOrUpdate({ title: txt })}
+      text={data.title}
+      onTextChange={(txt) => setOrUpdateDebounced({ ...data, title: txt })}
       isEdit={mode !== ItemModes.Show}
     />
   );
 };
 
 const Ingredients = () => {
-  const { mode, complexState: nutrition, handleSetOrUpdate } = useThisContext();
+  const { mode, data: nutrition, setOrUpdate } = useThisContext();
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
-
-  // TODO: come up wtih function that splits an array in two based on condition
 
   const { all, create } = useNutritionItemContext();
 
@@ -126,11 +123,11 @@ const Ingredients = () => {
   );
 
   function addIngredient(id: string) {
-    handleSetOrUpdate(NILogic.add_ingredient(nutrition, id));
+    setOrUpdate(NILogic.add_ingredient(nutrition, id));
   }
 
   function removeIngredient(id: string) {
-    handleSetOrUpdate(NILogic.remove_ingredient(nutrition, id));
+    setOrUpdate(NILogic.remove_ingredient(nutrition, id));
   }
 
   function handleCreateAndAdd(title: string) {
@@ -153,7 +150,7 @@ const Ingredients = () => {
           key={ingredient._id}
         >
           <Box>
-            <Wrapper item={ingredient} initialMode={ItemModes.Show}>
+            <Wrapper data={ingredient} initialMode={ItemModes.Show}>
               <Title />
             </Wrapper>
           </Box>
@@ -161,10 +158,14 @@ const Ingredients = () => {
       ))}
       <div className={classes.addSection}>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={!isAddOpen}>
-          <button onClick={() => setIsAddOpen(true)}>+</button>
+          <Button onClick={() => setIsAddOpen(true)}>
+            <Icon icon={"plus"} size={IconSizes.S} />
+          </Button>
         </Collapsible>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={isAddOpen}>
-          <button onClick={() => setIsAddOpen(false)}>cancel</button>
+          <Button onClick={() => setIsAddOpen(false)}>
+            <Icon icon={"undo"} size={IconSizes.S} />
+          </Button>
         </Collapsible>
         <Collapsible animation={Animations.ExpandWidth} isExpanded={isAddOpen}>
           <div className={classes.wrapper}>
@@ -174,7 +175,7 @@ const Ingredients = () => {
                   id: item._id,
                   node: (
                     <Box>
-                      <Wrapper item={item} initialMode={ItemModes.Show}>
+                      <Wrapper data={item} initialMode={ItemModes.Show}>
                         <Title />
                       </Wrapper>
                     </Box>
@@ -194,11 +195,8 @@ const Ingredients = () => {
 };
 
 const Delete = () => {
-  const { handleDelete, mode } = useThisContext();
-
-  return <DeleteButton onDelete={handleDelete} mode={mode} />;
+  const { remove, mode } = useThisContext();
+  return <DeleteButton onDelete={() => remove && remove()} mode={mode} />;
 };
 
-const NutritionFields = { Wrapper, Buttons, Title, Ingredients, Delete };
-
-export { NutritionFields };
+export const NutritionFields = { Wrapper, Buttons, Title, Ingredients, Delete };

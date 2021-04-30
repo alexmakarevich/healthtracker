@@ -1,14 +1,19 @@
-import React from "react";
+import React, { useMemo } from "react";
 // import {useState} from 'react';
 import {
-  NutritionItem,
+  NutritionItemClass,
+  NutritionItemDAO,
   nutritionItemDefaults,
+  useNutrition,
 } from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { NutritionFields } from "./NutritionFields";
 import { SimpleRow } from "../generic/layout/SimpleRow";
+import { Columns, Row } from "../../hooks/useCustomTable";
+import { title } from "process";
+import { Table } from "../generic/layout/Table";
 
 const styles = () => ({
   list: {
@@ -18,48 +23,74 @@ const styles = () => ({
   },
 });
 
-const useStyles = createUseStyles(styles, { name: "NutritionList" });
+const useStyles = createUseStyles(styles, { name: "NutritiionTable" });
 
-export const NutritionItemTable = () => {
-  const NIContext = useNutritionItemContext();
-
+export const NutritiionTable = () => {
+  const { all } = useNutritionItemContext();
   const classes = useStyles();
+  interface NutritiionTableData {
+    title: string;
+    ingredients: number;
+    delete: undefined;
+  }
 
-  return (
-    <>
-      <h2>Nutrition Item Table</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>Title</th>
-            <th>Ingredients</th>
-          </tr>
-        </thead>
-        <tbody className={classes.list}>
-          {NIContext.all?.map((nutritionItem) => (
-            <Row
-              key={nutritionItem._id}
-              item={nutritionItem}
-              initialMode={ItemModes.QuickEdit}
-            />
-          ))}
-          <Row item={nutritionItemDefaults} initialMode={ItemModes.New} />
-        </tbody>
-      </table>
-    </>
-  );
-};
+  const makeRow = (initialMode: ItemModes) => (
+    nutrition: NutritionItemDAO
+  ): Row<
+    NutritiionTableData,
+    {
+      data: NutritionItemDAO;
+      initialMode: ItemModes;
+    }
+  > => ({
+    cellData: {
+      title: { data: nutrition.title },
+      ingredients: { data: nutrition.ingredientIds.length },
+      delete: { data: undefined },
+    },
+    key: nutrition._id,
+    rowWrapperProps: { data: nutrition, initialMode },
+  });
 
-const Row = (props: { item: NutritionItem; initialMode: ItemModes }) => {
-  return (
-    <NutritionFields.Wrapper item={props.item} initialMode={props.initialMode}>
-      <SimpleRow>
-        <NutritionFields.Buttons />
-        <NutritionFields.Title />
-        <NutritionFields.Ingredients />
-        <NutritionFields.Delete />
-      </SimpleRow>
-    </NutritionFields.Wrapper>
+  const tableData: Row<
+    NutritiionTableData,
+    {
+      data: NutritionItemDAO;
+      initialMode: ItemModes;
+    }
+  >[] = (all ?? []).map(makeRow(ItemModes.QuickEdit));
+
+  const newRow = makeRow(ItemModes.New)(nutritionItemDefaults);
+
+  const columns: Columns<NutritiionTableData> = useMemo(
+    () => ({
+      title: {
+        title: "title",
+        renderFn: () => (
+          <>
+            <NutritionFields.Title /> <NutritionFields.Buttons />
+          </>
+        ),
+      },
+      ingredients: {
+        title: "ingredients",
+        renderFn: () => <NutritionFields.Ingredients />,
+      },
+      delete: { title: "", renderFn: () => <NutritionFields.Delete /> },
+    }),
+    []
   );
+
+  const tableProps = {
+    data: tableData,
+    lastRow: newRow,
+    columns,
+    columnKeys: [
+      "title",
+      "ingredients",
+      "delete",
+    ] as (keyof NutritiionTableData)[],
+  };
+
+  return <Table {...tableProps} RowWrapper={NutritionFields.Wrapper} />;
 };

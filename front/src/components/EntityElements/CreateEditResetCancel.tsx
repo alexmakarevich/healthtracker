@@ -12,6 +12,7 @@ export type CreateEditResetCancelProps = {
   onReset: () => void;
   onCreate: () => void;
   valid: boolean;
+  isFlexRow?: boolean;
 } & HTMLProps<HTMLDivElement>;
 
 const useStyles = createUseStyles(
@@ -24,6 +25,9 @@ const useStyles = createUseStyles(
         flexGrow: 1,
       },
     },
+    flexRow: {
+      flexDirection: "row",
+    },
   },
   { name: "CreateEditResetCancel" }
 );
@@ -35,6 +39,7 @@ const CreateEditResetCancel = ({
   onSave,
   onCreate,
   onSetMode,
+  isFlexRow,
   valid,
   className,
   ...wrapperProps
@@ -44,7 +49,14 @@ const CreateEditResetCancel = ({
   if (mode === ItemModes.QuickEdit) return null;
 
   return (
-    <div className={classConcat(classes.buttons, className)} {...wrapperProps}>
+    <div
+      className={classConcat(
+        classes.buttons,
+        isFlexRow ? classes.flexRow : "",
+        className
+      )}
+      {...wrapperProps}
+    >
       {mode === ItemModes.Show && (
         <Button onClick={() => onSetMode(ItemModes.Edit)}>
           <Icon icon={"pen"} size={IconSizes.S} />

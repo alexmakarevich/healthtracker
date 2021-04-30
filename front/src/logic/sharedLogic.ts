@@ -12,12 +12,12 @@ export const BASIC_DEFAULTS = {
   createdOn: new Date().toISOString(),
   lastModifiedOn: new Date().toISOString(),
   _v: -1,
-};
+} as const;
 
-/** uitility type to easily optionalize basic properties in types extending Basic */
+/** utility type to easily optionalize basic properties in types extending Basic */
 export type ExceptAutoSetBasics<T extends Basic> = PartialPartial<
   T,
-  "_id" | "createdOn" | "lastModifiedOn"
+  "_id" | "createdOn" | "lastModifiedOn" | "_v"
 >;
 
 // TOOO: separate DAOs / create-ready items from proper useable items
