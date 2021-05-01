@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createUseStyles } from "react-jss";
+import { Icon } from "./styling/Icon";
 
 const styles = () => ({
   wrapper: {
@@ -64,7 +65,7 @@ const Removable = ({ children, onRemove }: Props) => {
               className={classes.removeButton}
               onClick={() => removeWithAnimation()}
             >
-              X
+              <Icon icon={"cross"} />
             </button>
             {children}
           </div>
