@@ -1,8 +1,7 @@
-import * as mongoose from "mongoose";
+import { Schema } from "mongoose";
 import generateRoutes from "./routeGenerator";
 
-const Schema = mongoose.Schema;
-let Event = new Schema({
+const EventSchema = new Schema({
   createdOn: {
     type: String,
   },
@@ -30,4 +29,4 @@ let Event = new Schema({
   items: [{ type: String, id: String }],
 });
 
-export const { router, Model } = generateRoutes("Event", Event);
+export const Event = generateRoutes("Event", EventSchema);

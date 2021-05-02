@@ -11,3 +11,9 @@ export const isItemFound = (Model: Model<Document, {}>) => async (
   });
   return result;
 };
+
+export const validateIsItemFound = (Model: Model<Document, {}>) => ({
+  validator: isItemFound(Model),
+  message: (props) =>
+    Model.modelName + " with id " + props.value + " doesn't exist",
+});

@@ -17,9 +17,4 @@ let NutririonItem = new Schema({
   },
 });
 
-const { router: nutritionItemRoutes } = generateRoutes(
-  "NutritionItem",
-  NutririonItem
-);
-
-export { nutritionItemRoutes };
+export const Nutrition = generateRoutes("NutritionItem", NutririonItem);
