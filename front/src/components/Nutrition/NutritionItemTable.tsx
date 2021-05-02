@@ -1,10 +1,8 @@
 import React, { useMemo } from "react";
 // import {useState} from 'react';
 import {
-  NutritionItemClass,
   NutritionItemDAO,
   nutritionItemDefaults,
-  useNutrition,
 } from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";

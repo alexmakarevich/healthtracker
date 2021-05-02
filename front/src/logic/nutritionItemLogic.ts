@@ -1,6 +1,5 @@
 import { makeUseEntity } from "./../hooks/useEntity";
 import { useNutritionItemContext } from "../context/NutritionItemContextProvider";
-import { ItemModes } from "./../utils/utils";
 import { Basic, BASIC_DEFAULTS } from "./sharedLogic";
 
 export interface NutritionItemDAO extends Basic {
@@ -34,17 +33,6 @@ export const NILogic = {
     return newNI;
   },
 };
-
-export class NutritionItemClass {
-  data: NutritionItemDAO;
-  initialMode: ItemModes;
-  constructor(props: Partial<NutritionItemDAO> & { mode: ItemModes }) {
-    this.data = { ...nutritionItemDefaults, ...props };
-    this.initialMode = props.mode;
-  }
-
-  someField = "someValue";
-}
 
 export const useNutrition = makeUseEntity({
   contextFn: useNutritionItemContext,

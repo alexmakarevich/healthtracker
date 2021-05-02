@@ -1,5 +1,7 @@
+import { makeUseEntity } from "./../hooks/useEntity";
 import { updateObject } from "./../common/updateObject";
 import { Basic } from "./sharedLogic";
+import { useEventContext } from "../context/EventContextProvider";
 
 export interface EventDAO extends Basic {
   time: string;
@@ -91,3 +93,8 @@ export const eventLogic = (event: EventDAO) => {
 
   return { addNI, removeNI, addExercise, removeExercise };
 };
+
+export const useEvent = makeUseEntity({
+  contextFn: useEventContext,
+  defaults: eventDefaults,
+});

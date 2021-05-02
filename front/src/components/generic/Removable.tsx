@@ -37,11 +37,7 @@ const Removable = ({ children, onRemove }: Props) => {
   const [isHRemoved, setIsHRemoved] = useState(false);
   const durationInSec = 0.15;
 
-  // console.log(children);
-  // console.log(isHRemoved);
-
   function removeWithAnimation() {
-    // console.log("remove with animation triggered");
     setIsHRemoved(true);
     setTimeout(() => onRemove(), durationInSec * 1000);
   }

@@ -11,7 +11,7 @@ import { ItemModes } from "../utils/utils";
 import { useComplexState } from "./useComplexState";
 import { useDebouncedCallbackVoid } from "./useDebounce";
 
-type UseEntityProps<EntityDAO extends Basic> =
+export type UseEntityProps<EntityDAO extends Basic> =
   | {
       data: EntityDAO;
       initialMode: Exclude<ItemModes, ItemModes.New>;

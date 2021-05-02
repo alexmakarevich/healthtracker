@@ -266,7 +266,6 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
     <div className={className} {...otherDivProps}>
       <div className={classes.exerciseWrapper}>
         <span> {exercise?.title}</span>
-        {/* TODO: check why the drowpdwon is selected the whole time - likely has to do with the exercise query not being ready */}
         {data.exerciseId !== exerciseInstanceDefaults.exerciseId && (
           <Button
             onClick={() => setShowSelect(!showSelect)}
