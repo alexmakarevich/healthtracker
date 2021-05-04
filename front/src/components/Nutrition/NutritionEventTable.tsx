@@ -1,16 +1,8 @@
 import React, { useMemo } from "react";
 // import {useState} from 'react';
-import {
-  NutritionItemDAO,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
-import { NutritionFields } from "./NutritionFields";
-import { SimpleRow } from "../generic/layout/SimpleRow";
 import { Columns, Row } from "../../hooks/useCustomTable";
-import { title } from "process";
 import { Table } from "../generic/layout/Table";
 import { useNutritionEventContext } from "../../context/NutritionEventContextProvider";
 import {

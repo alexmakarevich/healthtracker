@@ -157,7 +157,9 @@ export const useExerciseInstance = ({
     setOrUpdateDebounced,
     update,
     delete: deleteFn,
-    exercise: ExContext.getOneFromContext(dataState.exerciseId),
-    event: EvContext.getOneFromContext(dataState.eventId),
+    exerciseData: ExContext.getOneFromContext(dataState.exerciseId),
+    eventData: EvContext.getOneFromContext(dataState.eventId),
   };
 };
+
+export type ExerciseInstance = ReturnType<typeof useExerciseInstance>;

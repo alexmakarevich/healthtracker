@@ -98,3 +98,5 @@ export const useEvent = makeUseEntity({
   contextFn: useEventContext,
   defaults: eventDefaults,
 });
+
+export type Event = ReturnType<typeof useEvent>;

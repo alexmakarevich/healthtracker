@@ -3,12 +3,13 @@ import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
 import { createContextDefined } from "../../context/ContextWrapper";
 import {
+  NutritionEvent,
   NutritionEventDAO,
   nutritionEventDefaults,
   useNutritionEvent,
 } from "../../logic/nutritionEventLogic";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
-import { eventDefaults } from "../../logic/eventLogic";
+import { Event, eventDefaults } from "../../logic/eventLogic";
 import { EventFields } from "../Events/EventFields";
 import { Button } from "../generic/buttons/Button";
 import Collapsible, { Animations } from "../generic/Collapsible";
@@ -57,9 +58,8 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] = createContextDefined<
-  ReturnType<typeof useNutritionEvent>
+  NutritionEvent & { event: Event }
 >();
-
 export interface NutritionEventFieldsProps {
   data: NutritionEventDAO;
   initialMode: ItemModes;
@@ -71,28 +71,50 @@ const Wrapper = ({
   initialMode,
   children,
 }: NutritionEventFieldsProps) => {
-  const contextProps = useNutritionEvent({
+  const nutritionEvent = useNutritionEvent({
     data,
     initialMode,
   });
 
-  return <Provider value={contextProps}>{children}</Provider>;
+  const { eventData } = nutritionEvent;
+
+  const { ProviderWrapper, event } = EventFields.WrapperAndHook({
+    event: eventData ?? eventDefaults,
+    initialMode: eventData ? ItemModes.QuickEdit : ItemModes.New,
+    children,
+  });
+
+  return (
+    <Provider value={{ ...nutritionEvent, event }}>{ProviderWrapper}</Provider>
+  );
 };
 
 const Buttons = () => {
   const {
     mode,
     data,
+    event,
     create,
     reset,
-    setData,
     update,
     setMode,
   } = useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
-      onCreate={create}
+      onCreate={() =>
+        create
+          ? event.mode === ItemModes.New
+            ? event.create?.(undefined, {
+                onSuccess: (newEvent) =>
+                  create(
+                    { ...data, eventId: newEvent._id },
+                    { onError: () => event.remove?.(), onSuccess: reset }
+                  ),
+              })
+            : create
+          : () => {}
+      }
       onReset={reset}
       onSave={update}
       onCancelEdit={() => setMode(ItemModes.Show)}
@@ -103,19 +125,7 @@ const Buttons = () => {
   );
 };
 
-const Event = (inputProps: HTMLProps<HTMLInputElement>) => {
-  const { event, mode } = useThisContext();
-
-  return (
-    <EventFields.Wrapper
-      initialMode={mode}
-      event={event.data}
-      onChange={(newEvent) => mode === ItemModes.New && event.setData(newEvent)}
-    >
-      <EventFields.DateTime {...inputProps} />
-    </EventFields.Wrapper>
-  );
-};
+const EventField = () => <EventFields.DateTime />;
 
 const Nutrition = (divProps: HTMLProps<HTMLDivElement>) => {
   const { data, nutritionData: nutrition, setOrUpdate } = useThisContext();
@@ -191,7 +201,7 @@ const Delete = () => {
 export const NutritionEventFields = {
   Wrapper,
   Buttons,
-  Event,
+  Event: EventField,
   Nutrition,
   Delete,
 };

@@ -46,19 +46,15 @@ interface EventFieldProps {
 
 const [useThisContext, Provider] = createContextDefined<Event>();
 
-const WrapperAndHook = ({ event, initialMode, children }: EventFieldProps) => {
+const Wrapper = ({ event, initialMode, children }: EventFieldProps) => {
   const contextProps: Event = useEvent({ data: event, initialMode });
 
-  const ProviderWrapper = (
+  const ProviderWrapper = ({ children }: { children: ReactNode }) => (
     <Provider value={{ ...contextProps }}>{children}</Provider>
   );
 
-  return { ProviderWrapper, event: contextProps };
-};
-
-const Wrapper = ({ event, initialMode, children }: EventFieldProps) => {
-  const contextProps: Event = useEvent({ data: event, initialMode });
-  return <Provider value={{ ...contextProps }}>{children}</Provider>;
+  // return <Provider value={{ ...contextProps, onChange }}>{children}</Provider>;
+  return { ProviderWrapper, someProps: "someValue", event: contextProps };
 };
 
 const Buttons = () => {
@@ -102,15 +98,12 @@ const DateTime = (
 const Delete = () => {
   const { remove, mode } = useThisContext();
 
-  return <DeleteButton onDelete={() => remove?.()} mode={mode} />;
+  return <DeleteButton onDelete={() => remove} mode={mode} />;
 };
 
-const EventFields = {
-  WrapperAndHook,
+export const EventFieldsAlt = {
   Wrapper,
   Buttons,
   DateTime,
   Delete,
 };
-
-export { EventFields };

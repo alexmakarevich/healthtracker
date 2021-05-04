@@ -32,6 +32,12 @@ const useStyles = createUseStyles(
   { name: "CreateEditResetCancel" }
 );
 
+/**
+ * TODO: accept undefined callbacks, and show buttons/actions as disabled in that case
+ * @param param0
+ * @returns
+ */
+
 const CreateEditResetCancel = ({
   mode,
   onCancelEdit,

@@ -19,8 +19,7 @@ import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCance
 import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
-import { useEventContext } from "../../../context/EventContextProvider";
-import { EventDAO, eventDefaults } from "../../../logic/eventLogic";
+import { Event, EventDAO, eventDefaults } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
@@ -74,8 +73,7 @@ export interface ExerciseInstanceFieldsProps {
 const [useThisContext, Provider] = createContextDefined<ThisContextValue>();
 
 type ThisContextValue = ReturnType<typeof useExerciseInstance> & {
-  newEvent?: EventDAO;
-  setNewEvent: React.Dispatch<React.SetStateAction<EventDAO>>;
+  event: Event;
 };
 
 const Wrapper = ({
@@ -88,64 +86,50 @@ const Wrapper = ({
     initialMode,
   });
 
-  const [newEvent, setNewEvent] = useState({ ...eventDefaults });
+  const { eventData } = EI;
 
-  return (
-    <Provider value={{ ...EI, newEvent, setNewEvent }}>{children}</Provider>
-  );
+  const { ProviderWrapper, event } = EventFields.WrapperAndHook({
+    event: eventData ?? eventDefaults,
+    initialMode: eventData ? ItemModes.QuickEdit : ItemModes.New,
+    children,
+  });
+
+  return <Provider value={{ ...EI, event }}>{ProviderWrapper}</Provider>;
 };
 
 const Buttons = () => {
+  const classes = useStyles();
+
   const {
     mode,
-    create,
     data,
+    event,
+    create,
     reset,
-    newEvent,
-    setNewEvent,
     update,
     setMode,
   } = useThisContext();
-
-  const events = useEventContext();
-  const classes = useStyles();
-
   return (
     <CreateEditResetCancel
       mode={mode}
       onCreate={() =>
-        create &&
-        events.create(newEvent, {
-          onSuccess: (event) => {
-            create(
-              { ...data, eventId: event._id },
-              {
-                onSuccess: () => {
-                  reset();
-                  setNewEvent({
-                    ...eventDefaults,
-                    time: new Date().toISOString(),
-                  });
-                },
-                // cleaning up auto-created event, if exercise instance creation fails
-                onError: () => {
-                  events.delete(event);
-                },
-              }
-            );
-          },
-        })
+        create
+          ? event.mode === ItemModes.New
+            ? event.create?.(undefined, {
+                onSuccess: (newEvent) =>
+                  create(
+                    { ...data, eventId: newEvent._id },
+                    { onError: () => event.remove?.(), onSuccess: reset }
+                  ),
+              })
+            : create
+          : () => {}
       }
-      onReset={() => {
-        reset();
-        setNewEvent({
-          ...eventDefaults,
-          time: new Date().toISOString(),
-        });
-      }}
+      onReset={reset}
       onSave={update}
       onCancelEdit={() => setMode(ItemModes.Show)}
       onSetMode={setMode}
+      isFlexRow
       valid
       className={classes.buttons}
     />
@@ -228,22 +212,12 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
   }
 };
 
-const Event = (inputProps: HTMLProps<HTMLInputElement>) => {
-  const { event, newEvent, mode, setNewEvent } = useThisContext();
-
-  return (
-    <EventFields.Wrapper
-      initialMode={mode}
-      event={event ?? newEvent ?? eventDefaults}
-      onChange={(event) => mode === ItemModes.New && setNewEvent(event)}
-    >
-      <EventFields.DateTime {...inputProps} />
-    </EventFields.Wrapper>
-  );
+const EventField = (inputProps: HTMLProps<HTMLInputElement>) => {
+  return <EventFields.DateTime />;
 };
 
 const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
-  const { data, exercise, setOrUpdate } = useThisContext();
+  const { data, exerciseData: exercise, setOrUpdate } = useThisContext();
   const { className, ...otherDivProps } = divProps;
 
   const exCtx = useExerciseContext();
@@ -315,7 +289,7 @@ const Delete = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
 
 const ExerciseInstanceFields = {
   Wrapper,
-  Event,
+  Event: EventField,
   Buttons,
   Exercise,
   Repetitions,
