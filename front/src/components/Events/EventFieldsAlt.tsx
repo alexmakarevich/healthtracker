@@ -7,8 +7,7 @@ import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import { InputDateTime } from "../generic/inputs/DateTimeInputs/InputDateTime";
 
-// TODO: deprecate or rewrite with parent/child logic between events and instances moved into instances,
-// i.e. instead of interating of "children" field of event, use "eventid" field in and exercise instance, or nutrition instance
+//  experimental file for playing around with the fields structure
 
 const styles = () => ({
   itemsWrapper: {
@@ -100,6 +99,10 @@ const Delete = () => {
 
   return <DeleteButton onDelete={() => remove} mode={mode} />;
 };
+
+/**
+ * experimental file for playing around with the fields structure
+ */
 
 export const EventFieldsAlt = {
   Wrapper,

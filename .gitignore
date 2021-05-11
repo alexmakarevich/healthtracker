@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# for per-machine dependency resolutiom
+*/yarn.lock
+
 # testing
 /coverage
 

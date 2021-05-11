@@ -13,7 +13,7 @@ interface ChartData {
   radius?: number;
 }
 
-export const ExerciseVisualizationNew = () => {
+export const ExerciseVisualization = () => {
   const events = useEventContext();
   const exerciseInstances = useExerciseInstanceContext();
   const exercises = useExerciseContext();

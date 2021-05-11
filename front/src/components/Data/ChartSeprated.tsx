@@ -8,15 +8,17 @@ export enum Scales {
   Ordinal = "Ordinal",
 }
 
-type ScaleTypes = {
-  Linear: number;
-  Time: Date;
-  Ordinal: string;
-};
-
 export interface Data<xType extends Scales, yType extends Scales> {
-  x: ScaleTypes[xType];
-  y: ScaleTypes[yType];
+  x: xType extends Scales.Time
+    ? Date
+    : xType extends Scales.Ordinal
+    ? string
+    : number;
+  y: yType extends Scales.Time
+    ? Date
+    : xType extends Scales.Ordinal
+    ? string
+    : number;
   radius?: number;
   label?: string | number;
 }
@@ -41,8 +43,6 @@ interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
 }
 
 // TODO: make empty data handling simpler
-
-// TODO: reduce the `as any`s as much as possible,
 
 export const LineAndDotChart = <xType extends Scales, yType extends Scales>({
   series,

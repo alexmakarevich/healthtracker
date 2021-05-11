@@ -13,12 +13,13 @@ import {
 import { Button } from "./components/generic/buttons/Button";
 import { createUseStyles, ThemeProvider } from "react-jss";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
-import { ExerciseVisualizationNew } from "./components/Data/ExerciseVisualizationNew";
+import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { theme } from "./styling/theme";
 import { classConcat } from "./utils/utils";
 import { AlertTypes } from "./components/generic/layout/Alert";
 import { NutritiionEventTable } from "./components/Nutrition/NutritionEventTable";
 import { NutritionEventProvider } from "./context/NutritionEventContextProvider";
+import { NutritionVisualization } from "./components/Data/NutritionVisualization";
 
 export const TestContext = createContext<any>("test context value");
 
@@ -65,7 +66,8 @@ function App() {
                     <h2>Exercise History</h2>
                     <ExerciseInstanceTable />
                     <h2>Exercise Chart</h2>
-                    <ExerciseVisualizationNew />
+                    {/* <ExerciseVisualization />
+                    <NutritionVisualization /> */}
 
                     {/* <DebounceTest /> */}
                     {/* <EventTable /> */}
