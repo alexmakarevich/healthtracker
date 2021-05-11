@@ -24,6 +24,7 @@ const connection = mongoose.connection;
 connection.once("open", function () {
   console.log("MongoDB database connection established successfully.");
 });
+connection.once("error", (err) => console.log("error: ", err));
 
 app.use("/nutritionItems", Nutrition.router);
 app.use("/nutritionEvents", NutritionEvent.router);

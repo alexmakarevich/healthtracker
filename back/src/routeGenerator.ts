@@ -79,7 +79,7 @@ function generateRoutes(
   includeRoutes.Delete &&
     router.route(RouteEnd.Delete).delete(function (req, res) {
       // TODO: FIX - if a bad string is passed, there's an internal error that is not visible and does not return anything
-      Model.findByIdAndDelete(req.params.id, function (err, item) {
+      Model.findByIdAndDelete(req.params.id, null, function (err, item) {
         if (err) {
           console.log(err);
           res.status(400).send("Server error: " + err);
