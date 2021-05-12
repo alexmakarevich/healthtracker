@@ -9,11 +9,11 @@ Stack: MongodDB + Express Backend + React Frontend.
 - track exercises
   - maintain reps/weights/duration
   - view exercise chart
+- track nutrition intake
 
 ## Upcoming Features
 
 - track health state (sysmptoms, basic measurables)
-- track nutrition intake
 - track other factors
 - combine tracked data
 - analyze data
@@ -37,6 +37,10 @@ Install frontend & backend separately (`$ yarn` for "front" and "back" directory
 2. start backend - `$ yarn dev` in "back" directory
 3. start frontent - `$ yarn start` in "front" directory
 
+#### Quick - Mac
+
+Run `startallMac.sh`
+
 #### Quick - Windows
 
-Run `startall.bat`
+Run `startallWin.bat`
