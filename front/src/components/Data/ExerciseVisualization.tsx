@@ -2,7 +2,8 @@ import React from "react";
 import { useEventContext } from "../../context/EventContextProvider";
 import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
-import { LineAndDotChart, Scales } from "./LineAndDotChart";
+import { ChartParts } from "./ChartParts";
+import { Scales } from "./LineAndDotChart";
 
 // TODO: import types from LineAndDotChart
 
@@ -52,7 +53,7 @@ export const ExerciseVisualization = () => {
 
   return (
     <>
-      <LineAndDotChart
+      <ChartParts
         xScale={Scales.Time}
         yScale={Scales.Linear}
         series={chartData}

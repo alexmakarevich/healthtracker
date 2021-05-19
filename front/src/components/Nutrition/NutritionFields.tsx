@@ -1,24 +1,19 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode } from "react";
 import { useState } from "react";
 import {
   NutritionItemDAO,
-  NILogic,
   nutritionItemDefaults,
   useNutrition,
 } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import TextWithEditAndState from "../generic/TextWithEditAndState";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
 import { createContextDefined } from "../../context/ContextWrapper";
-import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
-import { ExerciseInstanceDAO } from "../../logic/exerciseInstanceLogic";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import Removable from "../generic/Removable";
-import { SimpleRow } from "../generic/layout/SimpleRow";
 import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
 import { Button } from "../generic/buttons/Button";
@@ -50,9 +45,8 @@ const useStyles = createUseStyles(
   { name: "NutritionListItem" }
 );
 
-const [useThisContext, Provider] = createContextDefined<
-  ReturnType<typeof useNutrition>
->();
+const [useThisContext, Provider] =
+  createContextDefined<ReturnType<typeof useNutrition>>();
 
 export interface NutritionFieldsProps {
   data: NutritionItemDAO;
@@ -70,15 +64,7 @@ const Wrapper = ({ data, initialMode, children }: NutritionFieldsProps) => {
 };
 
 const Buttons = () => {
-  const {
-    mode,
-    data,
-    create,
-    reset,
-    setData,
-    update,
-    setMode,
-  } = useThisContext();
+  const { mode, data, create, reset, update, setMode } = useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
@@ -106,11 +92,11 @@ const Title = () => {
 };
 
 const Ingredients = () => {
-  const { mode, data: nutrition, setOrUpdate } = useThisContext();
+  const { data: nutrition, addIngredient, removeIngredient } = useThisContext();
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const { all, create } = useNutritionItemContext();
+  const { all, create /* getOneFromContext */ } = useNutritionItemContext();
 
   const ingredients = all?.filter(
     (item) =>
@@ -119,16 +105,10 @@ const Ingredients = () => {
 
   const dropdownItems = all?.filter(
     (item) =>
-      item._id !== nutrition._id && !nutrition.ingredientIds.includes(item._id)
+      item._id !== nutrition._id &&
+      !nutrition.ingredientIds.includes(item._id) &&
+      !nutrition.ingredientIdsFlat.includes(item._id)
   );
-
-  function addIngredient(id: string) {
-    setOrUpdate(NILogic.add_ingredient(nutrition, id));
-  }
-
-  function removeIngredient(id: string) {
-    setOrUpdate(NILogic.remove_ingredient(nutrition, id));
-  }
 
   function handleCreateAndAdd(title: string) {
     create(
@@ -190,6 +170,12 @@ const Ingredients = () => {
           </div>
         </Collapsible>
       </div>
+      {/* <div>
+        DEBUG: flat ingredients:{" "}
+        {nutrition.ingredientIdsFlat.map(
+          (id) => getOneFromContext(id)?.title + "; "
+        )}
+      </div> */}
     </div>
   );
 };

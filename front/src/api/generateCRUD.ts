@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { WithId } from "../common/types/types";
 
 // standard generic CRUD api
@@ -11,18 +11,15 @@ export function generateCRUD<Item extends WithId>(baseURL: string) {
   axiosInstance.interceptors.response.use();
 
   const CREATE = async (object: Item) => {
-    let apiRes;
     const { _id, ...objectWithoutMongoId } = object;
     try {
       const response = await axiosInstance.post<Item>(
         "/add",
         objectWithoutMongoId
       );
-      apiRes = response.data;
-      return apiRes;
-    } catch (error) {
-      apiRes = error.response.data;
-      return Promise.reject(apiRes);
+      return response.data;
+    } catch (err: any) {
+      return handleAxiosOrOtherError(err);
     }
   };
 
@@ -39,21 +36,17 @@ export function generateCRUD<Item extends WithId>(baseURL: string) {
         object
       );
       return res.data;
-    } catch (err) {
-      return Promise.reject(err);
+    } catch (err: any) {
+      return handleAxiosOrOtherError(err);
     }
   };
 
   const DELETE_BY_ID = async (id: string) => {
-    let apiRes = null;
     try {
-      apiRes = await axiosInstance.delete(`/delete/${id}`);
-      console.log("axios try", apiRes);
+      await axiosInstance.delete<string>(`/delete/${id}`);
       return;
-    } catch (error) {
-      apiRes = error.response.data;
-      console.log("axios error: ", error);
-      return Promise.reject(apiRes);
+    } catch (err: any) {
+      return handleAxiosOrOtherError(err);
     }
   };
 
@@ -63,5 +56,12 @@ export function generateCRUD<Item extends WithId>(baseURL: string) {
     READ_ALL,
     UPDATE_BY_ID,
     DELETE_BY_ID,
+    axiosInstance,
   };
+}
+
+export function handleAxiosOrOtherError(error: any) {
+  if (axios.isAxiosError(error as AxiosError))
+    return Promise.reject(error.response.data);
+  return Promise.reject(error);
 }

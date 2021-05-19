@@ -1,5 +1,4 @@
-import { AxiosResponse } from "axios";
-import React, { useEffect, ReactNode, useState, useCallback } from "react";
+import React, { useEffect, ReactNode, useCallback } from "react";
 import {
   MutateFunction,
   useMutation,
@@ -21,7 +20,7 @@ export interface ContextProps<Something extends WithId> {
   all: Something[] | undefined;
   create: MutateFunction<Something, unknown, Something, unknown>;
   update: MutateFunction<Something, unknown, Something, unknown>;
-  delete: MutateFunction<undefined, unknown, Something, unknown>;
+  delete: MutateFunction<void, unknown, Something, unknown>;
   getOneFromContext: (idOfObjectToGet: string) => Something | undefined;
   refresh: () => void;
 }
@@ -30,9 +29,7 @@ export interface ContextProps<Something extends WithId> {
  * creates a context and its provider with standard CRUD for a collection of items
  * make sure to provide item types
  * make sure to give the context & provider a unique name
- */
 
-/**
  * TODO: fix inconsistencies on slow updates - block re-request of update, while data is loading or until previous update operation is done
  */
 
@@ -40,9 +37,8 @@ export function generateContext<Item extends WithId>(
   apiBaseUrl: string,
   itemName: string
 ) {
-  const [useContextDefined, Provider] = createContextDefined<
-    ContextProps<Item>
-  >();
+  const [useContextDefined, Provider] =
+    createContextDefined<ContextProps<Item>>();
 
   interface Props {
     children: ReactNode;
@@ -65,7 +61,6 @@ export function generateContext<Item extends WithId>(
 
     const { addAlert } = useAlertContext();
 
-    // TODO: check how tominimize number of updates
     const allQuery = useQuery(itemName + "-get-all", () => CRUD.READ_ALL(), {
       // onSuccess: () =>
       //   addAlert({
@@ -83,13 +78,12 @@ export function generateContext<Item extends WithId>(
     // const [all, setAll] = useState(allQuery.data?.data);
     const all = allQuery.data?.data;
 
-    // TODO: check if should be replaced with geter from query, and/or merged with it somehow
+    // TODO: check if should be replaced with getter from query, and/or merged with it somehow
     function getOneFromContext(id: string) {
       const item = all?.find((item) => item._id === id);
       return item;
     }
 
-    // TODO: check if this needs to be returned
     const [createOne] = useMutation((item: Item) => CRUD.CREATE(item), {
       onSuccess: async (data) => {
         await refresh();
@@ -112,7 +106,7 @@ export function generateContext<Item extends WithId>(
         }),
     });
 
-    const [updateOne, {}] = useMutation(
+    const [updateOne] = useMutation(
       (item: Item) => {
         const itemWithModifiedTimestamp = {
           ...item,
@@ -141,11 +135,16 @@ export function generateContext<Item extends WithId>(
 
           refresh();
         },
-        onError: () =>
+        onError: (error: any) => {
           addAlert({
-            children: `ERROR: failed to delete ${itemName}`,
+            children: (
+              <>
+                <p> Failed to delete ${itemName}</p> <p>`${error}` </p>
+              </>
+            ),
             type: AlertTypes.NEGATIVE,
-          }),
+          });
+        },
       }
     );
 

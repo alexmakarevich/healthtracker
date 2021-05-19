@@ -60,14 +60,14 @@ function App() {
                     <NutritiionTable />
                     <h2>Nutrition History</h2>
                     <NutritiionEventTable />
-
+                    <h2>Nutrition Chart</h2>
+                    <NutritionVisualization />
                     {/* <CheckHowHooksRerender /> */}
                     {/* <ExerciseEventTable /> */}
                     <h2>Exercise History</h2>
                     <ExerciseInstanceTable />
                     <h2>Exercise Chart</h2>
-                    {/* <ExerciseVisualization />
-                    <NutritionVisualization /> */}
+                    <ExerciseVisualization />
 
                     {/* <DebounceTest /> */}
                     {/* <EventTable /> */}

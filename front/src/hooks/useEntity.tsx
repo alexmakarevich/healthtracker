@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MutateConfig } from "react-query";
-import { WithId } from "../common/types/types";
 import { ContextProps } from "../context/generateContext";
-import {
-  Basic,
-  BASIC_DEFAULTS,
-  ExceptAutoSetBasics,
-} from "../logic/sharedLogic";
+import { Basic } from "../logic/sharedLogic";
 import { ItemModes } from "../utils/utils";
 import { useComplexState } from "./useComplexState";
 import { useDebouncedCallbackVoid } from "./useDebounce";
@@ -22,11 +17,14 @@ export type UseEntityProps<EntityDAO extends Basic> =
     };
 
 /** replacing useEntityBase. TODO: remove the latter, once transitioned completely */
-export const makeUseEntity = <EntityDAO extends Basic>({
+export const makeUseEntity = <
+  EntityDAO extends Basic,
+  ContextFn extends () => ContextProps<EntityDAO>
+>({
   contextFn,
   defaults,
 }: {
-  contextFn: () => ContextProps<EntityDAO>;
+  contextFn: ContextFn;
   defaults: EntityDAO;
 }) => {
   const useEntity = ({ data, initialMode }: UseEntityProps<EntityDAO>) => {
@@ -116,6 +114,7 @@ export const makeUseEntity = <EntityDAO extends Basic>({
       setOrUpdateDebounced,
       update,
       remove,
+      contextFn,
     };
   };
 
