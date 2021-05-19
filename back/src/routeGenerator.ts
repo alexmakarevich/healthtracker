@@ -10,10 +10,9 @@ export const RouteEnd = {
   Add: "/add",
 } as const;
 
-// model should be of type express model, but not sure how to import it
-function generateRoutes(
+function generateRoutes<SchemaType = any>(
   modelName: string,
-  schema: any,
+  schema: mongoose.Schema<SchemaType>,
   includeRoutes: Record<keyof typeof RouteEnd, boolean> = {
     GetAll: true,
     Get: true,
@@ -22,7 +21,7 @@ function generateRoutes(
     Add: true,
   }
 ) {
-  const Model = mongoose.model(modelName, schema);
+  const Model = mongoose.model<SchemaType>(modelName, schema);
 
   let router = express.Router();
 
@@ -60,11 +59,14 @@ function generateRoutes(
             .send(
               `update of ${modelName} with ID: "${req.params.id}" failed. ID not found.`
             );
-        else item = Object.assign(item, req.body);
+        else console.log("before update", JSON.stringify(item));
+        item = Object.assign(item, req.body);
+        console.log("update", JSON.stringify(item));
+
         item
           .save()
           .then((item) => {
-            res.json({ result: "updated", request: req.body, item: item });
+            res.json({ result: "updated", request: req.body, item });
           })
           .catch((err) => {
             res
@@ -78,7 +80,6 @@ function generateRoutes(
 
   includeRoutes.Delete &&
     router.route(RouteEnd.Delete).delete(function (req, res) {
-      // TODO: FIX - if a bad string is passed, there's an internal error that is not visible and does not return anything
       Model.findByIdAndDelete(req.params.id, null, function (err, item) {
         if (err) {
           console.log(err);

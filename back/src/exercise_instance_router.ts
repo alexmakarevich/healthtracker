@@ -5,7 +5,7 @@ import { Schema } from "mongoose";
 import generateRoutes, { RouteEnd } from "./routeGenerator";
 import { Exercise } from "./exercise_type_router";
 
-const ExerciseInstance = new Schema({
+const ExerciseInstanceSchema = new Schema({
   ...BaseSchema.obj,
   ...SchemaWithEvent.obj,
   exerciseId: {
@@ -23,20 +23,12 @@ const ExerciseInstance = new Schema({
 
 const modelName = "ExerciseInstance";
 
-const { router: exerciseInstanceRoutes, Model } = generateRoutes(
-  modelName,
-  ExerciseInstance,
-  { Get: true, Update: true, Delete: true, GetAll: true, Add: true }
-);
-
-exerciseInstanceRoutes.route(RouteEnd.GetAll).get(function (_req, res) {
-  Model.find(function (err, items) {
-    if (err) {
-      res.status(400).send("Server error: " + err);
-    } else {
-      res.status(200).json(items);
-    }
-  });
+const { router, Model } = generateRoutes(modelName, ExerciseInstanceSchema, {
+  Get: true,
+  Update: true,
+  Delete: true,
+  GetAll: true,
+  Add: true,
 });
 
-export { exerciseInstanceRoutes };
+export const ExerciseInstance = { router, Model };

@@ -4,7 +4,7 @@ RESULT=$?   # returns 0 if mongo eval succeeds
 
 if [ $RESULT -ne 0 ]; then
     echo "mongodb not running, srarting it"
-    mongod --dbpath /System/Volumes/Data/data/db & # using this folder, since Apple doesn't allow creating root folders (/data/db) anymore
+    mongod --port 27017 --dbpath %MONGO_DATA_PATH% --replSet rs0 & mongod --port 27018 --dbpath %MONGO_DATA_PATH%/../replica1 --replSet rs0
 else
     echo "mongodb running!"
 fi
