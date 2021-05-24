@@ -1,9 +1,6 @@
 import React, { useMemo } from "react";
 import { createUseStyles } from "react-jss";
-import {
-  ExerciseTypeDAO,
-  exerciseTypeDefaults,
-} from "../../logic/exerciseTypeLogic";
+import { ExerciseTypeData, exerciseTypeDefaults } from "shared";
 import { ItemModes } from "../../utils/utils";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseFields } from "./ExerciseFields";
@@ -46,7 +43,7 @@ const useStyles = createUseStyles(
 );
 
 export interface ExerciseTypeFieldProps {
-  item: ExerciseTypeDAO;
+  item: ExerciseTypeData;
   initialMode: ItemModes;
 }
 
@@ -60,7 +57,7 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
   const classes = useStyles();
 
   const dataAndNew: {
-    item: ExerciseTypeDAO;
+    item: ExerciseTypeData;
     initialMode: ItemModes;
   }[] = [
     ...(ETContext.all ?? []).map((i) => ({
@@ -72,7 +69,7 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
   const tableData: Row<
     ExerciseTypeTableData,
     {
-      item: ExerciseTypeDAO;
+      item: ExerciseTypeData;
       initialMode: ItemModes;
     }
   >[] = dataAndNew.map((datum) => {
@@ -90,7 +87,7 @@ const ExerciseTypeTable = ({ className }: { className?: string }) => {
   const newRow: Row<
     ExerciseTypeTableData,
     {
-      item: ExerciseTypeDAO;
+      item: ExerciseTypeData;
       initialMode: ItemModes;
     }
   > = {

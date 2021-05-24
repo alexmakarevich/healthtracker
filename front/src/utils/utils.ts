@@ -77,18 +77,18 @@ export function classConcat(...classes: (string | undefined)[]) {
   );
 }
 
-export const splitArray = <Something>(array?: Something[]) => (
-  filterCallback: (something: Something) => boolean
-) => {
-  let trueArray: Something[] = [];
-  let falseArray: Something[] = [];
+export const splitArray =
+  <Something>(array?: Something[]) =>
+  (filterCallback: (something: Something) => boolean) => {
+    let trueArray: Something[] = [];
+    let falseArray: Something[] = [];
 
-  array?.forEach((item) => {
-    filterCallback(item) ? trueArray.push(item) : falseArray.push(item);
-  });
+    array?.forEach((item) => {
+      filterCallback(item) ? trueArray.push(item) : falseArray.push(item);
+    });
 
-  return { trueArray, falseArray };
-};
+    return { trueArray, falseArray };
+  };
 
 export function groupBy<T extends Record<string, any>, K extends keyof T>(
   array: T[],
@@ -112,18 +112,9 @@ export type ValidateShape<T, Shape> = T extends Shape
     : ShapeDoesNotExtendType
   : TypeDoesNotExtendShape;
 
-export type ValidateShapeAndReturn<
-  TypeToValidate,
-  Shape,
-  Return
-> = TypeToValidate extends Shape
-  ? Exclude<keyof TypeToValidate, keyof Shape> extends never
-    ? Return
-    : ShapeDoesNotExtendType
-  : TypeDoesNotExtendShape;
-
-/** returns given type but with specified keys made optional */
-export type PartialPartial<T, Keys extends keyof T> = Omit<T, Keys> &
-  Partial<Pick<T, Keys>>;
-
-export type Enummed<T> = T[keyof T];
+export type ValidateShapeAndReturn<TypeToValidate, Shape, Return> =
+  TypeToValidate extends Shape
+    ? Exclude<keyof TypeToValidate, keyof Shape> extends never
+      ? Return
+      : ShapeDoesNotExtendType
+    : TypeDoesNotExtendShape;

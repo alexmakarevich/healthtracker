@@ -3,10 +3,7 @@ import { useEventContext } from "../../../context/EventContextProvider";
 import { ItemModes } from "../../../utils/utils";
 import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { Columns, Row } from "../../../hooks/useCustomTable";
-import {
-  ExerciseInstanceDAO,
-  exerciseInstanceDefaults,
-} from "../../../logic/exerciseInstanceLogic";
+import { ExerciseInstanceData, exerciseInstanceDefaults } from "shared";
 import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
 import { Table } from "../../generic/layout/Table";
@@ -63,7 +60,7 @@ export const ExerciseInstanceTable = ({
   const newItem = { ...exerciseInstanceDefaults };
 
   const dataAndNew: {
-    item: ExerciseInstanceDAO;
+    item: ExerciseInstanceData;
     initialMode: ItemModes;
   }[] = [
     ...(exerciseInstances.all ?? []).map((i) => ({
@@ -75,7 +72,7 @@ export const ExerciseInstanceTable = ({
   const tableData: Row<
     ExerciseEventTableData,
     {
-      item: ExerciseInstanceDAO;
+      item: ExerciseInstanceData;
       initialMode: ItemModes;
     }
   >[] = dataAndNew.map((datum) => {
@@ -99,7 +96,7 @@ export const ExerciseInstanceTable = ({
   const newRow: Row<
     ExerciseEventTableData,
     {
-      item: ExerciseInstanceDAO;
+      item: ExerciseInstanceData;
       initialMode: ItemModes;
     }
   > = {

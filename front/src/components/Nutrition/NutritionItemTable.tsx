@@ -1,17 +1,11 @@
 import React, { useMemo } from "react";
-// import {useState} from 'react';
-import {
-  NutritionItemDAO,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { NutritionFields } from "./NutritionFields";
-import { SimpleRow } from "../generic/layout/SimpleRow";
 import { Columns, Row } from "../../hooks/useCustomTable";
-import { title } from "process";
 import { Table } from "../generic/layout/Table";
+import { NutritionItemData, nutritionItemDefaults } from "shared";
 
 const styles = () => ({
   list: {
@@ -32,28 +26,30 @@ export const NutritiionTable = () => {
     delete: undefined;
   }
 
-  const makeRow = (initialMode: ItemModes) => (
-    nutrition: NutritionItemDAO
-  ): Row<
-    NutritiionTableData,
-    {
-      data: NutritionItemDAO;
-      initialMode: ItemModes;
-    }
-  > => ({
-    cellData: {
-      title: { data: nutrition.title },
-      ingredients: { data: nutrition.ingredientIds.length },
-      delete: { data: undefined },
-    },
-    key: nutrition._id,
-    rowWrapperProps: { data: nutrition, initialMode },
-  });
+  const makeRow =
+    (initialMode: ItemModes) =>
+    (
+      nutrition: NutritionItemData
+    ): Row<
+      NutritiionTableData,
+      {
+        data: NutritionItemData;
+        initialMode: ItemModes;
+      }
+    > => ({
+      cellData: {
+        title: { data: nutrition.title },
+        ingredients: { data: nutrition.ingredientIds.length },
+        delete: { data: undefined },
+      },
+      key: nutrition._id,
+      rowWrapperProps: { data: nutrition, initialMode },
+    });
 
   const tableData: Row<
     NutritiionTableData,
     {
-      data: NutritionItemDAO;
+      data: NutritionItemData;
       initialMode: ItemModes;
     }
   >[] = (all ?? []).map(makeRow(ItemModes.QuickEdit));

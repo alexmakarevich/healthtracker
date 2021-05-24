@@ -1,21 +1,12 @@
 import { useNutritionEventContext } from "../context/NutritionEventContextProvider";
 import { makeUseEntity, UseEntityProps } from "./../hooks/useEntity";
-import { Basic, BASIC_DEFAULTS } from "./sharedLogic";
 import { useEventContext } from "../context/EventContextProvider";
 import { useNutritionItemContext } from "../context/NutritionItemContextProvider";
+import { NutritionEventData, nutritionEventDefaults } from "shared";
 
-export interface NutritionEventDAO extends Basic {
-  eventId: string;
-  nutritionId: string;
-}
-
-export const nutritionEventDefaults: NutritionEventDAO = {
-  ...BASIC_DEFAULTS,
-  eventId: "",
-  nutritionId: "",
-};
-
-export const useNutritionEvent = (props: UseEntityProps<NutritionEventDAO>) => {
+export const useNutritionEvent = (
+  props: UseEntityProps<NutritionEventData>
+) => {
   const base = makeUseEntity({
     contextFn: useNutritionEventContext,
     defaults: nutritionEventDefaults,

@@ -21,8 +21,6 @@ import { NutritiionEventTable } from "./components/Nutrition/NutritionEventTable
 import { NutritionEventProvider } from "./context/NutritionEventContextProvider";
 import { NutritionVisualization } from "./components/Data/NutritionVisualization";
 
-export const TestContext = createContext<any>("test context value");
-
 const useStyles = createUseStyles(
   {
     app: {
@@ -104,19 +102,19 @@ function App() {
 
 export default App;
 
-const AlertTester = () => {
-  const alertCtx = useAlertContext();
+// const AlertTester = () => {
+//   const alertCtx = useAlertContext();
 
-  return (
-    <Button
-      onClick={() =>
-        alertCtx.addAlert({
-          children: "sas" + new Date().toTimeString(),
-          type: AlertTypes.NEGATIVE,
-        })
-      }
-    >
-      add alert
-    </Button>
-  );
-};
+//   return (
+//     <Button
+//       onClick={() =>
+//         alertCtx.addAlert({
+//           children: "sas" + new Date().toTimeString(),
+//           type: AlertTypes.NEGATIVE,
+//         })
+//       }
+//     >
+//       add alert
+//     </Button>
+//   );
+// };

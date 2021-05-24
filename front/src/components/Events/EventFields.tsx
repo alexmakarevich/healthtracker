@@ -1,5 +1,5 @@
 import React, { HTMLProps, ReactNode } from "react";
-import { Event, EventDAO, useEvent } from "../../logic/eventLogic";
+import { Event, EventData, useEvent } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../context/ContextWrapper";
@@ -38,10 +38,10 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "EventTableRow" });
 
 interface EventFieldProps {
-  event: EventDAO;
+  event: EventData;
   initialMode: ItemModes;
   children: ReactNode;
-  onChange?: (event: EventDAO) => any;
+  onChange?: (event: EventData) => any;
 }
 
 const [useThisContext, Provider] = createContextDefined<Event>();
@@ -62,14 +62,7 @@ const Wrapper = ({ event, initialMode, children }: EventFieldProps) => {
 };
 
 const Buttons = () => {
-  const {
-    mode,
-    create,
-    reset,
-    setOrUpdate,
-    setMode,
-    update,
-  } = useThisContext();
+  const { mode, create, reset, setMode, update } = useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
@@ -85,7 +78,7 @@ const Buttons = () => {
 
 const DateTime = (
   props: HTMLProps<HTMLInputElement> & {
-    onCreateSuccess?: (event: EventDAO) => any;
+    onCreateSuccess?: (event: EventData) => any;
   }
 ) => {
   const { setOrUpdateDebounced, data: event } = useThisContext();

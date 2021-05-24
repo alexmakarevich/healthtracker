@@ -5,11 +5,9 @@ import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
 import { useNutritionEventContext } from "../../context/NutritionEventContextProvider";
-import {
-  NutritionEventDAO,
-  nutritionEventDefaults,
-} from "../../logic/nutritionEventLogic";
+
 import { NutritionEventFields } from "./NutritionEventFields";
+import { NutritionEventData, nutritionEventDefaults } from "shared";
 
 const styles = () => ({
   list: {
@@ -30,28 +28,30 @@ export const NutritiionEventTable = () => {
     delete: undefined;
   }
 
-  const makeRow = (initialMode: ItemModes) => (
-    nutritionEvent: NutritionEventDAO
-  ): Row<
-    NutritiionEventTableData,
-    {
-      data: NutritionEventDAO;
-      initialMode: ItemModes;
-    }
-  > => ({
-    cellData: {
-      nutrition: { data: nutritionEvent.nutritionId },
-      event: { data: nutritionEvent.eventId },
-      delete: { data: undefined },
-    },
-    key: nutritionEvent._id,
-    rowWrapperProps: { data: nutritionEvent, initialMode },
-  });
+  const makeRow =
+    (initialMode: ItemModes) =>
+    (
+      nutritionEvent: NutritionEventData
+    ): Row<
+      NutritiionEventTableData,
+      {
+        data: NutritionEventData;
+        initialMode: ItemModes;
+      }
+    > => ({
+      cellData: {
+        nutrition: { data: nutritionEvent.nutritionId },
+        event: { data: nutritionEvent.eventId },
+        delete: { data: undefined },
+      },
+      key: nutritionEvent._id,
+      rowWrapperProps: { data: nutritionEvent, initialMode },
+    });
 
   const tableData: Row<
     NutritiionEventTableData,
     {
-      data: NutritionEventDAO;
+      data: NutritionEventData;
       initialMode: ItemModes;
     }
   >[] = (all ?? []).map(makeRow(ItemModes.QuickEdit));

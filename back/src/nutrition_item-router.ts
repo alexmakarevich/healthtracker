@@ -192,7 +192,6 @@ router.route(RouteEnd.Delete).delete(async (req, res) => {
       }
     });
   } catch (error) {
-    console.log("delete error", { error });
     res.status(400).send(error);
   }
 });

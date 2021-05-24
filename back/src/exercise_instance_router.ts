@@ -2,7 +2,7 @@ import { SchemaWithEvent } from "./withEvent";
 import { BaseSchema } from "./base_router";
 import { isItemFound } from "./utils";
 import { Schema } from "mongoose";
-import generateRoutes, { RouteEnd } from "./routeGenerator";
+import generateRoutes from "./routeGenerator";
 import { Exercise } from "./exercise_type_router";
 
 const ExerciseInstanceSchema = new Schema({

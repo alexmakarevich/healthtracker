@@ -1,22 +1,9 @@
 import { makeUseEntity, UseEntityProps } from "./../hooks/useEntity";
 import { useNutritionItemContext } from "../context/NutritionItemContextProvider";
-import { Basic, BASIC_DEFAULTS } from "./sharedLogic";
 import { ItemModes } from "../utils/utils";
+import { NutritionItemData, nutritionItemDefaults } from "shared";
 
-export interface NutritionItemDAO extends Basic {
-  title: string;
-  ingredientIds: NutritionItemDAO["_id"][];
-  ingredientIdsFlat: NutritionItemDAO["_id"][];
-}
-
-export const nutritionItemDefaults: NutritionItemDAO = {
-  ...BASIC_DEFAULTS,
-  title: "",
-  ingredientIds: [],
-  ingredientIdsFlat: [],
-};
-
-export const useNutrition = (props: UseEntityProps<NutritionItemDAO>) => {
+export const useNutrition = (props: UseEntityProps<NutritionItemData>) => {
   const base = makeUseEntity({
     contextFn: useNutritionItemContext,
     defaults: nutritionItemDefaults,

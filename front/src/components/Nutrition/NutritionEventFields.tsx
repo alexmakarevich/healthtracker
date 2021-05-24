@@ -4,12 +4,10 @@ import { ItemModes } from "../../utils/utils";
 import { createContextDefined } from "../../context/ContextWrapper";
 import {
   NutritionEvent,
-  NutritionEventDAO,
-  nutritionEventDefaults,
   useNutritionEvent,
 } from "../../logic/nutritionEventLogic";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
-import { Event, eventDefaults } from "../../logic/eventLogic";
+import { Event } from "../../logic/eventLogic";
 import { EventFields } from "../Events/EventFields";
 import { Button } from "../generic/buttons/Button";
 import Collapsible, { Animations } from "../generic/Collapsible";
@@ -17,9 +15,14 @@ import PickOrAdd from "../generic/PickOrAdd";
 import { Box } from "../generic/styling/Box";
 import { Icon, IconSizes } from "../generic/styling/Icon";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import { nutritionItemDefaults } from "../../logic/nutritionItemLogic";
 import { DeleteButton } from "../EntityElements/Delete";
 import { Theme } from "../../styling/theme";
+import {
+  eventDefaults,
+  NutritionEventData,
+  nutritionEventDefaults,
+  nutritionItemDefaults,
+} from "shared";
 
 const useStyles = createUseStyles(
   (theme: Theme) => ({
@@ -57,11 +60,10 @@ const useStyles = createUseStyles(
   { name: "NutritionEventFields" }
 );
 
-const [useThisContext, Provider] = createContextDefined<
-  NutritionEvent & { event: Event }
->();
+const [useThisContext, Provider] =
+  createContextDefined<NutritionEvent & { event: Event }>();
 export interface NutritionEventFieldsProps {
-  data: NutritionEventDAO;
+  data: NutritionEventData;
   initialMode: ItemModes;
   children: ReactNode;
 }
@@ -90,15 +92,8 @@ const Wrapper = ({
 };
 
 const Buttons = () => {
-  const {
-    mode,
-    data,
-    event,
-    create,
-    reset,
-    update,
-    setMode,
-  } = useThisContext();
+  const { mode, data, event, create, reset, update, setMode } =
+    useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}

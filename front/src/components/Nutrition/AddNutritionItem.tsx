@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  NutritionItemDAO,
-  nutritionItemDefaults,
-} from "../../logic/nutritionItemLogic";
+import { NutritionItemData, nutritionItemDefaults } from "shared";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
 import PickOrAdd from "../generic/PickOrAdd";
@@ -33,7 +30,7 @@ const useStyles = createUseStyles(
 
 interface Props {
   idsToExclude?: string[];
-  onAdd: (id: NutritionItemDAO["_id"]) => void;
+  onAdd: (id: NutritionItemData["_id"]) => void;
 }
 
 const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
@@ -41,7 +38,7 @@ const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
   const classes = useStyles();
 
   function handleCreateAndAdd(title: string) {
-    const newNI: NutritionItemDAO = { ...nutritionItemDefaults, title: title };
+    const newNI: NutritionItemData = { ...nutritionItemDefaults, title: title };
     NIContext.create(newNI, {
       onSuccess: (data) => {
         onAdd(data._id);

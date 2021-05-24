@@ -1,7 +1,8 @@
 import React, { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
+import { Enummed } from "shared";
 import { Theme } from "../../../styling/theme";
-import { classConcat, Enummed } from "../../../utils/utils";
+import { classConcat } from "../../../utils/utils";
 import { Button } from "../buttons/Button";
 import { Box } from "../styling/Box";
 import { Icon, IconSizes } from "../styling/Icon";

@@ -8,23 +8,26 @@ import React, {
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../../context/ContextWrapper";
 import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
-import {
-  ExerciseInstanceDAO,
-  exerciseInstanceDefaults,
-  useExerciseInstance,
-} from "../../../logic/exerciseInstanceLogic";
-import { exerciseTypeDefaults } from "../../../logic/exerciseTypeLogic";
+import { useExerciseInstance } from "../../../logic/exerciseInstanceLogic";
 import { classConcat, ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
-import { Event, EventDAO, eventDefaults } from "../../../logic/eventLogic";
+import { Event, EventData } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
 import { Theme } from "../../../styling/theme";
 import Collapsible, { Animations } from "../../generic/Collapsible";
+import {
+  ExerciseInstanceData,
+  eventDefaults,
+  exerciseInstanceDefaults,
+  exerciseTypeDefaults,
+} from "shared";
+
+console.log({ exerciseInstanceDefaults, exerciseTypeDefaults });
 
 const useStyles = createUseStyles(
   (theme: Theme) => ({
@@ -64,10 +67,10 @@ const useStyles = createUseStyles(
 );
 
 export interface ExerciseInstanceFieldsProps {
-  item: ExerciseInstanceDAO;
+  item: ExerciseInstanceData;
   initialMode: ItemModes;
   children: ReactNode;
-  newEvent?: EventDAO;
+  newEvent?: EventData;
 }
 
 const [useThisContext, Provider] = createContextDefined<ThisContextValue>();
@@ -100,15 +103,8 @@ const Wrapper = ({
 const Buttons = () => {
   const classes = useStyles();
 
-  const {
-    mode,
-    data,
-    event,
-    create,
-    reset,
-    update,
-    setMode,
-  } = useThisContext();
+  const { mode, data, event, create, reset, update, setMode } =
+    useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}

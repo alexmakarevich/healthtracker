@@ -1,10 +1,6 @@
 import React, { ReactNode } from "react";
 import { useState } from "react";
-import {
-  NutritionItemDAO,
-  nutritionItemDefaults,
-  useNutrition,
-} from "../../logic/nutritionItemLogic";
+import { useNutrition } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
@@ -18,6 +14,7 @@ import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
 import { Button } from "../generic/buttons/Button";
 import { Icon, IconSizes } from "../generic/styling/Icon";
+import { NutritionItemData, nutritionItemDefaults } from "shared";
 
 const useStyles = createUseStyles(
   {
@@ -49,7 +46,7 @@ const [useThisContext, Provider] =
   createContextDefined<ReturnType<typeof useNutrition>>();
 
 export interface NutritionFieldsProps {
-  data: NutritionItemDAO;
+  data: NutritionItemData;
   initialMode: ItemModes;
   children: ReactNode;
 }
@@ -121,6 +118,8 @@ const Ingredients = () => {
       }
     );
   }
+
+  //
 
   return (
     <div className={classes.wrapper}>

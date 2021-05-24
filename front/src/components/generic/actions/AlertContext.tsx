@@ -11,7 +11,7 @@ import { createContextDefined } from "../../../context/ContextWrapper";
 import { usePrevious } from "../../../hooks/usePrevious";
 import { Alert, AlertProps } from "../layout/Alert";
 import { v4 as uuid } from "uuid";
-import { PartialPartial } from "../../../utils/utils";
+import { PartialPartial } from "shared";
 
 interface AlertContextProps {
   children: ReactNode;
@@ -21,9 +21,10 @@ interface AlertObject extends AlertProps {
   id: string;
 }
 
-const [useAlertContext, AlertContextProvider] = createContextDefined<{
-  addAlert: (props: PartialPartial<AlertObject, "id">) => void;
-}>();
+const [useAlertContext, AlertContextProvider] =
+  createContextDefined<{
+    addAlert: (props: PartialPartial<AlertObject, "id">) => void;
+  }>();
 
 const styles = () => {
   const padding = "20px";

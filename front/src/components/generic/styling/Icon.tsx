@@ -2,7 +2,7 @@ import React from "react";
 import { createUseStyles } from "react-jss";
 import all from "../../../media/icons/all.svg";
 
-import { Enummed } from "../../../utils/utils";
+import { Enummed } from "shared";
 
 const allUrl = all + "#gg-";
 

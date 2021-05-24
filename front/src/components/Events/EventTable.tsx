@@ -5,8 +5,9 @@ import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
 import { useEventContext } from "../../context/EventContextProvider";
-import { EventDAO, eventDefaults } from "../../logic/eventLogic";
+import { EventData } from "../../logic/eventLogic";
 import { EventFields } from "./EventFields";
+import { eventDefaults } from "shared";
 
 const styles = () => ({
   list: {
@@ -26,27 +27,29 @@ export const EventTable = () => {
     delete: undefined;
   }
 
-  const makeRow = (initialMode: ItemModes) => (
-    event: EventDAO
-  ): Row<
-    EventTableData,
-    {
-      event: EventDAO;
-      initialMode: ItemModes;
-    }
-  > => ({
-    cellData: {
-      event: { data: event.time },
-      delete: { data: undefined },
-    },
-    key: event._id,
-    rowWrapperProps: { event, initialMode },
-  });
+  const makeRow =
+    (initialMode: ItemModes) =>
+    (
+      event: EventData
+    ): Row<
+      EventTableData,
+      {
+        event: EventData;
+        initialMode: ItemModes;
+      }
+    > => ({
+      cellData: {
+        event: { data: event.time },
+        delete: { data: undefined },
+      },
+      key: event._id,
+      rowWrapperProps: { event, initialMode },
+    });
 
   const tableData: Row<
     EventTableData,
     {
-      event: EventDAO;
+      event: EventData;
       initialMode: ItemModes;
     }
   >[] = (all ?? []).map(makeRow(ItemModes.QuickEdit));

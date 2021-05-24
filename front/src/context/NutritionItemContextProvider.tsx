@@ -9,13 +9,13 @@ import { generateCRUD } from "../api/generateCRUD";
 import { WithId } from "../common/types/types";
 import { useAlertContext } from "../components/generic/actions/AlertContext";
 import { AlertTypes } from "../components/generic/layout/Alert";
-import { NutritionItemDAO } from "./../logic/nutritionItemLogic";
+import { NutritionItemData } from "shared";
 import { createContextDefined } from "./ContextWrapper";
 
 // export const {
 //   ContextProvider: NutritionItemProvider,
 //   useContextDefined: useNutritionItemContext,
-// } = generateContext<NutritionItemDAO>(
+// } = generateContext<NutritionItemData>(
 //   "http://localhost:4000/nutritionItems",
 //   "Nutrition"
 // );
@@ -44,7 +44,7 @@ interface AddIngredientParams {
 
 const [useContextDefined, Provider] =
   createContextDefined<
-    ContextProps<NutritionItemDAO> & {
+    ContextProps<NutritionItemData> & {
       addIngredient: MutateFunction<
         void,
         unknown,
@@ -66,7 +66,7 @@ interface Props {
 
 /** Quick and dirty context provider for nutrition. TODO: see if deriving it from generator makes sense */
 function ContextProvider({ children }: Props) {
-  const CRUD = generateCRUD<NutritionItemDAO>(apiBaseUrl);
+  const CRUD = generateCRUD<NutritionItemData>(apiBaseUrl);
 
   const queryClient = useQueryCache();
 
@@ -106,7 +106,7 @@ function ContextProvider({ children }: Props) {
 
   // TODO: check if this needs to be returned
   const [createOne] = useMutation(
-    (item: NutritionItemDAO) => CRUD.CREATE(item),
+    (item: NutritionItemData) => CRUD.CREATE(item),
     {
       onSuccess: async (data) => {
         await refresh();
@@ -131,7 +131,7 @@ function ContextProvider({ children }: Props) {
   );
 
   const [updateOne] = useMutation(
-    (item: NutritionItemDAO) => {
+    (item: NutritionItemData) => {
       const itemWithModifiedTimestamp = {
         ...item,
         lastModifiedOn: timestamp(),
@@ -144,7 +144,7 @@ function ContextProvider({ children }: Props) {
   );
 
   const [deleteOne] = useMutation(
-    (item: NutritionItemDAO) => {
+    (item: NutritionItemData) => {
       return CRUD.DELETE_BY_ID(item._id);
     },
     {
@@ -235,7 +235,7 @@ function ContextProvider({ children }: Props) {
     }
   );
 
-  const providerValues: ContextProps<NutritionItemDAO> & {
+  const providerValues: ContextProps<NutritionItemData> & {
     addIngredient: MutateFunction<void, unknown, AddIngredientParams, unknown>;
     removeIngredient: MutateFunction<
       void,

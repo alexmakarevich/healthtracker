@@ -1,10 +1,10 @@
 import * as d3 from "d3";
 import { axisBottom } from "d3";
 import React, { useEffect, useRef } from "react";
+import { NutritionItemData } from "shared";
 import { useEventContext } from "../../context/EventContextProvider";
 import { useNutritionEventContext } from "../../context/NutritionEventContextProvider";
 import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
-import { NutritionItemDAO } from "../../logic/nutritionItemLogic";
 import { sortByX } from "./ChartParts";
 
 interface Datum {
@@ -27,8 +27,8 @@ export const NutritionVisualization = () => {
   //   return null;
   // }
 
-  function flattenIngredients(nutrition: NutritionItemDAO) {
-    let ingredients: NutritionItemDAO[] = [];
+  function flattenIngredients(nutrition: NutritionItemData) {
+    let ingredients: NutritionItemData[] = [];
     nutrition.ingredientIds.forEach((id) => {
       // making sure there are no hierarchy loops
       if (

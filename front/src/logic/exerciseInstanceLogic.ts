@@ -3,35 +3,21 @@ import { useEffect, useState } from "react";
 
 import { useExerciseInstanceContext } from "../context/ExerciseInstanceContextProvider";
 import { useExerciseContext } from "../context/ExerciseTypeContextProvider";
-import { Basic, BASIC_DEFAULTS, ExceptAutoSetBasics } from "./sharedLogic";
+import { ExceptAutoSetBasics, ExerciseInstanceData } from "shared";
 import { MutateConfig } from "react-query";
 import { useEventContext } from "../context/EventContextProvider";
 import { useComplexState } from "../hooks/useComplexState";
 import { useDebouncedCallbackVoid } from "../hooks/useDebounce";
 
-export interface ExerciseInstanceDAO extends Basic {
-  exerciseId: string;
-  eventId: string;
-  repetitions?: number;
-  weightKg?: number;
-  durationSeconds?: number;
-}
-
-type ExerciseInstanceDAONew = ExceptAutoSetBasics<ExerciseInstanceDAO>;
-
-export const exerciseInstanceDefaults: ExerciseInstanceDAO = {
-  ...BASIC_DEFAULTS,
-  exerciseId: "no id yet",
-  eventId: "no id yet",
-};
+type ExerciseInstanceDataNew = ExceptAutoSetBasics<ExerciseInstanceData>;
 
 type New = {
-  data: ExerciseInstanceDAONew;
+  data: ExerciseInstanceDataNew;
   initialMode: ItemModes.New;
 };
 
 type Old = {
-  data: ExerciseInstanceDAO;
+  data: ExerciseInstanceData;
   initialMode: Exclude<ItemModes, ItemModes.New>;
 };
 
@@ -41,15 +27,15 @@ export const useExerciseInstance = ({
   data,
   initialMode,
 }: UseExerciseInstanceProps) => {
-  const defaults: Partial<ExerciseInstanceDAO> = {
+  const defaults: Partial<ExerciseInstanceData> = {
     _id: "new",
     lastModifiedOn: new Date().toUTCString(),
     createdOn: new Date().toUTCString(),
   };
 
   const getDataWithDefaults = (
-    data: ExerciseInstanceDAONew | ExerciseInstanceDAO
-  ) => ({ ...defaults, ...data } as ExerciseInstanceDAO);
+    data: ExerciseInstanceDataNew | ExerciseInstanceData
+  ) => ({ ...defaults, ...data } as ExerciseInstanceData);
 
   const {
     complexState: dataState,
@@ -74,22 +60,22 @@ export const useExerciseInstance = ({
   const create =
     mode === ItemModes.New
       ? (
-          data: ExerciseInstanceDAO = dataState,
+          data: ExerciseInstanceData = dataState,
           config?: MutateConfig<
-            ExerciseInstanceDAO,
+            ExerciseInstanceData,
             unknown,
-            ExerciseInstanceDAO,
+            ExerciseInstanceData,
             unknown
           >
         ) => EIContext.create(data, config)
       : undefined;
 
   const update = (
-    data: ExerciseInstanceDAO = dataState,
+    data: ExerciseInstanceData = dataState,
     config?: MutateConfig<
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown,
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown
     >
   ) => {
@@ -102,11 +88,11 @@ export const useExerciseInstance = ({
   const debouncedUpdateOnly = useDebouncedCallbackVoid(update, 750);
 
   const debouncedUpdate = (
-    data: ExerciseInstanceDAO = dataState,
+    data: ExerciseInstanceData = dataState,
     config?: MutateConfig<
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown,
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown
     >
   ) => {
@@ -125,11 +111,11 @@ export const useExerciseInstance = ({
   };
 
   const setOrUpdate = (
-    data: ExerciseInstanceDAO,
+    data: ExerciseInstanceData,
     config?: MutateConfig<
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown,
-      ExerciseInstanceDAO,
+      ExerciseInstanceData,
       unknown
     >
   ) => {
@@ -142,7 +128,7 @@ export const useExerciseInstance = ({
 
   const deleteFn =
     mode !== ItemModes.New
-      ? (config?: MutateConfig<void, unknown, ExerciseInstanceDAO, unknown>) =>
+      ? (config?: MutateConfig<void, unknown, ExerciseInstanceData, unknown>) =>
           EIContext.delete(dataState, config)
       : undefined;
 

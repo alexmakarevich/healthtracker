@@ -1,38 +1,38 @@
 import { useEffect, useState } from "react";
 import { MutateConfig } from "react-query";
 import { ContextProps } from "../context/generateContext";
-import { Basic } from "../logic/sharedLogic";
+import { BasicData } from "shared";
 import { ItemModes } from "../utils/utils";
 import { useComplexState } from "./useComplexState";
 import { useDebouncedCallbackVoid } from "./useDebounce";
 
-export type UseEntityProps<EntityDAO extends Basic> =
+export type UseEntityProps<EntityData extends BasicData> =
   | {
-      data: EntityDAO;
+      data: EntityData;
       initialMode: Exclude<ItemModes, ItemModes.New>;
     }
   | {
-      data: Partial<EntityDAO>;
+      data: Partial<EntityData>;
       initialMode: ItemModes.New;
     };
 
 /** replacing useEntityBase. TODO: remove the latter, once transitioned completely */
 export const makeUseEntity = <
-  EntityDAO extends Basic,
-  ContextFn extends () => ContextProps<EntityDAO>
+  EntityData extends BasicData,
+  ContextFn extends () => ContextProps<EntityData>
 >({
   contextFn,
   defaults,
 }: {
   contextFn: ContextFn;
-  defaults: EntityDAO;
+  defaults: EntityData;
 }) => {
-  const useEntity = ({ data, initialMode }: UseEntityProps<EntityDAO>) => {
+  const useEntity = ({ data, initialMode }: UseEntityProps<EntityData>) => {
     const {
       complexState: dataState,
       setComplexState: setDataState,
       reset,
-    } = useComplexState<EntityDAO>({ ...defaults, ...data });
+    } = useComplexState<EntityData>({ ...defaults, ...data });
 
     const [mode, setMode] = useState(initialMode);
 
@@ -41,14 +41,14 @@ export const makeUseEntity = <
     const create =
       mode === ItemModes.New
         ? (
-            data: EntityDAO = dataState,
-            config?: MutateConfig<EntityDAO, unknown, EntityDAO, unknown>
+            data: EntityData = dataState,
+            config?: MutateConfig<EntityData, unknown, EntityData, unknown>
           ) => Context.create(data, config)
         : undefined;
 
     const update = (
-      data: EntityDAO = dataState,
-      config?: MutateConfig<EntityDAO, unknown, EntityDAO, unknown>
+      data: EntityData = dataState,
+      config?: MutateConfig<EntityData, unknown, EntityData, unknown>
     ) => {
       Context.update(data, {
         onSuccess: () => Context.refresh(),
@@ -59,16 +59,16 @@ export const makeUseEntity = <
     const debouncedUpdateOnly = useDebouncedCallbackVoid(update, 750);
 
     const debouncedUpdate = (
-      data: EntityDAO = dataState,
-      config?: MutateConfig<EntityDAO, unknown, EntityDAO, unknown>
+      data: EntityData = dataState,
+      config?: MutateConfig<EntityData, unknown, EntityData, unknown>
     ) => {
       setDataState(data);
       debouncedUpdateOnly(data, config);
     };
 
     const setOrUpdate = (
-      data: EntityDAO,
-      config?: MutateConfig<EntityDAO, unknown, EntityDAO, unknown>
+      data: EntityData,
+      config?: MutateConfig<EntityData, unknown, EntityData, unknown>
     ) => {
       if (mode === ItemModes.Edit || mode === ItemModes.New) {
         return setDataState(data);
@@ -89,7 +89,7 @@ export const makeUseEntity = <
 
     const remove =
       mode !== ItemModes.New
-        ? (config?: MutateConfig<void, unknown, EntityDAO, unknown>) =>
+        ? (config?: MutateConfig<void, unknown, EntityData, unknown>) =>
             Context.delete(dataState, config)
         : undefined;
 

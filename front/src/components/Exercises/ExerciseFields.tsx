@@ -1,4 +1,4 @@
-import React, { ReactNode, useMemo } from "react";
+import React, { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
 import {
   EntityBaseContextUseQuery,
@@ -6,14 +6,11 @@ import {
 } from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
-import { ExerciseTypeDAO } from "../../logic/exerciseTypeLogic";
 import { ItemModes } from "../../utils/utils";
-import {
-  CreateEditResetCancel,
-  CreateEditResetCancelProps,
-} from "../EntityElements/CreateEditResetCancel";
+import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import TextWithEdit from "../generic/TextWithEdit";
+import { ExerciseTypeData } from "shared";
 
 const useStyles = createUseStyles(
   {},
@@ -21,12 +18,11 @@ const useStyles = createUseStyles(
   { name: "ExerciseFields" }
 );
 
-const [useThisContext, Provider] = createContextDefined<
-  EntityBaseContextUseQuery<ExerciseTypeDAO>
->();
+const [useThisContext, Provider] =
+  createContextDefined<EntityBaseContextUseQuery<ExerciseTypeData>>();
 
 export interface ExerciseTypeFieldProps {
-  item: ExerciseTypeDAO;
+  item: ExerciseTypeData;
   initialMode: ItemModes;
   children: ReactNode;
 }
@@ -42,14 +38,8 @@ const Wrapper = ({ item, initialMode, children }: ExerciseTypeFieldProps) => {
 };
 
 const Buttons = ({ className }: { className?: string }) => {
-  const {
-    mode,
-    handleCreate,
-    reset,
-    handleSave,
-    handleCancel,
-    setMode,
-  } = useThisContext();
+  const { mode, handleCreate, reset, handleSave, handleCancel, setMode } =
+    useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
