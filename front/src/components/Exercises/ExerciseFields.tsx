@@ -1,16 +1,12 @@
 import React, { ReactNode } from "react";
 import { createUseStyles } from "react-jss";
-import {
-  EntityBaseContextUseQuery,
-  useEntityBaseUseQuery,
-} from "../../hooks/useEntityBase";
 import { createContextDefined } from "../../context/ContextWrapper";
-import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import TextWithEdit from "../generic/TextWithEdit";
 import { ExerciseTypeData } from "shared";
+import { useExercise } from "../../logic/exerciseLogic";
 
 const useStyles = createUseStyles(
   {},
@@ -19,7 +15,7 @@ const useStyles = createUseStyles(
 );
 
 const [useThisContext, Provider] =
-  createContextDefined<EntityBaseContextUseQuery<ExerciseTypeData>>();
+  createContextDefined<ReturnType<typeof useExercise>>();
 
 export interface ExerciseTypeFieldProps {
   item: ExerciseTypeData;
@@ -28,25 +24,20 @@ export interface ExerciseTypeFieldProps {
 }
 
 const Wrapper = ({ item, initialMode, children }: ExerciseTypeFieldProps) => {
-  const contextProps = useEntityBaseUseQuery(
-    item,
-    useExerciseContext(),
-    initialMode
-  );
+  const contextProps = useExercise({ data: item, initialMode });
 
   return <Provider value={contextProps}>{children}</Provider>;
 };
 
 const Buttons = ({ className }: { className?: string }) => {
-  const { mode, handleCreate, reset, handleSave, handleCancel, setMode } =
-    useThisContext();
+  const { mode, create, reset, update, setMode } = useThisContext();
   return (
     <CreateEditResetCancel
       mode={mode}
-      onCreate={handleCreate}
+      onCreate={() => create?.()}
       onReset={reset}
-      onSave={handleSave}
-      onCancelEdit={handleCancel}
+      onSave={() => update?.()}
+      onCancelEdit={reset}
       onSetMode={setMode}
       className={className}
       valid
@@ -55,40 +46,24 @@ const Buttons = ({ className }: { className?: string }) => {
 };
 
 const Title = ({ className }: { className?: string }) => {
-  const { mode, complexState, handleSetOrUpdate } = useThisContext();
+  const { mode, data, setOrUpdateDebounced } = useThisContext();
 
   return (
     <TextWithEdit
-      text={complexState.title}
-      onTextChange={(txt) => handleSetOrUpdate({ title: txt })}
+      text={data.title}
+      onTextChange={(txt) => setOrUpdateDebounced({ ...data, title: txt })}
       isEdit={mode !== ItemModes.Show}
       className={className}
     />
   );
 };
 
-const SomeNumber = () => {
-  const { complexState, handleSetOrUpdate, mode } = useThisContext();
-
-  return (
-    <input
-      disabled={mode === ItemModes.Show}
-      type={"number"}
-      value={complexState.someNumber}
-      key={"check"}
-      onChange={(e: React.ChangeEvent<any>) =>
-        handleSetOrUpdate({ someNumber: parseInt(e.target.value) })
-      }
-    />
-  );
-};
-
 const Delete = () => {
-  const { handleDelete, mode } = useThisContext();
+  const { remove, mode } = useThisContext();
 
-  return <DeleteButton onDelete={handleDelete} mode={mode} />;
+  return <DeleteButton onDelete={() => remove?.()} mode={mode} />;
 };
 
-const Exercise = { Wrapper, Buttons, Title, SomeNumber, Delete };
+const ExerciseFields = { Wrapper, Buttons, Title, Delete };
 
-export { Exercise as ExerciseFields };
+export { ExerciseFields };

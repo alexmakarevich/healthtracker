@@ -20,13 +20,6 @@ const EventSchema = new Schema({
   timeEnd: {
     type: String,
   },
-  // TODO: replace children by< references to eventId in children types
-  children: {
-    nutritionItemIds: Array,
-    exerciseInstanceIds: Array,
-  },
-  // TODO: probably delete
-  items: [{ type: String, id: String }],
 });
 
 export const Event = generateRoutes("Event", EventSchema);

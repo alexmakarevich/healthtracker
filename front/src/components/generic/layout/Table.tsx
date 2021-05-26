@@ -10,7 +10,6 @@ import { classConcat } from "../../../utils/utils";
 import { Button } from "../buttons/Button";
 import { Icon, IconSizes } from "../styling/Icon";
 
-// TODO: cleanup style
 const useStyles = createUseStyles(
   (theme: Theme) => ({
     table: {
@@ -30,9 +29,7 @@ const useStyles = createUseStyles(
       },
       background: theme.textMain,
       color: theme.canvas,
-      "&:hover": {
-        // color: "white",
-      },
+      "&:hover": {},
     },
     td: {
       position: "relative",

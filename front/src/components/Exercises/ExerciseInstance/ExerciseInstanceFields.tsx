@@ -14,7 +14,7 @@ import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCance
 import { DeleteButton } from "../../EntityElements/Delete";
 import PickOrAdd from "../../generic/PickOrAdd";
 import { Box } from "../../generic/styling/Box";
-import { Event, EventData } from "../../../logic/eventLogic";
+import { Event } from "../../../logic/eventLogic";
 import { EventFields } from "../../Events/EventFields";
 import { Icon, IconSizes } from "../../generic/styling/Icon";
 import { Button } from "../../generic/buttons/Button";
@@ -25,6 +25,7 @@ import {
   eventDefaults,
   exerciseInstanceDefaults,
   exerciseTypeDefaults,
+  EventData,
 } from "shared";
 
 console.log({ exerciseInstanceDefaults, exerciseTypeDefaults });

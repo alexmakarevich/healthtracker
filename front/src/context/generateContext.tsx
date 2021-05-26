@@ -29,8 +29,6 @@ export interface ContextProps<Something extends WithId> {
  * creates a context and its provider with standard CRUD for a collection of items
  * make sure to provide item types
  * make sure to give the context & provider a unique name
-
- * TODO: fix inconsistencies on slow updates - block re-request of update, while data is loading or until previous update operation is done
  */
 
 export function generateContext<Item extends WithId>(

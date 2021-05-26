@@ -36,7 +36,7 @@ const styles = (theme: Theme) => ({
 const useStyles = createUseStyles(styles, { name: "SearchWithDropdown" });
 
 export interface SearchableSelectChild extends SelectChild {
-  // TODO: refactor to use arbitrary searchable properties
+  // TODO: NICETOHAVE - refactor to use arbitrary searchable properties
   searchableText: string;
 }
 

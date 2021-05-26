@@ -22,7 +22,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "SearchWithDropdown" });
 
 interface SearchableSelectChild extends SelectChild {
-  // TODO: refactor to use arbitrary searchable properties
+  // TODO: NICETOHAVE - refactor to use arbitrary searchable properties
   searchableText: string;
 }
 
@@ -66,10 +66,8 @@ const SearchWithDropdown = ({
     if (dropdownItems) {
       const fuse = new Fuse(dropdownItems, fuseOptions);
       const searchResult = fuse.search(searchTextValue);
-      const dropdownItemsAfterSearch: (
-        | SearchableSelectChild
-        | undefined
-      )[] = searchResult.map((searchItem) => searchItem.item);
+      const dropdownItemsAfterSearch: (SearchableSelectChild | undefined)[] =
+        searchResult.map((searchItem) => searchItem.item);
       return dropdownItemsAfterSearch;
     }
   }

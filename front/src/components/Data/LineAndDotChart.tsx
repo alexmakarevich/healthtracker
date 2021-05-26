@@ -41,7 +41,7 @@ interface LineAndDotChartProps<XScale extends Scales, YScale extends Scales> {
 }
 
 // TODO: make empty data handling simpler
-
+// TODO: Eventually remove this in favor of separate parts
 // TODO: reduce the `as any`s as much as possible,
 
 export const LineAndDotChart = <xType extends Scales, yType extends Scales>({

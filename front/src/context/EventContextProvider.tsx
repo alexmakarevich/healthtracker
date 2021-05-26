@@ -1,4 +1,4 @@
-import { EventData } from "./../logic/eventLogic";
+import { EventData } from "shared";
 import { generateContext } from "./generateContext";
 
 export const {

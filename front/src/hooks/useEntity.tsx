@@ -16,7 +16,6 @@ export type UseEntityProps<EntityData extends BasicData> =
       initialMode: ItemModes.New;
     };
 
-/** replacing useEntityBase. TODO: remove the latter, once transitioned completely */
 export const makeUseEntity = <
   EntityData extends BasicData,
   ContextFn extends () => ContextProps<EntityData>

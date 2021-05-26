@@ -9,12 +9,10 @@ import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider
 import { Table } from "../../generic/layout/Table";
 import { createUseStyles } from "react-jss";
 
-// TODO: cleanup style
 const useStyles = createUseStyles(
   {
     exercise: {
       padding: [0, 2],
-      // maxWidth: 150,
     },
 
     tableInput: {

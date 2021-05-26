@@ -1,14 +1,12 @@
 import React, { HTMLProps, ReactNode } from "react";
-import { Event, EventData, useEvent } from "../../logic/eventLogic";
+import { Event, useEvent } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import { InputDateTime } from "../generic/inputs/DateTimeInputs/InputDateTime";
-
-// TODO: deprecate or rewrite with parent/child logic between events and instances moved into instances,
-// i.e. instead of interating of "children" field of event, use "eventid" field in and exercise instance, or nutrition instance
+import { EventData } from "shared";
 
 const styles = () => ({
   itemsWrapper: {

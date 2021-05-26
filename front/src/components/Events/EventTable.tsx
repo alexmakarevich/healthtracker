@@ -5,9 +5,8 @@ import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
 import { useEventContext } from "../../context/EventContextProvider";
-import { EventData } from "../../logic/eventLogic";
 import { EventFields } from "./EventFields";
-import { eventDefaults } from "shared";
+import { eventDefaults, EventData } from "shared";
 
 const styles = () => ({
   list: {
