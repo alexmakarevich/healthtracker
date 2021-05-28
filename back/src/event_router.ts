@@ -1,13 +1,9 @@
+import { BaseSchema } from "./base_router";
 import { Schema } from "mongoose";
 import generateRoutes from "./routeGenerator";
 
 const EventSchema = new Schema({
-  createdOn: {
-    type: String,
-  },
-  lastModifiedOn: {
-    type: String,
-  },
+  ...BaseSchema.obj,
   time: {
     type: String,
   },

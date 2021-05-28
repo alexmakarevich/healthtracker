@@ -1,14 +1,10 @@
+import { BaseSchema } from "./base_router";
 import * as mongoose from "mongoose";
 import generateRoutes from "./routeGenerator";
 
 const Schema = mongoose.Schema;
 let ExerciseEvent = new Schema({
-  createdOn: {
-    type: String,
-  },
-  lastModifiedOn: {
-    type: String,
-  },
+  ...BaseSchema.obj,
   exerciseId: {
     type: String,
   },

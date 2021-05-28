@@ -1,4 +1,4 @@
-import { Basic } from "base_router";
+import { BaseSchema, Basic } from "./base_router";
 import * as mongoose from "mongoose";
 import generateRoutes, { RouteEnd } from "./routeGenerator";
 
@@ -10,12 +10,7 @@ export interface NutritionItemDAO extends Basic {
 
 const Schema = mongoose.Schema;
 const NutririonItem = new Schema<NutritionItemDAO>({
-  createdOn: {
-    type: String,
-  },
-  lastModifiedOn: {
-    type: String,
-  },
+  ...BaseSchema.obj,
   title: {
     type: String,
   },

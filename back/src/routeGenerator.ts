@@ -26,83 +26,58 @@ function generateRoutes<SchemaType = any>(
   let router = express.Router();
 
   includeRoutes.GetAll &&
-    router.route(RouteEnd.GetAll).get(function (_req, res) {
-      Model.find(function (err, items) {
-        if (err) {
-          res.status(400).send("Server error: " + err);
-        } else {
-          res.status(200).json(items);
-        }
-      });
+    router.route(RouteEnd.GetAll).get(async (_req, res) => {
+      try {
+        const allItems = await Model.find();
+        res.status(200).json(allItems);
+      } catch (error) {
+        res.status(400).send("Server error: " + error);
+      }
     });
 
   includeRoutes.Get &&
-    router.route(RouteEnd.Get).get(function (req, res) {
-      let id = req.params.id;
-      Model.findById(id, function (err, item) {
-        if (err) {
-          res.status(400).send("Server error: " + err);
-        } else if (!item) {
-          res.status(400).send("could not find item with id " + req.params.id);
-        } else {
-          res.status(200).json(item);
-        }
-      });
+    router.route(RouteEnd.Get).get(async (req, res) => {
+      const id = req.params.id;
+      try {
+        const item = await Model.findById(id);
+        res.status(200).json(item);
+      } catch (error) {
+        res.status(400).send("Server error: " + error);
+      }
     });
 
   includeRoutes.Update &&
-    router.route(RouteEnd.Update).post(function (req, res) {
-      Model.findById(req.params.id, function (err, item) {
-        if (!item)
-          res
-            .status(404)
-            .send(
-              `update of ${modelName} with ID: "${req.params.id}" failed. ID not found.`
-            );
-        else console.log("before update", JSON.stringify(item));
-        item = Object.assign(item, req.body);
-        console.log("update", JSON.stringify(item));
-
-        item
-          .save()
-          .then((item) => {
-            res.json({ result: "updated", request: req.body, item });
-          })
-          .catch((err) => {
-            res
-              .status(400)
-              .send(
-                `update of ${modelName} with ID: "${req.params.id}" failed. ${err}`
-              );
-          });
-      });
+    router.route(RouteEnd.Update).post(async (req, res) => {
+      const id = req.params.id;
+      try {
+        const item = await Model.findById(id);
+        const updated = await item.updateOne(req.body);
+        res.status(200).json(updated);
+      } catch (error) {
+        res.status(400).send("Server error: " + error);
+      }
     });
 
   includeRoutes.Delete &&
-    router.route(RouteEnd.Delete).delete(function (req, res) {
-      Model.findByIdAndDelete(req.params.id, null, function (err, item) {
-        if (err) {
-          console.log(err);
-          res.status(400).send("Server error: " + err);
-        } else if (!item) {
-          res.status(400).send("could not find item with id " + req.params.id);
-        } else {
-          res.status(200).json(`item ${req.params.id} deleted!`);
-        }
-      });
+    router.route(RouteEnd.Delete).delete(async (req, res) => {
+      const id = req.params.id;
+      try {
+        const item = await Model.findById(id);
+        await item.delete();
+        res.status(200).json(`item ${req.params.id} deleted!`);
+      } catch (error) {
+        res.status(400).send("Server error: " + error);
+      }
     });
 
   includeRoutes.Add &&
-    router.route(RouteEnd.Add).post(function (req, res) {
-      let item = new Model(req.body);
-      item
-        .save()
-        .then((item) => {
-          res.status(200).json(item);
-        })
-        .catch((err) => {
-          res.status(400).send(`adding new ${modelName} failed - ${err}`);
-        });
+    router.route(RouteEnd.Add).post(async (req, res) => {
+      try {
+        const item = await Model.create(req.body);
+        res.status(200).json(item);
+      } catch (err) {
+        res.status(400).send(`adding new ${modelName} failed - ${err}`);
+      }
     });
 
   return { router, Model };
