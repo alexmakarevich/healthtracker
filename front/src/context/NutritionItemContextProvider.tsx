@@ -160,7 +160,7 @@ function ContextProvider({ children }: Props) {
         addAlert({
           children: (
             <>
-              <p> Failed to delete ${itemName}</p> <p>`${error}` </p>
+              <p> Failed to delete {itemName}</p> <p>`{error}` </p>
             </>
           ),
           type: AlertTypes.NEGATIVE,
