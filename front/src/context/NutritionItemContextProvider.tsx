@@ -12,14 +12,6 @@ import { AlertTypes } from "../components/generic/layout/Alert";
 import { NutritionItemData } from "shared";
 import { createContextDefined } from "./ContextWrapper";
 
-// export const {
-//   ContextProvider: NutritionItemProvider,
-//   useContextDefined: useNutritionItemContext,
-// } = generateContext<NutritionItemData>(
-//   "http://localhost:4000/nutritionItems",
-//   "Nutrition"
-// );
-
 const apiBaseUrl = "http://localhost:4000/nutritionItems";
 const itemName = "Nutrition";
 
@@ -122,7 +114,7 @@ function ContextProvider({ children }: Props) {
           children: (
             <>
               <p>ERROR: could not create {itemName}</p>
-              <p>details: {JSON.stringify(err)}</p>
+              <p>details: {JSON.stringify(err, null, 3)}</p>
             </>
           ),
           type: AlertTypes.NEGATIVE,

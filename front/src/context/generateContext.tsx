@@ -97,7 +97,7 @@ export function generateContext<Item extends WithId>(
           children: (
             <>
               <p>ERROR: could not create {itemName}</p>
-              <p>details: {JSON.stringify(err)}</p>
+              <p>details: {JSON.stringify(err, null, 3)}</p>
             </>
           ),
           type: AlertTypes.NEGATIVE,
@@ -114,7 +114,7 @@ export function generateContext<Item extends WithId>(
       },
       {
         // onSuccess: (_data, vars) =>
-        //   addAlert({ children: JSON.stringify(vars) }),
+        //   addAlert({ children: JSON.stringify(vars, null, 3) }),
         onError: () =>
           addAlert({ children: `ERROR: failed to update ${itemName}` }),
       }
