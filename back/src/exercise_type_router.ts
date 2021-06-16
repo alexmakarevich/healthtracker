@@ -8,12 +8,6 @@ let ExerciseType = new Schema({
   title: {
     type: String,
   },
-  measuredFields: {
-    type: Object,
-  },
-  someNumber: {
-    type: Number,
-  },
 });
 
 export const Exercise = generateRoutes("ExerciseType", ExerciseType);

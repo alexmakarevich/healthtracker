@@ -11,9 +11,7 @@ const NutritionEventSchema = new Schema({
   nutritionId: {
     type: String,
     required: true,
-    validate: validateIsItemFound(
-      Nutrition.Model as any /** TODO: derive type from generic */
-    ),
+    validate: validateIsItemFound(Nutrition.Model),
   },
 });
 
