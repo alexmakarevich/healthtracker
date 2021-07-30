@@ -20,6 +20,10 @@ import { AlertTypes } from "./components/generic/layout/Alert";
 import { NutritiionEventTable } from "./components/Nutrition/NutritionEventTable";
 import { NutritionEventProvider } from "./context/NutritionEventContextProvider";
 import { NutritionVisualization } from "./components/Data/NutritionVisualization";
+import { SymptomTable } from "./components/Symptoms/SymptomTable";
+import { SymptomProvider } from "./context/SymptomContextProvider";
+import { SymptomEventProvider } from "./context/SymptomEventContextProvider";
+import { SymptomEventTable } from "./components/Symptoms/SymptomEventTable";
 
 const useStyles = createUseStyles(
   {
@@ -54,30 +58,38 @@ function App() {
               <EventProvider>
                 <NutritionItemProvider>
                   <NutritionEventProvider>
-                    <h2>Nutrition</h2>
-                    <NutritiionTable />
-                    <h2>Nutrition History</h2>
-                    <NutritiionEventTable />
-                    <h2>Nutrition Chart</h2>
-                    <NutritionVisualization />
-                    {/* <CheckHowHooksRerender /> */}
-                    {/* <ExerciseEventTable /> */}
-                    <h2>Exercise History</h2>
-                    <ExerciseInstanceTable />
-                    <h2>Exercise Chart</h2>
-                    <ExerciseVisualization />
+                    <SymptomProvider>
+                      <SymptomEventProvider>
+                        <h2>Nutrition</h2>
+                        <NutritiionTable />
+                        <h2>Nutrition History</h2>
+                        <NutritiionEventTable />
+                        <h2>Nutrition Chart</h2>
+                        <NutritionVisualization />
+                        {/* <CheckHowHooksRerender /> */}
+                        {/* <ExerciseEventTable /> */}
+                        <h2>Exercise History</h2>
+                        <ExerciseInstanceTable />
+                        <h2>Exercise Chart</h2>
+                        <ExerciseVisualization />
 
-                    {/* <DebounceTest /> */}
-                    {/* <EventTable /> */}
-                    {/* <ExerciseInstanceTable /> */}
-                    {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
+                        {/* <DebounceTest /> */}
+                        {/* <EventTable /> */}
+                        {/* <ExerciseInstanceTable /> */}
+                        {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
                   <use xlinkHref={allSvg + "#" + "gg-folder"} />
                 </svg> */}
-                    {/* <TestNewTableHook /> */}
-                    {/* <CheckSoringRerender /> */}
-                    {/* <ExerciseInstanceTableNew /> */}
-                    <h2>Exercise Types</h2>
-                    <ExerciseTypeTable />
+                        {/* <TestNewTableHook /> */}
+                        {/* <CheckSoringRerender /> */}
+                        {/* <ExerciseInstanceTableNew /> */}
+                        <h2>Exercise Types</h2>
+                        <ExerciseTypeTable />
+                        <h2>Symptoms</h2>
+                        <SymptomTable />
+                        <h2>Symptom Events</h2>
+                        <SymptomEventTable />
+                      </SymptomEventProvider>
+                    </SymptomProvider>
                   </NutritionEventProvider>
                 </NutritionItemProvider>
               </EventProvider>

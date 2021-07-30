@@ -119,8 +119,6 @@ const Ingredients = () => {
     );
   }
 
-  //
-
   return (
     <div className={classes.wrapper}>
       {ingredients?.map((ingredient) => (

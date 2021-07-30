@@ -60,8 +60,9 @@ const useStyles = createUseStyles(
   { name: "NutritionEventFields" }
 );
 
-const [useThisContext, Provider] =
-  createContextDefined<NutritionEvent & { event: Event }>();
+const [useThisContext, Provider] = createContextDefined<
+  NutritionEvent & { event: Event }
+>();
 export interface NutritionEventFieldsProps {
   data: NutritionEventData;
   initialMode: ItemModes;
