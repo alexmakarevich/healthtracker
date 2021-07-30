@@ -44,15 +44,16 @@ export interface ExerciseInstanceData extends BasicData {
   durationSeconds?: number;
 }
 
+export const NO_EVENT_ID = "NO_EVENT_ID";
+
 export const exerciseInstanceDefaults: ExerciseInstanceData = {
   ...BASIC_DEFAULTS,
   exerciseId: "no id yet",
-  eventId: "no id yet",
+  eventId: NO_EVENT_ID,
 };
 
 export interface ExerciseTypeData extends BasicData {
   title: string;
-  someNumber: number;
 }
 
 export const exerciseTypeDefaults: ExerciseTypeData = {
@@ -61,7 +62,6 @@ export const exerciseTypeDefaults: ExerciseTypeData = {
   lastModifiedOn: new Date().toISOString(),
   _v: -1,
   title: "",
-  someNumber: 0,
 };
 
 export interface NutritionEventData extends BasicData {
@@ -71,7 +71,7 @@ export interface NutritionEventData extends BasicData {
 
 export const nutritionEventDefaults: NutritionEventData = {
   ...BASIC_DEFAULTS,
-  eventId: "",
+  eventId: NO_EVENT_ID,
   nutritionId: "",
 };
 
@@ -86,4 +86,26 @@ export const nutritionItemDefaults: NutritionItemData = {
   title: "",
   ingredientIds: [],
   ingredientIdsFlat: [],
+};
+
+export interface SymptomData extends BasicData {
+  title: string;
+}
+
+export const symptomDefaults: ExerciseTypeData = {
+  ...BASIC_DEFAULTS,
+  title: "",
+};
+
+export interface SymptomEventData extends BasicData {
+  eventId: string;
+  symptomId: string;
+  strength: number;
+}
+
+export const symptomEventDefaults: SymptomEventData = {
+  ...BASIC_DEFAULTS,
+  eventId: NO_EVENT_ID,
+  symptomId: "",
+  strength: 0,
 };

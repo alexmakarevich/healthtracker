@@ -1,8 +1,10 @@
+import { SymptomEvent } from "./symptom_event_router";
 import { Event } from "./event_router";
 import { Nutrition } from "./nutrition_item-router";
 import { NutritionEvent } from "./nutrition_event_router";
 import { Exercise } from "./exercise_type_router";
 import { ExerciseInstance } from "./exercise_instance_router";
+import { Symptom } from "./symptom_router";
 import * as express from "express";
 import * as cors from "cors";
 import * as mongoose from "mongoose";
@@ -28,6 +30,8 @@ async function server() {
   app.use("/events", Event.router);
   app.use("/exerciseTypes", Exercise.router);
   app.use("/exerciseInstances", ExerciseInstance.router);
+  app.use("/symptoms", Symptom.router);
+  app.use("/symptomEvents", SymptomEvent.router);
 
   app.listen(PORT, function () {
     console.log("Server is running on Port: " + PORT);
