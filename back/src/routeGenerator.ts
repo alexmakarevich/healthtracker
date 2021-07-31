@@ -51,7 +51,8 @@ function generateRoutes<SchemaType = any>(
       const id = req.params.id;
       try {
         const item = await Model.findById(id);
-        const updated = await item.updateOne(req.body);
+        await item.updateOne(req.body);
+        const updated = await Model.findById(id);
         res.status(200).json(updated);
       } catch (error) {
         res.status(400).send("Server error: " + error);
