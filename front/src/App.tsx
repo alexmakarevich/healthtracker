@@ -1,4 +1,4 @@
-import React, { createContext } from "react";
+import React from "react";
 import "./App.css";
 import { NutritiionTable } from "./components/Nutrition/NutritionItemTable";
 import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
@@ -6,17 +6,12 @@ import { EventProvider } from "./context/EventContextProvider";
 import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
 import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
-import {
-  AlertContext,
-  useAlertContext,
-} from "./components/generic/actions/AlertContext";
-import { Button } from "./components/generic/buttons/Button";
+import { AlertContext } from "./components/generic/actions/AlertContext";
 import { createUseStyles, ThemeProvider } from "react-jss";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
 import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { theme } from "./styling/theme";
 import { classConcat } from "./utils/utils";
-import { AlertTypes } from "./components/generic/layout/Alert";
 import { NutritiionEventTable } from "./components/Nutrition/NutritionEventTable";
 import { NutritionEventProvider } from "./context/NutritionEventContextProvider";
 import { NutritionVisualization } from "./components/Data/NutritionVisualization";
@@ -46,6 +41,9 @@ const useStyles = createUseStyles(
   { name: "App" }
 );
 
+// IMPORTANT: for some ungodly reason, it's best to put a
+// "child" context provider above a "parent" context provider
+
 function App() {
   const classes = useStyles();
   return (
@@ -54,60 +52,37 @@ function App() {
         <AlertContext>
           {/* <AlertTester></AlertTester> */}
           <ExerciseInstanceProvider>
-            <ExerciseProvider>
-              <EventProvider>
-                <NutritionItemProvider>
-                  <NutritionEventProvider>
-                    <SymptomProvider>
-                      <SymptomEventProvider>
+            <NutritionEventProvider>
+              <SymptomEventProvider>
+                <ExerciseProvider>
+                  <EventProvider>
+                    <NutritionItemProvider>
+                      <SymptomProvider>
                         <h2>Nutrition</h2>
                         <NutritiionTable />
                         <h2>Nutrition History</h2>
                         <NutritiionEventTable />
                         <h2>Nutrition Chart</h2>
                         <NutritionVisualization />
-                        {/* <CheckHowHooksRerender /> */}
-                        {/* <ExerciseEventTable /> */}
                         <h2>Exercise History</h2>
                         <ExerciseInstanceTable />
                         <h2>Exercise Chart</h2>
                         <ExerciseVisualization />
-
-                        {/* <DebounceTest /> */}
-                        {/* <EventTable /> */}
-                        {/* <ExerciseInstanceTable /> */}
-                        {/* <svg className={"sas"} style={{ width: 300, height: 300 }}>
-                  <use xlinkHref={allSvg + "#" + "gg-folder"} />
-                </svg> */}
-                        {/* <TestNewTableHook /> */}
-                        {/* <CheckSoringRerender /> */}
-                        {/* <ExerciseInstanceTableNew /> */}
                         <h2>Exercise Types</h2>
                         <ExerciseTypeTable />
                         <h2>Symptoms</h2>
                         <SymptomTable />
                         <h2>Symptom Events</h2>
                         <SymptomEventTable />
-                      </SymptomEventProvider>
-                    </SymptomProvider>
-                  </NutritionEventProvider>
-                </NutritionItemProvider>
-              </EventProvider>
-            </ExerciseProvider>
+                      </SymptomProvider>
+                    </NutritionItemProvider>
+                  </EventProvider>
+                </ExerciseProvider>
+              </SymptomEventProvider>
+            </NutritionEventProvider>
           </ExerciseInstanceProvider>
         </AlertContext>
       </ThemeProvider>
-
-      {/* 
-      <InputDate />
-      <InputDateTime date={date} onChange={(d) => setDate(d)} />
-
-      <InputTime
-        hh={hours}
-        mm={minutes}
-        onHourChange={setHours}
-        onMinuteChange={setMinutes}
-      /> */}
     </div>
   );
 }
