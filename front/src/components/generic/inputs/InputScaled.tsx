@@ -28,8 +28,8 @@ export const InputScaled = forwardRef(
     const plusWidtWithFallback = plusWidth ?? (hideButtons ? 2 : 20);
 
     useEffect(() => {
-      setWidth((fakeRef.current?.offsetWidth ?? 10) + plusWidtWithFallback);
-    }, [fakeRef, props, spanWidth, className, plusWidtWithFallback]);
+      setWidth((spanWidth ?? 10) + plusWidtWithFallback);
+    }, [spanWidth, plusWidtWithFallback]);
 
     return (
       <>

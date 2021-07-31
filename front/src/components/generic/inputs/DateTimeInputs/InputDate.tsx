@@ -1,7 +1,6 @@
 import React, { useState, useRef, RefObject } from "react";
 import { createUseStyles } from "react-jss";
 import { InputDay } from "./InputDay";
-import { InputHours } from "./InputHours";
 import { InputMonth } from "./InputMonth";
 import { InputYear } from "./InputYear";
 const useStyles = createUseStyles(
@@ -16,7 +15,6 @@ const useStyles = createUseStyles(
 const locale = "ru-RU";
 
 const currentDate = new Date();
-const currentDateLocale = currentDate.toLocaleDateString(locale);
 
 const InputDate = () => {
   const classes = useStyles();
@@ -58,57 +56,6 @@ const InputDate = () => {
     const days = new Date(year, month + 1, 0).getDate();
     return days;
   }
-
-  const dayList = [
-    { no: 0, string: "" },
-    { no: 1, string: "01" },
-    { no: 2, string: "02" },
-    { no: 3, string: "03" },
-    { no: 4, string: "04" },
-    { no: 5, string: "05" },
-    { no: 6, string: "06" },
-    { no: 7, string: "07" },
-    { no: 8, string: "08" },
-    { no: 9, string: "09" },
-    { no: 10, string: "10" },
-    { no: 11, string: "11" },
-    { no: 12, string: "12" },
-    { no: 13, string: "13" },
-    { no: 14, string: "14" },
-    { no: 15, string: "15" },
-    { no: 16, string: "16" },
-    { no: 17, string: "17" },
-    { no: 18, string: "18" },
-    { no: 19, string: "19" },
-    { no: 20, string: "20" },
-    { no: 21, string: "21" },
-    { no: 22, string: "22" },
-    { no: 23, string: "23" },
-    { no: 24, string: "24" },
-    { no: 25, string: "25" },
-    { no: 26, string: "26" },
-    { no: 27, string: "27" },
-    { no: 28, string: "28" },
-    { no: 29, string: "29" },
-    { no: 30, string: "30" },
-    { no: 31, string: "31" },
-  ];
-
-  const monthList = [
-    { no: 0, string: "" },
-    { no: 1, string: "01" },
-    { no: 2, string: "02" },
-    { no: 3, string: "03" },
-    { no: 4, string: "04" },
-    { no: 5, string: "05" },
-    { no: 6, string: "06" },
-    { no: 7, string: "07" },
-    { no: 8, string: "08" },
-    { no: 9, string: "09" },
-    { no: 10, string: "10" },
-    { no: 11, string: "11" },
-    { no: 12, string: "12" },
-  ];
 
   const maxDays = daysInMonth(month, year);
 

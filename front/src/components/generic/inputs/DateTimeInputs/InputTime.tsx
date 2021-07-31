@@ -1,16 +1,6 @@
-import React, { forwardRef, Ref } from "react";
-import { createUseStyles } from "react-jss";
+import React from "react";
 import { InputHours } from "./InputHours";
 import { InputMinutes } from "./InputMinutes";
-
-const useStyles = createUseStyles(
-  {
-    input: {
-      width: "1.25em",
-    },
-  },
-  { name: "InputHour" }
-);
 
 interface InputTimeProps {
   hh: number;
@@ -20,8 +10,6 @@ interface InputTimeProps {
 }
 
 export const InputTime = (props: InputTimeProps) => {
-  const classes = useStyles();
-
   return (
     <div>
       {props.hh} : {props.mm}

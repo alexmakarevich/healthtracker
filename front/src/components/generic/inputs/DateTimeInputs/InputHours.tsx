@@ -1,16 +1,5 @@
 import React, { forwardRef, Ref, useEffect, useState } from "react";
-import { createUseStyles } from "react-jss";
-import { classConcat } from "../../../../utils/utils";
 import { InputScaled, InputScaledProps } from "../InputScaled";
-
-const useStyles = createUseStyles(
-  {
-    input: {
-      // width: "2.5rem",
-    },
-  },
-  { name: "InputHour" }
-);
 
 type Props = {
   hours: number;
@@ -21,14 +10,13 @@ type Props = {
 
 export const InputHours = forwardRef(
   (props: Props, ref: Ref<HTMLInputElement>) => {
-    const classes = useStyles();
     const [formatted, setFormatted] = useState(props.hours.toString());
 
     useEffect(() => {
       setFormatted(
         props.hours > 9 ? props.hours.toString() : "0" + props.hours.toString()
       );
-    }, [props]);
+    }, [props.hours]);
 
     function handleChange(eventValue: string) {
       const n = parseInt(eventValue);
@@ -46,7 +34,7 @@ export const InputHours = forwardRef(
       <InputScaled
         hideButtons={true}
         ref={ref}
-        className={classConcat(classes.input, props.className)}
+        className={props.className}
         type={"number"}
         value={formatted}
         onChange={(e) => handleChange(e.target.value)}

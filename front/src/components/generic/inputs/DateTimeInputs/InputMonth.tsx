@@ -1,14 +1,5 @@
 import React, { useState, useEffect, forwardRef, Ref } from "react";
-import { createUseStyles } from "react-jss";
-import { classConcat } from "../../../../utils/utils";
 import { InputScaled, InputScaledProps } from "../InputScaled";
-
-const useStyles = createUseStyles(
-  {
-    input: {},
-  },
-  { name: "InputMonth" }
-);
 
 type Props = {
   month: number;
@@ -20,15 +11,13 @@ type Props = {
 export const InputMonth = forwardRef(
   (props: Props, ref: Ref<HTMLInputElement>) => {
     const { month: day, onChange, className, ...rest } = props;
-
-    const classes = useStyles();
     const [formatted, setFormatted] = useState(props.month.toString());
 
     useEffect(() => {
       setFormatted(
         props.month > 9 ? props.month.toString() : "0" + props.month.toString()
       );
-    }, [props]);
+    }, [props.month]);
 
     function handleChange(eventValue: string) {
       const n = parseInt(eventValue);
@@ -48,7 +37,7 @@ export const InputMonth = forwardRef(
       <InputScaled
         ref={ref}
         hideButtons={true}
-        className={classConcat(classes.input, className)}
+        className={className}
         type={"number"}
         value={formatted}
         onChange={(e) => handleChange(e.target.value)}

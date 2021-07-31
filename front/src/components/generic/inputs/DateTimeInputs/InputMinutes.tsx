@@ -1,16 +1,5 @@
-import React, { forwardRef, Ref, useEffect, useRef, useState } from "react";
-import { createUseStyles } from "react-jss";
-import { classConcat } from "../../../../utils/utils";
+import React, { forwardRef, Ref, useEffect, useState } from "react";
 import { InputScaled, InputScaledProps } from "../InputScaled";
-
-const useStyles = createUseStyles(
-  {
-    input: {
-      // width: "2.5rem",
-    },
-  },
-  { name: "InputMinutes" }
-);
 
 type Props = {
   minutes: number;
@@ -22,10 +11,7 @@ type Props = {
 export const InputMinutes = forwardRef(
   (props: Props, ref: Ref<HTMLInputElement>) => {
     const { minutes, onChange, className, ...rest } = props;
-
-    const classes = useStyles();
     const [formatted, setFormatted] = useState(props.minutes.toString());
-    const [isValid, setIsValid] = useState(true);
 
     useEffect(() => {
       setFormatted(
@@ -33,7 +19,7 @@ export const InputMinutes = forwardRef(
           ? props.minutes.toString()
           : "0" + props.minutes.toString()
       );
-    }, [props]);
+    }, [props.minutes]);
 
     function handleChange(eventValue: string) {
       const n = parseInt(eventValue);
@@ -52,7 +38,7 @@ export const InputMinutes = forwardRef(
       <InputScaled
         ref={ref}
         hideButtons={true}
-        className={classConcat(classes.input, className)}
+        className={className}
         type={"number"}
         value={formatted}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

@@ -56,6 +56,8 @@ export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
   const dayRef = useRef<HTMLInputElement>(null);
   const monthRef = useRef<HTMLInputElement>(null);
   const yearRef = useRef<HTMLInputElement>(null);
+  const hourRef = useRef<HTMLInputElement>(null);
+  const minRef = useRef<HTMLInputElement>(null);
 
   // TODO: conversion between UTC & local
 
@@ -137,6 +139,7 @@ export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
         className={classes.input}
         hours={hours}
         onChange={handleHourChange}
+        ref={hourRef}
       />
       <span className={classes.separator}>:</span>
       <InputMinutes
@@ -144,6 +147,7 @@ export const InputDateTime = ({ date, onChange }: InputDateTimeProps) => {
         className={classes.input}
         minutes={minutes}
         onChange={handleMinuteChange}
+        ref={minRef}
       />
     </div>
   );
