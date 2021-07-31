@@ -1,39 +1,11 @@
 import React, { HTMLProps, ReactNode } from "react";
 import { Event, useEvent } from "../../logic/eventLogic";
 import { ItemModes } from "../../utils/utils";
-import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../context/ContextWrapper";
 import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import { InputDateTime } from "../generic/inputs/DateTimeInputs/InputDateTime";
 import { EventData } from "shared";
-
-const styles = () => ({
-  itemsWrapper: {
-    display: "flex",
-    alignItems: "center",
-  },
-  removeButton: {
-    background: "#ee3333",
-    display: "flex",
-    alignItems: "center",
-    height: "25px",
-    width: "25px",
-    color: "white",
-    borderRadius: "50%",
-    border: "none",
-    justifyContent: "center",
-  },
-  item: {
-    flexGrow: 0,
-    padding: [0, 3],
-  },
-  exerciseBox: {
-    padding: 4,
-  },
-});
-
-const useStyles = createUseStyles(styles, { name: "EventTableRow" });
 
 interface EventFieldProps {
   event: EventData;

@@ -60,12 +60,10 @@ export const ExerciseInstanceTable = ({
   const dataAndNew: {
     item: ExerciseInstanceData;
     initialMode: ItemModes;
-  }[] = [
-    ...(exerciseInstances.all ?? []).map((i) => ({
-      item: i,
-      initialMode: ItemModes.QuickEdit,
-    })),
-  ];
+  }[] = (exerciseInstances.all ?? []).map((i) => ({
+    item: i,
+    initialMode: ItemModes.QuickEdit,
+  }));
 
   const tableData: Row<
     ExerciseEventTableData,
