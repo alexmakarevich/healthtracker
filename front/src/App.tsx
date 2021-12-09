@@ -41,8 +41,8 @@ const useStyles = createUseStyles(
   { name: "App" }
 );
 
-// IMPORTANT: for some ungodly reason, it's best to put a
-// "child" context provider above a "parent" context provider
+// TODO: get out of context hell.
+// Current usage of high-level (in App-tsx) and low-level (in item/field components) contexts causes incosistent rendering.
 
 function App() {
   const classes = useStyles();
