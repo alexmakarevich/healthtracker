@@ -161,6 +161,7 @@ export function generateContext<Item extends WithId>(
   // unsure if to return declaration or result
   return {
     ContextProvider,
+    Provider,
     useContextDefined,
   };
 }
