@@ -209,7 +209,15 @@ const Duration = ({ className, ...inputProps }: HTMLProps<HTMLDivElement>) => {
 };
 
 const EventField = (inputProps: HTMLProps<HTMLInputElement>) => {
-  return <EventFields.DateTime />;
+  const { eventData } = useThisContext();
+  return (
+    <EventFields.Wrapper
+      event={eventData ?? eventDefaults}
+      initialMode={ItemModes.QuickEdit}
+    >
+      <EventFields.DateTime />
+    </EventFields.Wrapper>
+  );
 };
 
 const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {

@@ -122,7 +122,17 @@ const Buttons = () => {
   );
 };
 
-const EventField = () => <EventFields.DateTime />;
+const EventField = (inputProps: HTMLProps<HTMLInputElement>) => {
+  const { eventData } = useThisContext();
+  return (
+    <EventFields.Wrapper
+      event={eventData ?? eventDefaults}
+      initialMode={ItemModes.QuickEdit}
+    >
+      <EventFields.DateTime />
+    </EventFields.Wrapper>
+  );
+};
 
 const Symptom = (props?: HTMLProps<HTMLDivElement>) => {
   const { data, symptomData, setOrUpdate } = useThisContext();

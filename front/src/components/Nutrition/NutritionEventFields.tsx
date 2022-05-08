@@ -121,31 +121,17 @@ const Buttons = () => {
   );
 };
 
-const EventField = (inputProps: HTMLProps<HTMLInputElement>) => (
-  <EventFields.DateTime />
-);
-
-// TODO: implement fix below - same for other events
-// const EventField = (inputProps: HTMLProps<HTMLInputElement>) =>
-//  {
-//   const { event, eventData, data } = useThisContext();
-//   const eventDataAlt = Event.useContext().getOneFromContext(data._id);
-
-//   return (
-//     <div>
-//       {/* -{eventData?.time ?? "nope"}
-//       <br /> */}
-//       {/* {event.data.time} */}
-//       {/* <EventFields.DateTime /> */}
-//       <EventFields.Wrapper
-//         event={eventData ?? eventDefaults}
-//         initialMode={ItemModes.QuickEdit}
-//       >
-//         <EventFields.DateTime />
-//       </EventFields.Wrapper>
-//     </div>
-//   );
-// };
+const EventField = (inputProps: HTMLProps<HTMLInputElement>) => {
+  const { eventData } = useThisContext();
+  return (
+    <EventFields.Wrapper
+      event={eventData ?? eventDefaults}
+      initialMode={ItemModes.QuickEdit}
+    >
+      <EventFields.DateTime />
+    </EventFields.Wrapper>
+  );
+};
 
 const Nutrition = (divProps: HTMLProps<HTMLDivElement>) => {
   const { data, nutritionData: nutrition, setOrUpdate } = useThisContext();
