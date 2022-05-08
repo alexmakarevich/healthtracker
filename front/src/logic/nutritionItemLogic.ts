@@ -1,11 +1,11 @@
 import { makeUseEntity, UseEntityProps } from "./../hooks/useEntity";
-import { useNutritionItemContext } from "../context/NutritionItemContextProvider";
+import { NutritionItemContext } from "../context/NutritionItemContextProvider";
 import { ItemModes } from "../utils/utils";
 import { NutritionItemData, nutritionItemDefaults } from "shared";
 
 export const useNutrition = (props: UseEntityProps<NutritionItemData>) => {
   const base = makeUseEntity({
-    contextFn: useNutritionItemContext,
+    contextFn: NutritionItemContext.use,
     defaults: nutritionItemDefaults,
   })(props);
 

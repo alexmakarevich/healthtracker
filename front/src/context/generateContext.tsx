@@ -35,14 +35,13 @@ export function generateContext<Item extends WithId>(
   apiBaseUrl: string,
   itemName: string
 ) {
-  const [useContextDefined, Provider] =
-    createContextDefined<ContextProps<Item>>();
+  const [use, EmptyProvider] = createContextDefined<ContextProps<Item>>();
 
   interface Props {
     children: ReactNode;
   }
 
-  function ContextProvider({ children }: Props) {
+  function FullProvider({ children }: Props) {
     const CRUD = generateCRUD<Item>(apiBaseUrl);
 
     const queryClient = useQueryCache();
@@ -155,13 +154,13 @@ export function generateContext<Item extends WithId>(
       refresh: refresh,
     };
 
-    return <Provider value={providerValues}>{children}</Provider>;
+    return <EmptyProvider value={providerValues}>{children}</EmptyProvider>;
   }
 
   // unsure if to return declaration or result
   return {
-    ContextProvider,
-    Provider,
-    useContextDefined,
+    FullProvider,
+    EmptyProvider,
+    use,
   };
 }

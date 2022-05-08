@@ -1,7 +1,7 @@
 import React from "react";
 import { NutritionItemData, nutritionItemDefaults } from "shared";
 import { createUseStyles } from "react-jss";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import PickOrAdd from "../generic/PickOrAdd";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
@@ -34,7 +34,7 @@ interface Props {
 }
 
 const AddNutritionItem = ({ idsToExclude, onAdd }: Props) => {
-  const NIContext = useNutritionItemContext();
+  const NIContext = NutritionItemContext.use();
   const classes = useStyles();
 
   function handleCreateAndAdd(title: string) {

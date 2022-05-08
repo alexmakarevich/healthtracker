@@ -1,9 +1,9 @@
 import { makeUseEntity } from "./../hooks/useEntity";
-import { useEventContext } from "../context/EventContextProvider";
+import { EventContext } from "../context/EventContextProvider";
 import { eventDefaults } from "shared";
 
 export const useEvent = makeUseEntity({
-  contextFn: useEventContext,
+  contextFn: EventContext.use,
   defaults: eventDefaults,
 });
 

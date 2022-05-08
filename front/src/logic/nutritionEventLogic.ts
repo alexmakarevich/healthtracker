@@ -1,23 +1,23 @@
-import { useNutritionEventContext } from "../context/NutritionEventContextProvider";
+import { NutritionEventContext } from "../context/NutritionEventContextProvider";
 import { makeUseEntity, UseEntityProps } from "./../hooks/useEntity";
-import { useEventContext } from "../context/EventContextProvider";
-import { useNutritionItemContext } from "../context/NutritionItemContextProvider";
+import { EventContext } from "../context/EventContextProvider";
+import { NutritionItemContext } from "../context/NutritionItemContextProvider";
 import { NutritionEventData, nutritionEventDefaults } from "shared";
 
 export const useNutritionEvent = (
   props: UseEntityProps<NutritionEventData>
 ) => {
   const base = makeUseEntity({
-    contextFn: useNutritionEventContext,
+    contextFn: NutritionEventContext.use,
     defaults: nutritionEventDefaults,
   })(props);
 
   const { data } = base;
-  const EventContext = useEventContext();
-  const NutritionContext = useNutritionItemContext();
+  const events = EventContext.use();
+  const nutritionItems = NutritionItemContext.use();
 
-  const eventData = EventContext.getOneFromContext(data.eventId);
-  const nutritionData = NutritionContext.getOneFromContext(data.nutritionId);
+  const eventData = events.getOneFromContext(data.eventId);
+  const nutritionData = nutritionItems.getOneFromContext(data.nutritionId);
 
   return {
     ...base,

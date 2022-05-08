@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNutrition } from "../../logic/nutritionItemLogic";
 import TextWithEdit from "../generic/TextWithEdit";
 import { createUseStyles } from "react-jss";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { Box } from "../generic/styling/Box";
 import { createContextDefined } from "../../context/ContextWrapper";
@@ -93,7 +93,7 @@ const Ingredients = () => {
   const classes = useStyles();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const { all, create /* getOneFromContext */ } = useNutritionItemContext();
+  const { all, create /* getOneFromContext */ } = NutritionItemContext.use();
 
   const ingredients = all?.filter(
     (item) =>

@@ -34,23 +34,17 @@ interface AddIngredientParams {
   ingredientId: string;
 }
 
-const [useContextDefined, Provider] =
-  createContextDefined<
-    ContextProps<NutritionItemData> & {
-      addIngredient: MutateFunction<
-        void,
-        unknown,
-        AddIngredientParams,
-        unknown
-      >;
-      removeIngredient: MutateFunction<
-        void,
-        unknown,
-        AddIngredientParams,
-        unknown
-      >;
-    }
-  >();
+const [useContextDefined, Provider] = createContextDefined<
+  ContextProps<NutritionItemData> & {
+    addIngredient: MutateFunction<void, unknown, AddIngredientParams, unknown>;
+    removeIngredient: MutateFunction<
+      void,
+      unknown,
+      AddIngredientParams,
+      unknown
+    >;
+  }
+>();
 
 interface Props {
   children: ReactNode;
@@ -250,7 +244,8 @@ function ContextProvider({ children }: Props) {
   return <Provider value={providerValues}>{children}</Provider>;
 }
 
-export {
-  ContextProvider as NutritionItemProvider,
-  useContextDefined as useNutritionItemContext,
+export const NutritionItemContext = {
+  FullProvider: ContextProvider,
+  EmptyProvider: Provider,
+  use: useContextDefined,
 };

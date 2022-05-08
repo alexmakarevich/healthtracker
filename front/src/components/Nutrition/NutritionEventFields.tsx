@@ -14,7 +14,7 @@ import Collapsible, { Animations } from "../generic/Collapsible";
 import PickOrAdd from "../generic/PickOrAdd";
 import { Box } from "../generic/styling/Box";
 import { Icon, IconSizes } from "../generic/styling/Icon";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { DeleteButton } from "../EntityElements/Delete";
 import { Theme } from "../../styling/theme";
 import {
@@ -121,13 +121,37 @@ const Buttons = () => {
   );
 };
 
-const EventField = () => <EventFields.DateTime />;
+const EventField = (inputProps: HTMLProps<HTMLInputElement>) => (
+  <EventFields.DateTime />
+);
+
+// TODO: implement fix below - same for other events
+// const EventField = (inputProps: HTMLProps<HTMLInputElement>) =>
+//  {
+//   const { event, eventData, data } = useThisContext();
+//   const eventDataAlt = Event.useContext().getOneFromContext(data._id);
+
+//   return (
+//     <div>
+//       {/* -{eventData?.time ?? "nope"}
+//       <br /> */}
+//       {/* {event.data.time} */}
+//       {/* <EventFields.DateTime /> */}
+//       <EventFields.Wrapper
+//         event={eventData ?? eventDefaults}
+//         initialMode={ItemModes.QuickEdit}
+//       >
+//         <EventFields.DateTime />
+//       </EventFields.Wrapper>
+//     </div>
+//   );
+// };
 
 const Nutrition = (divProps: HTMLProps<HTMLDivElement>) => {
   const { data, nutritionData: nutrition, setOrUpdate } = useThisContext();
   const { className, ...otherDivProps } = divProps;
 
-  const nutritionCtx = useNutritionItemContext();
+  const nutritionCtx = NutritionItemContext.use();
   const classes = useStyles();
 
   const [showSelect, setShowSelect] = useState(

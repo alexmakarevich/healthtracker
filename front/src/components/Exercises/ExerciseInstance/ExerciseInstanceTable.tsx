@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { useEventContext } from "../../../context/EventContextProvider";
+import { EventContext } from "../../../context/EventContextProvider";
 import { ItemModes } from "../../../utils/utils";
-import { useExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
+import { ExerciseInstanceContext } from "../../../context/ExerciseInstanceContextProvider";
 import { Columns, Row } from "../../../hooks/useCustomTable";
 import { ExerciseInstanceData, exerciseInstanceDefaults } from "shared";
 import { ExerciseInstanceFields } from "./ExerciseInstanceFields";
-import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
+import { ExerciseTypeContext } from "../../../context/ExerciseTypeContextProvider";
 import { Table } from "../../generic/layout/Table";
 import { createUseStyles } from "react-jss";
 
@@ -41,9 +41,9 @@ export const ExerciseInstanceTable = ({
 }: {
   className?: string;
 }) => {
-  const events = useEventContext();
-  const exerciseInstances = useExerciseInstanceContext();
-  const exercises = useExerciseContext();
+  const events = EventContext.use();
+  const exerciseInstances = ExerciseInstanceContext.use();
+  const exercises = ExerciseTypeContext.use();
   const classes = useStyles();
 
   interface ExerciseEventTableData {

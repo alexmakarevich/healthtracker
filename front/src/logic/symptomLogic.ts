@@ -1,10 +1,10 @@
 import { symptomDefaults } from "shared";
-import { useSymptomContext } from "../context/SymptomContextProvider";
+import { SymptomContext } from "../context/SymptomContextProvider";
 import { makeUseEntity } from "../hooks/useEntity";
 
 export const useSymptom = makeUseEntity({
-  contextFn: useSymptomContext,
+  contextFn: SymptomContext.use,
   defaults: symptomDefaults,
 });
 
-export type Symptom = ReturnType<typeof useSymptomContext>;
+export type Symptom = ReturnType<typeof SymptomContext.use>;

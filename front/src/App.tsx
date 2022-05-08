@@ -1,11 +1,11 @@
 import React from "react";
 import "./App.css";
 import { NutritiionTable } from "./components/Nutrition/NutritionItemTable";
-import { NutritionItemProvider } from "./context/NutritionItemContextProvider";
-import { EventProvider } from "./context/EventContextProvider";
-import { ExerciseProvider } from "./context/ExerciseTypeContextProvider";
+import { NutritionItemContext } from "./context/NutritionItemContextProvider";
+import { EventContext } from "./context/EventContextProvider";
+import { ExerciseTypeContext } from "./context/ExerciseTypeContextProvider";
 import ExerciseTypeTable from "./components/Exercises/ExerciseTypeTable";
-import { ExerciseInstanceProvider } from "./context/ExerciseInstanceContextProvider";
+import { ExerciseInstanceContext } from "./context/ExerciseInstanceContextProvider";
 import { AlertContext } from "./components/generic/actions/AlertContext";
 import { createUseStyles, ThemeProvider } from "react-jss";
 import { ExerciseInstanceTable } from "./components/Exercises/ExerciseInstance/ExerciseInstanceTable";
@@ -13,11 +13,11 @@ import { ExerciseVisualization } from "./components/Data/ExerciseVisualization";
 import { theme } from "./styling/theme";
 import { classConcat } from "./utils/utils";
 import { NutritiionEventTable } from "./components/Nutrition/NutritionEventTable";
-import { NutritionEventProvider } from "./context/NutritionEventContextProvider";
+import { NutritionEventContext } from "./context/NutritionEventContextProvider";
 import { NutritionVisualization } from "./components/Data/NutritionVisualization";
 import { SymptomTable } from "./components/Symptoms/SymptomTable";
-import { SymptomProvider } from "./context/SymptomContextProvider";
-import { SymptomEventProvider } from "./context/SymptomEventContextProvider";
+import { SymptomContext } from "./context/SymptomContextProvider";
+import { SymptomEventContext } from "./context/SymptomEventContextProvider";
 import { SymptomEventTable } from "./components/Symptoms/SymptomEventTable";
 
 const useStyles = createUseStyles(
@@ -51,13 +51,13 @@ function App() {
       <ThemeProvider theme={theme}>
         <AlertContext>
           {/* <AlertTester></AlertTester> */}
-          <ExerciseInstanceProvider>
-            <NutritionEventProvider>
-              <SymptomEventProvider>
-                <ExerciseProvider>
-                  <EventProvider>
-                    <NutritionItemProvider>
-                      <SymptomProvider>
+          <ExerciseInstanceContext.FullProvider>
+            <NutritionEventContext.FullProvider>
+              <SymptomEventContext.FullProvider>
+                <ExerciseTypeContext.FullProvider>
+                  <EventContext.FullProvider>
+                    <NutritionItemContext.FullProvider>
+                      <SymptomContext.FullProvider>
                         <h2>Nutrition</h2>
                         <NutritiionTable />
                         <h2>Nutrition History</h2>
@@ -74,13 +74,13 @@ function App() {
                         <SymptomTable />
                         <h2>Symptom Events</h2>
                         <SymptomEventTable />
-                      </SymptomProvider>
-                    </NutritionItemProvider>
-                  </EventProvider>
-                </ExerciseProvider>
-              </SymptomEventProvider>
-            </NutritionEventProvider>
-          </ExerciseInstanceProvider>
+                      </SymptomContext.FullProvider>
+                    </NutritionItemContext.FullProvider>
+                  </EventContext.FullProvider>
+                </ExerciseTypeContext.FullProvider>
+              </SymptomEventContext.FullProvider>
+            </NutritionEventContext.FullProvider>
+          </ExerciseInstanceContext.FullProvider>
         </AlertContext>
       </ThemeProvider>
     </div>

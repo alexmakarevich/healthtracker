@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { ExerciseTypeData, exerciseTypeDefaults } from "shared";
 import { ItemModes } from "../../utils/utils";
-import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
+import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { ExerciseFields } from "./ExerciseFields";
 import { Row } from "../../hooks/useCustomTable";
 import { Columns } from "../../hooks/useCustomTableNew.";
@@ -53,7 +53,7 @@ interface ExerciseTypeTableData {
 }
 
 const ExerciseTypeTable = ({ className }: { className?: string }) => {
-  const ETContext = useExerciseContext();
+  const ETContext = ExerciseTypeContext.use();
   const classes = useStyles();
 
   const dataAndNew: {

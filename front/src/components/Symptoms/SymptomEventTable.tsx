@@ -4,7 +4,7 @@ import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
 import { SymptomEventData, symptomEventDefaults } from "shared";
-import { useSymptomEventContext } from "../../context/SymptomEventContextProvider";
+import { SymptomEventContext } from "../../context/SymptomEventContextProvider";
 import { SymptomEventFields } from "./SymptomEventFields";
 
 const styles = () => ({
@@ -29,7 +29,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "SymptomEventTable" });
 
 export const SymptomEventTable = () => {
-  const { all } = useSymptomEventContext();
+  const { all } = SymptomEventContext.use();
   const classes = useStyles();
   interface SymptomEventTableData {
     symptom: string;

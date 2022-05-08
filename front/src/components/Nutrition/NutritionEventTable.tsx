@@ -4,7 +4,7 @@ import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
-import { useNutritionEventContext } from "../../context/NutritionEventContextProvider";
+import { NutritionEventContext } from "../../context/NutritionEventContextProvider";
 
 import { NutritionEventFields } from "./NutritionEventFields";
 import { NutritionEventData, nutritionEventDefaults } from "shared";
@@ -20,7 +20,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "NutritiionTable" });
 
 export const NutritiionEventTable = () => {
-  const { all } = useNutritionEventContext();
+  const { all } = NutritionEventContext.use();
   const classes = useStyles();
   interface NutritiionEventTableData {
     event: string;

@@ -1,11 +1,11 @@
 import { ItemModes } from "./../utils/utils";
 import { useEffect, useState } from "react";
 
-import { useExerciseInstanceContext } from "../context/ExerciseInstanceContextProvider";
-import { useExerciseContext } from "../context/ExerciseTypeContextProvider";
+import { ExerciseInstanceContext } from "../context/ExerciseInstanceContextProvider";
+import { ExerciseTypeContext } from "../context/ExerciseTypeContextProvider";
 import { ExceptAutoSetBasics, ExerciseInstanceData } from "shared";
 import { MutateConfig } from "react-query";
-import { useEventContext } from "../context/EventContextProvider";
+import { EventContext } from "../context/EventContextProvider";
 import { useComplexState } from "../hooks/useComplexState";
 import { useDebouncedCallbackVoid } from "../hooks/useDebounce";
 
@@ -43,9 +43,9 @@ export const useExerciseInstance = ({
     reset,
   } = useComplexState<Old["data"]>(getDataWithDefaults(data));
   const [mode, setMode] = useState(initialMode);
-  const EIContext = useExerciseInstanceContext();
-  const ExContext = useExerciseContext();
-  const EvContext = useEventContext();
+  const EIContext = ExerciseInstanceContext.use();
+  const ExContext = ExerciseTypeContext.use();
+  const EvContext = EventContext.use();
 
   // any time the passed item changes (e.g. when it's refreshed in context, update the state here)
   useEffect(() => {

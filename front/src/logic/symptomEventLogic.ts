@@ -1,24 +1,24 @@
 import { SymptomEventData, symptomEventDefaults } from "shared";
-import { useEventContext } from "../context/EventContextProvider";
-import { useSymptomContext } from "../context/SymptomContextProvider";
-import { useSymptomEventContext } from "../context/SymptomEventContextProvider";
+import { EventContext } from "../context/EventContextProvider";
+import { SymptomContext } from "../context/SymptomContextProvider";
+import { SymptomEventContext } from "../context/SymptomEventContextProvider";
 import { makeUseEntity, UseEntityProps } from "../hooks/useEntity";
 
 export const useSymptomEvent = (props: UseEntityProps<SymptomEventData>) => {
   const base = makeUseEntity({
-    contextFn: useSymptomEventContext,
+    contextFn: SymptomEventContext.use,
     defaults: symptomEventDefaults,
   })(props);
 
   const { data } = base;
 
-  const EventContext = useEventContext();
-  const SymptomContext = useSymptomContext();
+  const events = EventContext.use();
+  const symptoms = SymptomContext.use();
 
-  const eventData = EventContext.getOneFromContext(data.eventId);
-  const symptomData = SymptomContext.getOneFromContext(data.symptomId);
+  const eventData = events.getOneFromContext(data.eventId);
+  const symptomData = symptoms.getOneFromContext(data.symptomId);
 
   return { ...base, eventData, symptomData };
 };
 
-export type SymptomEvent = ReturnType<typeof useSymptomEventContext>;
+export type SymptomEvent = ReturnType<typeof SymptomEventContext.use>;

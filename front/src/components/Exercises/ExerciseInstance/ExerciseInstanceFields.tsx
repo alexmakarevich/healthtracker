@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { createUseStyles } from "react-jss";
 import { createContextDefined } from "../../../context/ContextWrapper";
-import { useExerciseContext } from "../../../context/ExerciseTypeContextProvider";
+import { ExerciseTypeContext } from "../../../context/ExerciseTypeContextProvider";
 import { useExerciseInstance } from "../../../logic/exerciseInstanceLogic";
 import { classConcat, ItemModes } from "../../../utils/utils";
 import { CreateEditResetCancel } from "../../EntityElements/CreateEditResetCancel";
@@ -63,7 +63,6 @@ const useStyles = createUseStyles(
       zIndex: 50,
     },
   }),
-
   { name: "ExerciseFields" }
 );
 
@@ -217,7 +216,7 @@ const Exercise = (divProps: HTMLProps<HTMLDivElement>) => {
   const { data, exerciseData: exercise, setOrUpdate } = useThisContext();
   const { className, ...otherDivProps } = divProps;
 
-  const exCtx = useExerciseContext();
+  const exCtx = ExerciseTypeContext.use();
   const classes = useStyles();
 
   const [showSelect, setShowSelect] = useState(

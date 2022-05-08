@@ -4,7 +4,7 @@ import { createUseStyles } from "react-jss";
 import { ItemModes } from "../../utils/utils";
 import { Columns, Row } from "../../hooks/useCustomTable";
 import { Table } from "../generic/layout/Table";
-import { useEventContext } from "../../context/EventContextProvider";
+import { EventContext } from "../../context/EventContextProvider";
 import { EventFields } from "./EventFields";
 import { eventDefaults, EventData } from "shared";
 
@@ -19,7 +19,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "NutritiionTable" });
 
 export const EventTable = () => {
-  const { all } = useEventContext();
+  const { all } = EventContext.use();
   const classes = useStyles();
   interface EventTableData {
     event: string;

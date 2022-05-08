@@ -1,7 +1,7 @@
 import React from "react";
-import { useEventContext } from "../../context/EventContextProvider";
-import { useExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
-import { useExerciseContext } from "../../context/ExerciseTypeContextProvider";
+import { EventContext } from "../../context/EventContextProvider";
+import { ExerciseInstanceContext } from "../../context/ExerciseInstanceContextProvider";
+import { ExerciseTypeContext } from "../../context/ExerciseTypeContextProvider";
 import { ChartParts } from "./ChartParts";
 import { Scales } from "./LineAndDotChart";
 
@@ -15,9 +15,9 @@ interface ChartData {
 }
 
 export const ExerciseVisualization = () => {
-  const events = useEventContext();
-  const exerciseInstances = useExerciseInstanceContext();
-  const exercises = useExerciseContext();
+  const events = EventContext.use();
+  const exerciseInstances = ExerciseInstanceContext.use();
+  const exercises = ExerciseTypeContext.use();
 
   if (!events.all || !exerciseInstances.all || !exercises.all) {
     return null;

@@ -1,6 +1,7 @@
 import React, { HTMLProps, ReactNode, useMemo, useState } from "react";
 import { createUseStyles } from "react-jss";
 import {
+  EventData,
   eventDefaults,
   symptomDefaults,
   SymptomEventData,
@@ -13,8 +14,7 @@ import { CreateEditResetCancel } from "../EntityElements/CreateEditResetCancel";
 import { DeleteButton } from "../EntityElements/Delete";
 import { EventFields } from "../Events/EventFields";
 import { Event } from "../../logic/eventLogic";
-import { SymptomFields } from "./SymptomFields";
-import { useSymptomContext } from "../../context/SymptomContextProvider";
+import { SymptomContext } from "../../context/SymptomContextProvider";
 import { Box } from "../generic/styling/Box";
 import { Theme } from "../../styling/theme";
 import { Button } from "../generic/buttons/Button";
@@ -71,6 +71,7 @@ export interface SymptomFieldsProps {
   data: SymptomEventData;
   initialMode: ItemModes;
   children: ReactNode;
+  newEvent?: EventData;
 }
 
 const Wrapper = ({ data, initialMode, children }: SymptomFieldsProps) => {
@@ -79,8 +80,10 @@ const Wrapper = ({ data, initialMode, children }: SymptomFieldsProps) => {
     initialMode,
   });
 
+  const { eventData } = contextProps;
+
   const { ProviderWrapper, event } = EventFields.WrapperAndHook({
-    event: contextProps.eventData ?? eventDefaults,
+    event: eventData ?? eventDefaults,
     initialMode: contextProps.eventData ? ItemModes.QuickEdit : ItemModes.New,
     children,
   });
@@ -125,7 +128,7 @@ const Symptom = (props?: HTMLProps<HTMLDivElement>) => {
   const { data, symptomData, setOrUpdate } = useThisContext();
   const { className, ...otherDivProps } = props ?? { className: "" };
 
-  const sCtx = useSymptomContext();
+  const sCtx = SymptomContext.use();
   const classes = useStyles();
 
   const [showSelect, setShowSelect] = useState(

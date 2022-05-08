@@ -2,9 +2,9 @@ import * as d3 from "d3";
 import { axisBottom } from "d3";
 import React, { useEffect, useRef } from "react";
 import { NutritionItemData } from "shared";
-import { useEventContext } from "../../context/EventContextProvider";
-import { useNutritionEventContext } from "../../context/NutritionEventContextProvider";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { EventContext } from "../../context/EventContextProvider";
+import { NutritionEventContext } from "../../context/NutritionEventContextProvider";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { sortByX } from "./ChartParts";
 
 interface Datum {
@@ -16,9 +16,9 @@ interface Datum {
 }
 
 export const NutritionVisualization = () => {
-  const eventCtx = useEventContext();
-  const nutritionCtx = useNutritionItemContext();
-  const nutritionEventCtx = useNutritionEventContext();
+  const eventCtx = EventContext.use();
+  const nutritionCtx = NutritionItemContext.use();
+  const nutritionEventCtx = NutritionEventContext.use();
   const ref = useRef(null);
 
   const colors = d3.scaleOrdinal(d3.schemeTableau10);

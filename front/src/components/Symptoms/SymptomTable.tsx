@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { createUseStyles } from "react-jss";
-import { useSymptomContext } from "../../context/SymptomContextProvider";
+import { SymptomContext } from "../../context/SymptomContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { SymptomFields } from "./SymptomFields";
 import { Columns, Row } from "../../hooks/useCustomTable";
@@ -18,7 +18,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "SymptomTable" });
 
 export const SymptomTable = () => {
-  const { all } = useSymptomContext();
+  const { all } = SymptomContext.use();
   const classes = useStyles();
   interface SymptomTableData {
     title: string;

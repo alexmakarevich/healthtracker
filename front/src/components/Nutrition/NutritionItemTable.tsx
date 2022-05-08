@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { createUseStyles } from "react-jss";
-import { useNutritionItemContext } from "../../context/NutritionItemContextProvider";
+import { NutritionItemContext } from "../../context/NutritionItemContextProvider";
 import { ItemModes } from "../../utils/utils";
 import { NutritionFields } from "./NutritionFields";
 import { Columns, Row } from "../../hooks/useCustomTable";
@@ -18,7 +18,7 @@ const styles = () => ({
 const useStyles = createUseStyles(styles, { name: "NutritiionTable" });
 
 export const NutritiionTable = () => {
-  const { all } = useNutritionItemContext();
+  const { all } = NutritionItemContext.use();
   const classes = useStyles();
   interface NutritiionTableData {
     title: string;
