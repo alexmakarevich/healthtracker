@@ -1,10 +1,4 @@
-import React, {
-  ComponentProps,
-  ReactChildren,
-  ReactElement,
-  ReactNode,
-  ReactNodeArray,
-} from "react";
+import React, { ComponentProps, ReactElement } from "react";
 import { createUseStyles } from "react-jss";
 import { classConcat } from "../../../utils/utils";
 
@@ -19,6 +13,7 @@ const useStyles = createUseStyles(
       display: "flex",
       alignItems: "center",
       flexWrap: "wrap",
+      justifyContent: "center",
     },
     child: {
       // padding: "5px",
