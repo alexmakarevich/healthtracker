@@ -1,6 +1,5 @@
 TODO
 
-- Basic Router
 - Standardized "duplicate" action for items (FE+BE)
 - Time Filter for charts
 - Chart Improvements
@@ -9,3 +8,5 @@ TODO
 - First Simple FE Tests
 
 DONE
+
+- Basic Router
